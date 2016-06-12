@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
 import com.dreamliner.ptrlib.util.PtrCLog;
+import com.dreamliner.rvhelper.R;
 
 /**
  * This layout view for "Pull to Refresh(Ptr)" support all of the view, you can contain everything you want.
@@ -87,25 +88,27 @@ public class PtrFrameLayout extends ViewGroup {
 
         mPtrIndicator = new PtrIndicator();
 
-        TypedArray arr = context.obtainStyledAttributes(attrs, com.dreamliner.ptrlib.R.styleable.PtrFrameLayout, 0, 0);
+        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.PtrFrameLayout, 0, 0);
         if (arr != null) {
 
-            mHeaderId = arr.getResourceId(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_header, mHeaderId);
-            mContainerId = arr.getResourceId(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_content, mContainerId);
+            mHeaderId = arr.getResourceId(R.styleable.PtrFrameLayout_ptr_header, mHeaderId);
+            mContainerId = arr.getResourceId(R.styleable.PtrFrameLayout_ptr_content, mContainerId);
 
             mPtrIndicator.setResistance(
-                    arr.getFloat(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_resistance, mPtrIndicator.getResistance()));
+                    arr.getFloat(R.styleable.PtrFrameLayout_ptr_resistance, mPtrIndicator.getResistance()));
 
-            mDurationToClose = arr.getInt(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_duration_to_close, mDurationToClose);
-            mDurationToCloseHeader = arr.getInt(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_duration_to_close_header, mDurationToCloseHeader);
+            mDurationToClose = arr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close, mDurationToClose);
+            mDurationToCloseHeader = arr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close_header,
+                    mDurationToCloseHeader);
 
             float ratio = mPtrIndicator.getRatioOfHeaderToHeightRefresh();
-            ratio = arr.getFloat(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, ratio);
+            ratio = arr.getFloat(R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, ratio);
             mPtrIndicator.setRatioOfHeaderHeightToRefresh(ratio);
 
-            mKeepHeaderWhenRefresh = arr.getBoolean(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_keep_header_when_refresh, mKeepHeaderWhenRefresh);
+            mKeepHeaderWhenRefresh = arr.getBoolean(R.styleable.PtrFrameLayout_ptr_keep_header_when_refresh,
+                    mKeepHeaderWhenRefresh);
 
-            mPullToRefresh = arr.getBoolean(com.dreamliner.ptrlib.R.styleable.PtrFrameLayout_ptr_pull_to_fresh, mPullToRefresh);
+            mPullToRefresh = arr.getBoolean(R.styleable.PtrFrameLayout_ptr_pull_to_fresh, mPullToRefresh);
             arr.recycle();
         }
 
@@ -319,7 +322,8 @@ public class PtrFrameLayout extends ViewGroup {
                 float offsetX = mPtrIndicator.getOffsetX();
                 float offsetY = mPtrIndicator.getOffsetY();
 
-                if (mDisableWhenHorizontalMove && !mPreventForHorizontal && (Math.abs(offsetX) > mPagingTouchSlop && Math.abs(offsetX) > Math.abs(offsetY))) {
+                if (mDisableWhenHorizontalMove && !mPreventForHorizontal && (Math.abs(offsetX) > mPagingTouchSlop && Math.abs
+                        (offsetX) > Math.abs(offsetY))) {
                     if (mPtrIndicator.isInStartPosition()) {
                         mPreventForHorizontal = true;
                     }
@@ -334,7 +338,8 @@ public class PtrFrameLayout extends ViewGroup {
 
                 if (DEBUG) {
                     boolean canMoveDown = mPtrHandler != null && mPtrHandler.checkCanDoRefresh(this, mContent, mHeaderView);
-                    PtrCLog.v(LOG_TAG, "ACTION_MOVE: offsetY:%s, currentPos: %s, moveUp: %s, canMoveUp: %s, moveDown: %s: canMoveDown: %s", offsetY, mPtrIndicator.getCurrentPosY(), moveUp, canMoveUp, moveDown, canMoveDown);
+                    PtrCLog.v(LOG_TAG, "ACTION_MOVE: offsetY:%s, currentPos: %s, moveUp: %s, canMoveUp: %s, moveDown: %s: " +
+                            "canMoveDown: %s", offsetY, mPtrIndicator.getCurrentPosY(), moveUp, canMoveUp, moveDown, canMoveDown);
                 }
 
                 // disable move when header not reach top
@@ -598,7 +603,8 @@ public class PtrFrameLayout extends ViewGroup {
 
     /**
      * Call this when data is loaded.
-     * The UI will perform complete at once or after a delay, depends on the time elapsed is greater then {@link #mLoadingMinTime} or not.
+     * The UI will perform complete at once or after a delay, depends on the time elapsed is greater then {@link #mLoadingMinTime}
+     * or not.
      */
     final public void refreshComplete() {
         if (DEBUG) {
@@ -929,7 +935,8 @@ public class PtrFrameLayout extends ViewGroup {
             return;
         }
         MotionEvent last = mLastMoveEvent;
-        MotionEvent e = MotionEvent.obtain(last.getDownTime(), last.getEventTime() + ViewConfiguration.getLongPressTimeout(), MotionEvent.ACTION_CANCEL, last.getX(), last.getY(), last.getMetaState());
+        MotionEvent e = MotionEvent.obtain(last.getDownTime(), last.getEventTime() + ViewConfiguration.getLongPressTimeout(),
+                MotionEvent.ACTION_CANCEL, last.getX(), last.getY(), last.getMetaState());
         dispatchTouchEventSupper(e);
     }
 
@@ -938,7 +945,8 @@ public class PtrFrameLayout extends ViewGroup {
             PtrCLog.d(LOG_TAG, "send down event");
         }
         final MotionEvent last = mLastMoveEvent;
-        MotionEvent e = MotionEvent.obtain(last.getDownTime(), last.getEventTime(), MotionEvent.ACTION_DOWN, last.getX(), last.getY(), last.getMetaState());
+        MotionEvent e = MotionEvent.obtain(last.getDownTime(), last.getEventTime(), MotionEvent.ACTION_DOWN, last.getX(), last.getY
+                (), last.getMetaState());
         dispatchTouchEventSupper(e);
     }
 

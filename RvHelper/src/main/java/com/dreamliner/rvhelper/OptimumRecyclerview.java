@@ -2,8 +2,6 @@ package com.dreamliner.rvhelper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.ColorRes;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +12,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 
-import com.dreamliner.ptrlib.R;
+import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
 public class OptimumRecyclerview extends FrameLayout {
@@ -46,14 +44,23 @@ public class OptimumRecyclerview extends FrameLayout {
 
     protected OnMoreListener mOnMoreListener;
     protected boolean isLoadingMore;
-    protected SwipeRefreshLayout mPtrLayout;
+    protected PtrClassicFrameLayout mPtrLayout;
 
     protected int mSuperRecyclerViewMainLayout;
     private int mProgressId;
 
     private int[] lastScrollPositions;
 
-    public SwipeRefreshLayout getSwipeToRefresh() {
+    //下拉刷新的头部相关信息
+    private int mPtrBgColor;
+    private int mDurationToClose;
+    private int mDurationToCloseHeader;
+    private boolean mKeepHeaderWhenREfresh;
+    private boolean mPullToFresh;
+    private float mRatioOfHedaerHeightToRefresh;
+    private float mResistance;
+
+    public PtrClassicFrameLayout getPtrLayout() {
         return mPtrLayout;
     }
 
@@ -79,22 +86,36 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     protected void initAttrs(AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.superrecyclerview);
+        TypedArray optimumRvArr = getContext().obtainStyledAttributes(attrs, R.styleable.superrecyclerview);
+        TypedArray ptrArr = getContext().obtainStyledAttributes(attrs, R.styleable.PtrFrameLayout);
+
         try {
-            mSuperRecyclerViewMainLayout = a.getResourceId(R.styleable.superrecyclerview_mainLayoutId, R.layout
+            //初始化rv相关
+            mSuperRecyclerViewMainLayout = optimumRvArr.getResourceId(R.styleable.superrecyclerview_mainLayoutId, R.layout
                     .layout_progress_recyclerview);
-            mClipToPadding = a.getBoolean(R.styleable.superrecyclerview_recyclerClipToPadding, false);
-            mPadding = (int) a.getDimension(R.styleable.superrecyclerview_recyclerPadding, -1.0f);
-            mPaddingTop = (int) a.getDimension(R.styleable.superrecyclerview_recyclerPaddingTop, 0.0f);
-            mPaddingBottom = (int) a.getDimension(R.styleable.superrecyclerview_recyclerPaddingBottom, 0.0f);
-            mPaddingLeft = (int) a.getDimension(R.styleable.superrecyclerview_recyclerPaddingLeft, 0.0f);
-            mPaddingRight = (int) a.getDimension(R.styleable.superrecyclerview_recyclerPaddingRight, 0.0f);
-            mScrollbarStyle = a.getInt(R.styleable.superrecyclerview_scrollbarStyle, -1);
-            mEmptyId = a.getResourceId(R.styleable.superrecyclerview_layout_empty, 0);
-            mMoreProgressId = a.getResourceId(R.styleable.superrecyclerview_layout_moreProgress, R.layout.layout_more_progress);
-            mProgressId = a.getResourceId(R.styleable.superrecyclerview_layout_progress, R.layout.layout_progress);
+            mClipToPadding = optimumRvArr.getBoolean(R.styleable.superrecyclerview_recyclerClipToPadding, false);
+            mPadding = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPadding, -1.0f);
+            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingTop, 0.0f);
+            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingBottom, 0.0f);
+            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingLeft, 0.0f);
+            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingRight, 0.0f);
+            mScrollbarStyle = optimumRvArr.getInt(R.styleable.superrecyclerview_scrollbarStyle, -1);
+            mEmptyId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_empty, 0);
+            mMoreProgressId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_moreProgress, R.layout
+                    .layout_more_progress);
+            mProgressId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_progress, R.layout.layout_progress);
+
+            //初始化uptr相关
+            mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
+            mDurationToClose = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close, 200);
+            mDurationToCloseHeader = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close_header, 1000);
+            mKeepHeaderWhenREfresh = ptrArr.getBoolean(R.styleable.PtrFrameLayout_ptr_duration_to_close, true);
+            mPullToFresh = ptrArr.getBoolean(R.styleable.PtrFrameLayout_ptr_duration_to_close, false);
+            mRatioOfHedaerHeightToRefresh = ptrArr.getFloat(R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, 1.2f);
+            mResistance = ptrArr.getFloat(R.styleable.PtrFrameLayout_ptr_resistance, 1.7f);
         } finally {
-            a.recycle();
+            optimumRvArr.recycle();
+            ptrArr.recycle();
         }
     }
 
@@ -103,7 +124,7 @@ public class OptimumRecyclerview extends FrameLayout {
             return;
         }
         View v = LayoutInflater.from(getContext()).inflate(mSuperRecyclerViewMainLayout, this);
-        mPtrLayout = (SwipeRefreshLayout) v.findViewById(R.id.ptr_layout);
+        mPtrLayout = (PtrClassicFrameLayout) v.findViewById(R.id.ptr_layout);
         mPtrLayout.setEnabled(false);
 
         mProgress = (ViewStub) v.findViewById(android.R.id.progress);
@@ -260,7 +281,9 @@ public class OptimumRecyclerview extends FrameLayout {
 
         mProgress.setVisibility(View.GONE);
         mRecycler.setVisibility(View.VISIBLE);
-        mPtrLayout.setRefreshing(false);
+
+        // TODO: 2016/6/12 默认关闭下拉刷新
+        //mPtrLayout.setRefreshing(false);
         if (null != adapter)
             adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
@@ -297,7 +320,8 @@ public class OptimumRecyclerview extends FrameLayout {
                     mProgress.setVisibility(View.GONE);
                     mMoreProgress.setVisibility(View.GONE);
                     isLoadingMore = false;
-                    mPtrLayout.setRefreshing(false);
+                    // TODO: 2016/6/12  数据更新之后.禁用一下刷新.
+                    //mPtrLayout.setRefreshing(false);
                     if (mRecycler.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
                         mEmpty.setVisibility(View.VISIBLE);
                     } else if (mEmptyId != 0) {
@@ -375,33 +399,6 @@ public class OptimumRecyclerview extends FrameLayout {
 
     public void hideMoreProgress() {
         mMoreProgress.setVisibility(View.GONE);
-    }
-
-    public void setRefreshing(boolean refreshing) {
-        mPtrLayout.setRefreshing(refreshing);
-    }
-
-    /**
-     * Set the listener when refresh is triggered and enable the SwipeRefreshLayout
-     */
-    public void setRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
-        mPtrLayout.setEnabled(true);
-        mPtrLayout.setOnRefreshListener(listener);
-    }
-
-    /**
-     * Set the colors for the SwipeRefreshLayout states
-     */
-    public void setRefreshingColorResources(@ColorRes int colRes1, @ColorRes int colRes2, @ColorRes int colRes3, @ColorRes int
-            colRes4) {
-        mPtrLayout.setColorSchemeResources(colRes1, colRes2, colRes3, colRes4);
-    }
-
-    /**
-     * Set the colors for the SwipeRefreshLayout states
-     */
-    public void setRefreshingColor(int col1, int col2, int col3, int col4) {
-        mPtrLayout.setColorSchemeColors(col1, col2, col3, col4);
     }
 
     /**

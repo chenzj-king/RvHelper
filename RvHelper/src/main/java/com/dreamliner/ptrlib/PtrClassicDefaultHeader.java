@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
+import com.dreamliner.rvhelper.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,19 +51,18 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
     }
 
     protected void initViews(AttributeSet attrs) {
-        TypedArray arr = getContext().obtainStyledAttributes(attrs, com.dreamliner.ptrlib.R.styleable.PtrClassicHeader, 0, 0);
+        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.PtrClassicHeader, 0, 0);
         if (arr != null) {
-            mRotateAniTime = arr.getInt(com.dreamliner.ptrlib.R.styleable.PtrClassicHeader_ptr_rotate_ani_time, mRotateAniTime);
+            mRotateAniTime = arr.getInt(R.styleable.PtrClassicHeader_ptr_rotate_ani_time, mRotateAniTime);
         }
         buildAnimation();
-        View header = LayoutInflater.from(getContext()).inflate(com.dreamliner.ptrlib.R.layout.cube_ptr_classic_default_header, this);
+        View header = LayoutInflater.from(getContext()).inflate(R.layout.cube_ptr_classic_default_header, this);
 
-        mRotateView = header.findViewById(com.dreamliner.ptrlib.R.id.ptr_classic_header_rotate_view);
+        mRotateView = header.findViewById(R.id.ptr_classic_header_rotate_view);
 
-        mTitleTextView = (TextView) header.findViewById(com.dreamliner.ptrlib.R.id.ptr_classic_header_rotate_view_header_title);
-        mLastUpdateTextView = (TextView) header.findViewById(com.dreamliner.ptrlib.R.id
-                .ptr_classic_header_rotate_view_header_last_update);
-        mProgressBar = header.findViewById(com.dreamliner.ptrlib.R.id.ptr_classic_header_rotate_view_progressbar);
+        mTitleTextView = (TextView) header.findViewById(R.id.ptr_classic_header_rotate_view_header_title);
+        mLastUpdateTextView = (TextView) header.findViewById(R.id.ptr_classic_header_rotate_view_header_last_update);
+        mProgressBar = header.findViewById(R.id.ptr_classic_header_rotate_view_progressbar);
 
         resetView();
     }
@@ -146,9 +146,9 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         mRotateView.setVisibility(VISIBLE);
         mTitleTextView.setVisibility(VISIBLE);
         if (frame.isPullToRefresh()) {
-            mTitleTextView.setText(getResources().getString(com.dreamliner.ptrlib.R.string.cube_ptr_pull_down_to_refresh));
+            mTitleTextView.setText(getResources().getString(R.string.cube_ptr_pull_down_to_refresh));
         } else {
-            mTitleTextView.setText(getResources().getString(com.dreamliner.ptrlib.R.string.cube_ptr_pull_down));
+            mTitleTextView.setText(getResources().getString(R.string.cube_ptr_pull_down));
         }
     }
 
@@ -158,7 +158,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         hideRotateView();
         mProgressBar.setVisibility(VISIBLE);
         mTitleTextView.setVisibility(VISIBLE);
-        mTitleTextView.setText(com.dreamliner.ptrlib.R.string.cube_ptr_refreshing);
+        mTitleTextView.setText(R.string.cube_ptr_refreshing);
 
         tryUpdateLastUpdateTime();
         mLastUpdateTimeUpdater.stop();
@@ -171,7 +171,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         mProgressBar.setVisibility(INVISIBLE);
 
         mTitleTextView.setVisibility(VISIBLE);
-        mTitleTextView.setText(getResources().getString(com.dreamliner.ptrlib.R.string.cube_ptr_refresh_complete));
+        mTitleTextView.setText(getResources().getString(R.string.cube_ptr_refresh_complete));
 
         // update last update time
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(KEY_SharedPreferences, 0);
@@ -212,10 +212,10 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
             return null;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(getContext().getString(com.dreamliner.ptrlib.R.string.cube_ptr_last_update));
+        sb.append(getContext().getString(R.string.cube_ptr_last_update));
 
         if (seconds < 60) {
-            sb.append(seconds + getContext().getString(com.dreamliner.ptrlib.R.string.cube_ptr_seconds_ago));
+            sb.append(seconds + getContext().getString(R.string.cube_ptr_seconds_ago));
         } else {
             int minutes = (seconds / 60);
             if (minutes > 60) {
@@ -224,11 +224,11 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
                     Date date = new Date(mLastUpdateTime);
                     sb.append(sDataFormat.format(date));
                 } else {
-                    sb.append(hours + getContext().getString(com.dreamliner.ptrlib.R.string.cube_ptr_hours_ago));
+                    sb.append(hours + getContext().getString(R.string.cube_ptr_hours_ago));
                 }
 
             } else {
-                sb.append(minutes + getContext().getString(com.dreamliner.ptrlib.R.string.cube_ptr_minutes_ago));
+                sb.append(minutes + getContext().getString(R.string.cube_ptr_minutes_ago));
             }
         }
         return sb.toString();
@@ -263,16 +263,16 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
     private void crossRotateLineFromTopUnderTouch(PtrFrameLayout frame) {
         if (!frame.isPullToRefresh()) {
             mTitleTextView.setVisibility(VISIBLE);
-            mTitleTextView.setText(com.dreamliner.ptrlib.R.string.cube_ptr_release_to_refresh);
+            mTitleTextView.setText(R.string.cube_ptr_release_to_refresh);
         }
     }
 
     private void crossRotateLineFromBottomUnderTouch(PtrFrameLayout frame) {
         mTitleTextView.setVisibility(VISIBLE);
         if (frame.isPullToRefresh()) {
-            mTitleTextView.setText(getResources().getString(com.dreamliner.ptrlib.R.string.cube_ptr_pull_down_to_refresh));
+            mTitleTextView.setText(getResources().getString(R.string.cube_ptr_pull_down_to_refresh));
         } else {
-            mTitleTextView.setText(getResources().getString(com.dreamliner.ptrlib.R.string.cube_ptr_pull_down));
+            mTitleTextView.setText(getResources().getString(R.string.cube_ptr_pull_down));
         }
     }
 

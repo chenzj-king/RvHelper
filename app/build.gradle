@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile project(':RecyclerviewHelper')
+    compile project(':RvHelper')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile libraries.junit
     compile libraries.supportAppCompat

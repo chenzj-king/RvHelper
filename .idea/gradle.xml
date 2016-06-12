@@ -8,14 +8,14 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/RecyclerviewHelper" />
+            <option value="$PROJECT_DIR$/RvHelper" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/RecyclerviewHelper" />
+            <option value="$PROJECT_DIR$/RvHelper" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
