@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:transcriptMode="normal"
         app:layout_empty="@layout/layout_emptyview"
-        app:layout_moreProgress="@layout/layout_progress"
+        app:layout_moreProgress="@layout/view_more_progress"
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="insideInset"

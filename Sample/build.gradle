@@ -29,6 +29,8 @@ dependencies {
     compile libraries.butterknife
     apt libraries.butterknifeApt
 
+    compile libraries.loadingView
+
     compile project(':RvHelperLib')
     //user this in your project
     //compile 'com.github.chenzj-king:RvHelper:1.0'

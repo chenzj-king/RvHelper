@@ -71,6 +71,7 @@ I strongly recommend [jitpack.io](https://jitpack.io)
 1.  [butterknife](https://github.com/JakeWharton/butterknife) for bindview more easy.  
 2.  [android-Ultra-Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh) for pull to refresh.  
 3.  [SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView) for loadmore & emptyView.  
+4.  [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) for loadmore custom view.  
 
 ## License ##
 

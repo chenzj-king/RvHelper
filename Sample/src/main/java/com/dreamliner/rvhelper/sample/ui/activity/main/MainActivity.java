@@ -1,6 +1,8 @@
 package com.dreamliner.rvhelper.sample.ui.activity.main;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
@@ -11,6 +13,7 @@ import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.activity.main.adapter.TextAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -30,11 +33,14 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
 
     private TextAdapter mAdapter;
 
+    private MyHandler mHandler;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mHandler = new MyHandler(this);
 
         mAdapter = new TextAdapter();
         mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -53,7 +59,14 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
     @Override
     public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         if (overallItemsCount < 120) {
-            updateData();
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateData();
+                }
+            }, 1000);
+
         } else {
             mOptimumRecyclerview.hideMoreProgress();
             mOptimumRecyclerview.removeMoreListener();
@@ -69,6 +82,28 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
             strings.add("测试数据 " + (i + 1));
         }
         mAdapter.addAll(strings);
+    }
+
+    private class MyHandler extends Handler {
+
+        private WeakReference<MainActivity> mActivityWeakReference;
+
+        public MyHandler(MainActivity activityWeakReference) {
+            mActivityWeakReference = new WeakReference<>(activityWeakReference);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity mainActivity = mActivityWeakReference.get();
+
+            if (null != mainActivity) {
+                mainActivity.handleMessage(msg);
+            }
+        }
+    }
+
+    private void handleMessage(Message msg) {
+        //
     }
 }
 
