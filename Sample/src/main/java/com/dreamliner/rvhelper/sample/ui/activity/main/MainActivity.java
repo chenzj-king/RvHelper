@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
     public void onRefresh(PtrFrameLayout ptrFrameLayout) {
         mAdapter.clear();
         updateData();
+        mOptimumRecyclerview.setOnMoreListener(this);
     }
 
     @Override
