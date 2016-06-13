@@ -15,7 +15,6 @@
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="insideInset"
-
         />
 
 
