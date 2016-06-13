@@ -1,4 +1,4 @@
-package com.dreamliner.ultrapulltorefresh;
+package com.dreamliner.rvhelper.sample;
 
 import android.app.Application;
 

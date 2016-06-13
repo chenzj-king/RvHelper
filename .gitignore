@@ -48,3 +48,7 @@ captures/
 # Keystore files
 *.jks
 
+app/libs/
+app/src/main/java/com/dreamliner/ultrapulltorefresh/ui/base/
+app/src/main/java/com/dreamliner/ultrapulltorefresh/ui/fragment/
+app/src/main/res/drawable/

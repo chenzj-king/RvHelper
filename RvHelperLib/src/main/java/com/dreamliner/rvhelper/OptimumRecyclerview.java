@@ -13,6 +13,11 @@ import android.view.ViewStub;
 import android.widget.FrameLayout;
 
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
+import com.dreamliner.ptrlib.PtrDefaultHandler;
+import com.dreamliner.ptrlib.PtrFrameLayout;
+import com.dreamliner.ptrlib.PtrHandler;
+import com.dreamliner.rvhelper.interfaces.OnMoreListener;
+import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
 public class OptimumRecyclerview extends FrameLayout {
@@ -42,6 +47,7 @@ public class OptimumRecyclerview extends FrameLayout {
     protected RecyclerView.OnScrollListener mInternalOnScrollListener;
     protected RecyclerView.OnScrollListener mExternalOnScrollListener;
 
+    protected OnRefreshListener mOnRefreshListener;
     protected OnMoreListener mOnMoreListener;
     protected boolean isLoadingMore;
     protected PtrClassicFrameLayout mPtrLayout;
@@ -124,8 +130,6 @@ public class OptimumRecyclerview extends FrameLayout {
             return;
         }
         View v = LayoutInflater.from(getContext()).inflate(mSuperRecyclerViewMainLayout, this);
-        mPtrLayout = (PtrClassicFrameLayout) v.findViewById(R.id.ptr_layout);
-        mPtrLayout.setEnabled(false);
 
         mProgress = (ViewStub) v.findViewById(android.R.id.progress);
 
@@ -144,7 +148,23 @@ public class OptimumRecyclerview extends FrameLayout {
             mEmptyView = mEmpty.inflate();
         mEmpty.setVisibility(View.GONE);
 
+        inituptrView(v);
         initRecyclerView(v);
+    }
+
+    private void inituptrView(View v) {
+        mPtrLayout = (PtrClassicFrameLayout) v.findViewById(R.id.ptr_layout);
+        mPtrLayout.setEnabled(false);
+
+        mPtrLayout.setBackgroundColor(mPtrBgColor);
+        mPtrLayout.setDurationToClose(mDurationToClose);
+        mPtrLayout.setDurationToCloseHeader(mDurationToCloseHeader);
+        mPtrLayout.setKeepHeaderWhenRefresh(mKeepHeaderWhenREfresh);
+        mPtrLayout.setPullToRefresh(mPullToFresh);
+        mPtrLayout.setRatioOfHeaderHeightToRefresh(mRatioOfHedaerHeightToRefresh);
+        mPtrLayout.setResistance(mResistance);
+
+        mPtrLayout.setLastUpdateTimeRelateObject(this);
     }
 
     /**
@@ -284,6 +304,7 @@ public class OptimumRecyclerview extends FrameLayout {
 
         // TODO: 2016/6/12 默认关闭下拉刷新
         //mPtrLayout.setRefreshing(false);
+        mPtrLayout.refreshComplete();
         if (null != adapter)
             adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
@@ -322,6 +343,7 @@ public class OptimumRecyclerview extends FrameLayout {
                     isLoadingMore = false;
                     // TODO: 2016/6/12  数据更新之后.禁用一下刷新.
                     //mPtrLayout.setRefreshing(false);
+                    mPtrLayout.refreshComplete();
                     if (mRecycler.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
                         mEmpty.setVisibility(View.VISIBLE);
                     } else if (mEmptyId != 0) {
@@ -441,6 +463,28 @@ public class OptimumRecyclerview extends FrameLayout {
      */
     public RecyclerView.Adapter getAdapter() {
         return mRecycler.getAdapter();
+    }
+
+    /**
+     * Sets the onRefresh listener
+     */
+    public void setRefreshListener(OnRefreshListener onRefreshListener) {
+        mPtrLayout.setEnabled(true);
+        this.mOnRefreshListener = onRefreshListener;
+
+        mPtrLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                if (null != mOnRefreshListener) {
+                    mOnRefreshListener.onRefresh(frame);
+                }
+            }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        });
     }
 
     /**

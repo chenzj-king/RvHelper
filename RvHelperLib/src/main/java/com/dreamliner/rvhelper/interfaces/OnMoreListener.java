@@ -1,4 +1,4 @@
-package com.dreamliner.rvhelper;
+package com.dreamliner.rvhelper.interfaces;
 
 public interface OnMoreListener {
     /**
