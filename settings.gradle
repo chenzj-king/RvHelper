@@ -1,1 +1,1 @@
-include ':app', ':RvHelper'
+include ':app', ':RvHelperLib'

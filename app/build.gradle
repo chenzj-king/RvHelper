@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile project(':RvHelper')
+    compile project(':RvHelperLib')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile libraries.junit
     compile libraries.supportAppCompat
