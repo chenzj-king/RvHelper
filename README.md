@@ -5,7 +5,7 @@ inspired and modified from  [liaohuqiu-uptr](https://github.com/liaohuqiu/androi
 This project make nice way to init our Recylcerview.  Simplify to new Adapter and easy to do custome onRefresh and loadmore. Also it can cutome the empty datas view. 
 
 ## Demo
-![demo-gif](http://i.imgur.com/GWYuzvN.gif)
+![demo-gif](http://i.imgur.com/LvIMSYj.gif)
 
 ## Usage
 
