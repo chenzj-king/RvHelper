@@ -21,11 +21,15 @@ android {
 }
 
 dependencies {
-    compile project(':RvHelperLib')
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile libraries.junit
     compile libraries.supportAppCompat
 
     compile libraries.butterknife
     apt libraries.butterknifeApt
+
+    compile project(':RvHelperLib')
+    //user this in your project
+    //compile 'com.github.chenzj-king:RvHelper:1.0'
 }
