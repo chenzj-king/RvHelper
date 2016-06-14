@@ -30,7 +30,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     private Context mContext;
 
-    private List<T> mDatas = new ArrayList<>();
+    private List<T> mDatas;
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
 
@@ -38,20 +38,21 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     public BaseAdapter() {
         super();
+        mDatas = new ArrayList<>();
     }
 
     public BaseAdapter(ItemClickListener itemClickListener) {
-        super();
+        this();
         mItemClickListener = itemClickListener;
     }
 
     public BaseAdapter(ItemLongListener itemLongListener) {
-        super();
+        this();
         mItemLongListener = itemLongListener;
     }
 
     public BaseAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
-        super();
+        this();
         mItemClickListener = itemClickListener;
         mItemLongListener = itemLongListener;
     }
