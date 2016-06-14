@@ -5,9 +5,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
+import android.widget.Toast;
 
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
 import com.dreamliner.rvhelper.interfaces.OnMoreListener;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.R;
@@ -42,7 +45,12 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         ButterKnife.bind(this);
         mHandler = new MyHandler(this);
 
-        mAdapter = new TextAdapter();
+        mAdapter = new TextAdapter(new ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "click " + (position + 1) + " item", Toast.LENGTH_SHORT).show();
+            }
+        });
         mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mOptimumRecyclerview.setAdapter(mAdapter);
         mOptimumRecyclerview.setRefreshListener(this);

@@ -1,13 +1,13 @@
 package com.dreamliner.rvhelper.sample.ui.activity.main.adapter;
 
-import android.annotation.SuppressLint;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dreamliner.rvhelper.adapter.BaseAdapter;
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
 import com.dreamliner.rvhelper.sample.R;
+import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,12 +21,17 @@ import butterknife.ButterKnife;
  */
 public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(getView(R.layout.item_text, parent));
+    private ItemClickListener mItemClickListener;
+
+    public TextAdapter(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
     }
 
-    @SuppressLint("SetTextI18n")
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(getView(R.layout.item_text, parent), mItemClickListener);
+    }
+
     @Override
     protected void bindView(ViewHolder holder, int position) {
         String itemData = getItem(position);
@@ -34,16 +39,16 @@ public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends BaseViewHolder {
 
         @BindView(R.id.item_text_textview)
         TextView mTextTv;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View itemView, ItemClickListener itemClickListener) {
+            super(itemView, itemClickListener);
             ButterKnife.bind(this, itemView);
+            mTextTv.setOnClickListener(this);
         }
-
     }
 
 }
