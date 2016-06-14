@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
+import com.dreamliner.rvhelper.interfaces.ItemLongListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,11 +31,26 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     private Context mContext;
 
     private List<T> mDatas;
+    private ItemClickListener mItemClickListener;
+    private ItemLongListener mItemLongListener;
 
     private final Object mLock = new Object();
 
     public BaseAdapter() {
         mDatas = new ArrayList<>();
+    }
+
+    public BaseAdapter(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public BaseAdapter(ItemLongListener itemLongListener) {
+        mItemLongListener = itemLongListener;
+    }
+
+    public BaseAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+        mItemClickListener = itemClickListener;
+        mItemLongListener = itemLongListener;
     }
 
     public Context getContext() {
@@ -170,6 +188,14 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public void setItemLongListener(ItemLongListener itemLongListener) {
+        mItemLongListener = itemLongListener;
     }
 }
 
