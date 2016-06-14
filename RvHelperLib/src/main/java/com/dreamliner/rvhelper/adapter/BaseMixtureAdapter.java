@@ -30,7 +30,7 @@ public abstract class BaseMixtureAdapter<T> extends RecyclerView.Adapter<Recycle
 
     private Context mContext;
 
-    private List<T> mDatas;
+    private List<T> mDatas = new ArrayList<>();
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
 
@@ -38,7 +38,6 @@ public abstract class BaseMixtureAdapter<T> extends RecyclerView.Adapter<Recycle
 
     public BaseMixtureAdapter() {
         super();
-        mDatas = new ArrayList<>();
     }
 
     public BaseMixtureAdapter(ItemClickListener itemClickListener) {
