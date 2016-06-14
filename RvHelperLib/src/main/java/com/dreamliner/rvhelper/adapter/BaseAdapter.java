@@ -190,8 +190,16 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         }
     }
 
+    public ItemClickListener getItemClickListener() {
+        return mItemClickListener;
+    }
+
     public void setItemClickListener(ItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
+    }
+
+    public ItemLongListener getItemLongListener() {
+        return mItemLongListener;
     }
 
     public void setItemLongListener(ItemLongListener itemLongListener) {

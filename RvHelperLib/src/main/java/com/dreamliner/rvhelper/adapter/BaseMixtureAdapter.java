@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
+import com.dreamliner.rvhelper.interfaces.ItemLongListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,11 +31,26 @@ public abstract class BaseMixtureAdapter<T> extends RecyclerView.Adapter<Recycle
     private Context mContext;
 
     private List<T> mDatas;
+    private ItemClickListener mItemClickListener;
+    private ItemLongListener mItemLongListener;
 
     private final Object mLock = new Object();
 
     public BaseMixtureAdapter() {
         mDatas = new ArrayList<>();
+    }
+
+    public BaseMixtureAdapter(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public BaseMixtureAdapter(ItemLongListener itemLongListener) {
+        mItemLongListener = itemLongListener;
+    }
+
+    public BaseMixtureAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+        mItemClickListener = itemClickListener;
+        mItemLongListener = itemLongListener;
     }
 
     public Context getContext() {
@@ -170,6 +188,22 @@ public abstract class BaseMixtureAdapter<T> extends RecyclerView.Adapter<Recycle
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public ItemClickListener getItemClickListener() {
+        return mItemClickListener;
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public ItemLongListener getItemLongListener() {
+        return mItemLongListener;
+    }
+
+    public void setItemLongListener(ItemLongListener itemLongListener) {
+        mItemLongListener = itemLongListener;
     }
 }
 
