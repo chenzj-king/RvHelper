@@ -37,18 +37,22 @@ public abstract class BaseMixtureAdapter<T> extends RecyclerView.Adapter<Recycle
     private final Object mLock = new Object();
 
     public BaseMixtureAdapter() {
+        super();
         mDatas = new ArrayList<>();
     }
 
     public BaseMixtureAdapter(ItemClickListener itemClickListener) {
+        super();
         mItemClickListener = itemClickListener;
     }
 
     public BaseMixtureAdapter(ItemLongListener itemLongListener) {
+        super();
         mItemLongListener = itemLongListener;
     }
 
     public BaseMixtureAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+        super();
         mItemClickListener = itemClickListener;
         mItemLongListener = itemLongListener;
     }

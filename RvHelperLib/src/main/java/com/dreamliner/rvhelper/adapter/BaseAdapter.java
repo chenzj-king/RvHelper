@@ -41,14 +41,17 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     public BaseAdapter(ItemClickListener itemClickListener) {
+        super();
         mItemClickListener = itemClickListener;
     }
 
     public BaseAdapter(ItemLongListener itemLongListener) {
+        super();
         mItemLongListener = itemLongListener;
     }
 
     public BaseAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+        super();
         mItemClickListener = itemClickListener;
         mItemLongListener = itemLongListener;
     }
