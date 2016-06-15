@@ -13,6 +13,10 @@ import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
  */
 public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends BaseDataAdapter<T, VH> {
 
+    public BaseAdapter() {
+        super();
+    }
+
     public BaseAdapter(ItemClickListener itemClickListener) {
         super(itemClickListener);
     }

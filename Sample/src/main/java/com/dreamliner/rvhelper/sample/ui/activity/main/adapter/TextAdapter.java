@@ -21,6 +21,10 @@ import butterknife.ButterKnife;
  */
 public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
 
+    public TextAdapter() {
+        super();
+    }
+
     public TextAdapter(ItemClickListener itemClickListener) {
         super(itemClickListener);
     }
