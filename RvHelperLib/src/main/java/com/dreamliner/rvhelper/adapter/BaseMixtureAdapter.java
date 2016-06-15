@@ -1,5 +1,7 @@
 package com.dreamliner.rvhelper.adapter;
 
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
+import com.dreamliner.rvhelper.interfaces.ItemLongListener;
 import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
 
 /**
@@ -11,7 +13,17 @@ import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
  */
 public abstract class BaseMixtureAdapter<T> extends BaseDataAdapter<T, BaseViewHolder> {
 
-    private static final String TAG = "BaseMixtureAdapter";
+    public BaseMixtureAdapter(ItemClickListener itemClickListener) {
+        super(itemClickListener);
+    }
+
+    public BaseMixtureAdapter(ItemLongListener itemLongListener) {
+        super(itemLongListener);
+    }
+
+    public BaseMixtureAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+        super(itemClickListener, itemLongListener);
+    }
 
     @Override
     public final void onBindViewHolder(BaseViewHolder holder, int position) {

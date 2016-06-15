@@ -18,7 +18,11 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by chenzj on 16-6-15.
+ * @author chenzj
+ * @Title: BaseDataAdapter
+ * @Description: 类的描述 - 专门用于处理数据用的Adapter.从这边开始扩展
+ * @date 2016/6/12 09:05
+ * @email admin@chenzhongjin.cn
  */
 public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 

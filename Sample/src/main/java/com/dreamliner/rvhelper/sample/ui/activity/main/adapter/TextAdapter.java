@@ -21,15 +21,13 @@ import butterknife.ButterKnife;
  */
 public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
 
-    private ItemClickListener mItemClickListener;
-
     public TextAdapter(ItemClickListener itemClickListener) {
-        mItemClickListener = itemClickListener;
+        super(itemClickListener);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(getView(R.layout.item_text, parent), mItemClickListener);
+        return new ViewHolder(getView(R.layout.item_text, parent), getItemClickListener());
     }
 
     @Override
