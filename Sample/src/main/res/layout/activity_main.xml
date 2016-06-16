@@ -12,7 +12,7 @@
         android:transcriptMode="normal"
         app:layout_empty="@layout/layout_emptyview"
         app:layout_moreProgress="@layout/view_more_progress"
-        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
+        app:mainLayoutId="@layout/layout_rvhelper_verticalscroll"
         app:recyclerClipToPadding="false"
         app:scrollbarStyle="insideInset"
         />

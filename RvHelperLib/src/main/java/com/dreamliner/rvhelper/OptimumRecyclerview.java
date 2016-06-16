@@ -98,7 +98,7 @@ public class OptimumRecyclerview extends FrameLayout {
         try {
             //初始化rv相关
             mSuperRecyclerViewMainLayout = optimumRvArr.getResourceId(R.styleable.superrecyclerview_mainLayoutId, R.layout
-                    .layout_progress_recyclerview);
+                    .layout_rvhelper_progress);
             mClipToPadding = optimumRvArr.getBoolean(R.styleable.superrecyclerview_recyclerClipToPadding, false);
             mPadding = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPadding, -1.0f);
             mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingTop, 0.0f);
