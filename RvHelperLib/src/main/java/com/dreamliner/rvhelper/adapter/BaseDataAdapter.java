@@ -108,6 +108,10 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
     }
 
     public void insert(T object, int index) {
+        if (index < 0 || index > mDatas.size()) {
+            Log.i(TAG, "insert: index error");
+            return;
+        }
         synchronized (mLock) {
             if (null != mDatas) {
                 mDatas.add(index, object);
@@ -116,19 +120,32 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         notifyItemInserted(index);
     }
 
-    public void remove(int index) {
-
-        if (index >= 0 && index < getItemCount()) {
-            synchronized (mLock) {
-                mDatas.remove(index);
-            }
-            notifyItemRemoved(index);
-        } else {
-            Log.i(TAG, "remove: index error");
+    public void insertAll(Collection<? extends T> collection, int index) {
+        if (index < 0 || index > mDatas.size()) {
+            Log.i(TAG, "insertAll: index error");
+            return;
         }
+        synchronized (mLock) {
+            if (null != mDatas) {
+                mDatas.addAll(index, collection);
+            }
+        }
+        notifyItemRangeInserted(index, index + collection.size());
     }
 
-    public void remove(T object) {
+    public void remove(int index) {
+
+        if (index < 0 || index >= getItemCount()) {
+            Log.i(TAG, "remove: index error");
+            return;
+        }
+        synchronized (mLock) {
+            mDatas.remove(index);
+        }
+        notifyItemRemoved(index);
+    }
+
+    public boolean remove(T object) {
         int removeIndex = -1;
         boolean removeSuccess = false;
         synchronized (mLock) {
@@ -143,7 +160,9 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         }
         if (removeSuccess) {
             notifyItemRemoved(removeIndex);
+            return true;
         }
+        return false;
     }
 
     public void clear() {
