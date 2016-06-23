@@ -11,12 +11,73 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode versions.code
         versionName versions.name
+
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi'//, 'armeabi-v7a', 'arm64-v8a'//, 'x86', 'x86_64'
+        }
     }
-    buildTypes {
+
+    signingConfigs {
         release {
+            def filePrivateProperties = file("private.properties")
+            if (filePrivateProperties.exists()) {
+                Properties propsPrivate = new Properties()
+                propsPrivate.load(new FileInputStream(filePrivateProperties))
+                storeFile file(propsPrivate['RELEASE_STORE_FILE'])
+                storePassword propsPrivate['RELEASE_STORE_PASSWORD']
+                keyAlias propsPrivate['RELEASE_KEY_ALIAS']
+                keyPassword propsPrivate['RELEASE_KEY_PASSWORD']
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            resValue 'string', 'APP_NAME', 'rvHelper-debug'
+            resValue 'string', 'isDebug', 'true'
             minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            resValue 'string', 'APP_NAME', 'rvHelper'
+            resValue 'string', 'isDebug', 'false'
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        preview {
+            resValue 'string', 'APP_NAME', 'rvHelper-preview'
+            resValue 'string', 'isDebug', 'true'
+            debuggable true // save debug mes
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent + "/${variant.buildType.name}",
+                    "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}.apk".toLowerCase())
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
     }
 }
 
