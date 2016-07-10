@@ -1,21 +1,18 @@
 # RvHelper
 -----
 
-# [中文文档](https://github.com/chenzj-king/RvHelper/blob/master/README-cn.md)   #
+这个项目的灵感来自于秋哥的[liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr")[SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView "SuperRecyclerView").基于他们我做了一些封装和实现.
 
+这个项目可以很友好的让你在项目中使用Recyclerview.简化你的Adapter和非常简单的定制你的刷新头部和加载更多.同时还可以定制数据为空的时候的界面.
 
-inspired and modified from  [liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr") and [SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView "SuperRecyclerView"), with some feature enhancement.  
-
-This project make nice way to init our Recylcerview.  Simplify to new Adapter and easy to do custome onRefresh and loadmore. Also it can cutome the empty datas view. 
-
-## Demo
+## 例子
 ![](http://i.imgur.com/irhBX5s.gif)
 
 ## Usage
 
 ## JitPack.io
 
-I strongly recommend [jitpack.io](https://jitpack.io)
+我把项目放到了[jitpack.io](https://jitpack.io).如果要使用请按照如下对项目进行配置.
 
     repositories {
     	//...
@@ -27,9 +24,9 @@ I strongly recommend [jitpack.io](https://jitpack.io)
     	compile 'com.github.chenzj-king:RvHelper:1.0'
 	}
 
-##Usage
+##使用方式
 
-## Use directly OptimumRecyclerview:  
+## 在xml中下面sample代码一样配置相关属性:  
 
 	    <com.dreamliner.rvhelper.OptimumRecyclerview
 	        android:id="@+id/list"
@@ -43,28 +40,29 @@ I strongly recommend [jitpack.io](https://jitpack.io)
 	        app:scrollbarStyle="insideInset"
 	        />
 
-## Use it in Java
+## 在代码中这样设置
 
-    mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));//setting layoutmanager
-    mOptimumRecyclerview.setAdapter(mAdapter);							 //set your Adapter
-    mOptimumRecyclerview.setRefreshListener(this);						 //set onRefresh listener
-    mOptimumRecyclerview.setupMoreListener(this, 1);					 //set moreListener and max size = 1.it meant if the itemcount is 100.when you scroll lastvisiable item is 100-1 = 99
+    mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));//设置你的layoutmanager
+    mOptimumRecyclerview.setAdapter(mAdapter);							 //设置你的Adapter
+    mOptimumRecyclerview.setRefreshListener(this);						 //设置下拉刷新监听
+    mOptimumRecyclerview.setupMoreListener(this, 1);					 //设置加载更多的监听.并且设置预加载数据为1.意思就是说.如果你列表中有100个item.当你滚动到99个item的时候.就会触发加载更多的回调.
 
-## Init Callback ##
+## 下拉刷新和加载更多的实现sample ##
 
     @Override
     public void onRefresh(PtrFrameLayout ptrFrameLayout) {
         mAdapter.clear();
-		// Fetch more from Api or DB
-        mOptimumRecyclerview.setOnMoreListener(this);
+		//... 从db/Api获取数据
+        mOptimumRecyclerview.setOnMoreListener(this);//重新设置加载更多的监听.因为加载更多的监听会在到了底部的时候remove掉.如果重新刷新过了.需要重新设置一次.
     }
 
     @Override
     public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-		//Item 120 just for test
+		//假设从Api/Db查询到最大size=120.当列表显示的item＜120.那么就会出发loadmore逻辑.
         if (overallItemsCount < 120) {
-			// Fetch more from Api or DB
+			// ....从db/Api获取数据
         } else {
+			//隐藏加载更多页面和移除回调
             mOptimumRecyclerview.hideMoreProgress();
             mOptimumRecyclerview.removeMoreListener();
         }
