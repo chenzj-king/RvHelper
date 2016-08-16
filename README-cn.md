@@ -21,7 +21,7 @@
 
 	dependencies {
 		//...
-    	compile 'com.github.chenzj-king:RvHelper:1.0'
+    	compile 'com.github.chenzj-king:RvHelper:1.2'
 	}
 
 ##使用方式

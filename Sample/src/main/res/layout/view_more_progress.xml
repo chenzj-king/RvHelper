@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:minHeight="60dp">
 
     <ImageView
         android:id="@+id/line"
@@ -12,13 +13,14 @@
         />
 
     <com.wang.avi.AVLoadingIndicatorView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_below="@id/line"
         android:layout_centerInParent="true"
         android:layout_margin="10dp"
-        app:indicator="BallSpinFadeLoader"
-        app:indicator_color="@android:color/holo_red_light"
+        app:indicatorColor="@android:color/holo_red_light"
+        app:indicatorName="BallSpinFadeLoaderIndicator"
         />
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.dreamliner.rvhelper.adapter;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,8 +79,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         }
     }
 
-
-    public void add(T object) {
+    public void add(@NonNull T object) {
         synchronized (mLock) {
             if (null != mDatas) {
                 mDatas.add(object);
@@ -88,27 +88,35 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         notifyItemInserted(getItemCount() - 1);
     }
 
-    public void addAll(Collection<? extends T> collection) {
+    public void addAll(@NonNull Collection<? extends T> collection) {
         synchronized (mLock) {
             if (null != mDatas) {
                 mDatas.addAll(collection);
             }
         }
-        notifyItemRangeInserted(getItemCount() - collection.size(), getItemCount() - 1);
+        if (getItemCount() - collection.size() != 0) {
+            notifyItemRangeInserted(getItemCount() - collection.size(), collection.size());
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     @SafeVarargs
-    public final void addAll(T... items) {
+    public final void addAll(@NonNull T... items) {
         synchronized (mLock) {
             if (null != mDatas) {
                 Collections.addAll(mDatas, items);
             }
         }
-        notifyItemRangeInserted(getItemCount() - items.length, getItemCount() - 1);
+        if (getItemCount() - items.length != 0) {
+            notifyItemRangeInserted(getItemCount() - items.length, items.length);
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
-    public void insert(T object, int index) {
-        if (index < 0 || index > mDatas.size()) {
+    public void insert(@NonNull T object, int index) {
+        if (index < 0 || index > getItemCount()) {
             Log.i(TAG, "insert: index error");
             return;
         }
@@ -120,8 +128,8 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         notifyItemInserted(index);
     }
 
-    public void insertAll(Collection<? extends T> collection, int index) {
-        if (index < 0 || index > mDatas.size()) {
+    public void insertAll(@NonNull Collection<? extends T> collection, int index) {
+        if (index < 0 || index > getItemCount()) {
             Log.i(TAG, "insertAll: index error");
             return;
         }
@@ -130,7 +138,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
                 mDatas.addAll(index, collection);
             }
         }
-        notifyItemRangeInserted(index, index + collection.size());
+        notifyItemRangeInserted(index, collection.size());
     }
 
     public void remove(int index) {
@@ -145,7 +153,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         notifyItemRemoved(index);
     }
 
-    public boolean remove(T object) {
+    public boolean remove(@NonNull T object) {
         int removeIndex = -1;
         boolean removeSuccess = false;
         synchronized (mLock) {
@@ -183,7 +191,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         notifyDataSetChanged();
     }
 
-    public void update(List<T> mDatas) {
+    public void update(@NonNull List<T> mDatas) {
         synchronized (mLock) {
             this.mDatas = mDatas;
         }

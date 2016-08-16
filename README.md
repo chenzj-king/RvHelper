@@ -24,7 +24,7 @@ I strongly recommend [jitpack.io](https://jitpack.io)
 
 	dependencies {
 		//...
-    	compile 'com.github.chenzj-king:RvHelper:1.0'
+    	compile 'com.github.chenzj-king:RvHelper:1.2'
 	}
 
 ##Usage

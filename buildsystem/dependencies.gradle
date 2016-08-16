@@ -128,7 +128,7 @@ ext.libraries = [
         //搜索框
         searchview           : "com.lapism:searchview:3.0.1",
         //加载中动画
-        loadingView          : "com.wang.avi:library:1.0.5",
+        loadingView          : "com.github.chenzj-king:AVLoadingIndicatorView:2.1.1",
         pagerslidingtabstrip : "com.astuetz:pagerslidingtabstrip:1.0.1",
         navigationtabbar     : "com.github.devlight.navigationtabbar:library:1.1.3",
 
