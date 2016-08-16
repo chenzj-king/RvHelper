@@ -1,6 +1,9 @@
 # RvHelper
 -----
 
+[![](https://jitpack.io/v/chenzj-king/RvHelper.svg)](https://jitpack.io/#chenzj-king/RvHelper)
+
+-----
 这个项目的灵感来自于秋哥的[liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr")和[SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView "SuperRecyclerView").基于他们我做了一些封装和实现.
 
 这个项目可以很友好的让你在项目中使用Recyclerview.简化你的Adapter和非常简单的定制你的刷新头部和加载更多.同时还可以定制数据为空的时候的界面.
@@ -21,7 +24,7 @@
 
 	dependencies {
 		//...
-    	compile 'com.github.chenzj-king:RvHelper:1.2'
+    	compile 'com.github.chenzj-king:RvHelper:1.4'
 	}
 
 ##使用方式

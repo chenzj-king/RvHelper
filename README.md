@@ -1,6 +1,9 @@
 # RvHelper
 -----
 
+[![](https://jitpack.io/v/chenzj-king/RvHelper.svg)](https://jitpack.io/#chenzj-king/RvHelper)
+
+-----
 # [中文文档](https://github.com/chenzj-king/RvHelper/blob/master/README-cn.md)   #
 
 
@@ -24,7 +27,7 @@ I strongly recommend [jitpack.io](https://jitpack.io)
 
 	dependencies {
 		//...
-    	compile 'com.github.chenzj-king:RvHelper:1.2'
+    	compile 'com.github.chenzj-king:RvHelper:1.4'
 	}
 
 ##Usage
