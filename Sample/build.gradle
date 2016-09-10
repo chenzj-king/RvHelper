@@ -52,7 +52,7 @@ android {
         preview {
             resValue 'string', 'APP_NAME', 'rvHelper-preview'
             resValue 'string', 'isDebug', 'true'
-            debuggable true // save debug mes
+            debuggable true
             minifyEnabled true
             shrinkResources true
             signingConfig signingConfigs.release
