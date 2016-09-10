@@ -92,7 +92,7 @@ dependencies {
 
     compile libraries.loadingView
 
-    compile project(':RvHelperLib')
+    //compile project(':RvHelperLib')
     //user this in your project
-    //compile 'com.github.chenzj-king:RvHelper:1.0'
+    compile 'com.github.chenzj-king:RvHelper:1.4.2'
 }
