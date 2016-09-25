@@ -69,11 +69,17 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
 
         mIsLoading = true;
 
-        if (mLoadMoreUIHandler != null) {
+        if (null != mLoadMoreUIHandler) {
             mLoadMoreUIHandler.onLoading(this);
         }
+        final LoadMoreContainerBase loadMoreContainerBase = this;
         if (null != mLoadMoreHandler) {
-            mLoadMoreHandler.onLoadMore(this);
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadMoreHandler.onLoadMore(loadMoreContainerBase);
+                }
+            });
         }
     }
 

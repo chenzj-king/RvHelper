@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.dreamliner.rvhelper.interfaces.ItemClickListener;
 import com.dreamliner.rvhelper.interfaces.ItemLongListener;
+import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
+import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +27,7 @@ import java.util.List;
  * @date 2016/6/12 09:05
  * @email admin@chenzhongjin.cn
  */
-public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends RecyclerView.Adapter<BaseViewHolder> {
 
     private static final String TAG = "BaseDataAdapter";
 
@@ -34,6 +36,9 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
     private List<T> mDatas;
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
+
+    protected int FOOTER_TPYE = Integer.MAX_VALUE;
+    private View mFooterView;
 
     private final Object mLock = new Object();
 
@@ -63,11 +68,13 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
     }
 
     public void addFooterView(View view) {
-
+        mFooterView = view;
+        // TODO: 2016/9/25 addFooterView;
     }
 
     public void removeFooterView(View view) {
-
+        mFooterView = null;
+        // TODO: 2016/9/25 removeFooterView;
     }
 
     protected View getView(@LayoutRes int layoutId, ViewGroup parent) {
@@ -77,6 +84,23 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
         return LayoutInflater.from(mContext).inflate(layoutId, parent, false);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == FOOTER_TPYE) {
+            return new FooterViewHolder(mFooterView);
+        } else {
+            return createCustomViewHolder(parent, viewType);
+        }
+    }
+
+    public abstract VH createCustomViewHolder(ViewGroup parent, int viewType);
+
+    protected abstract void bindView(VH holder, int position);
 
     @Override
     public int getItemCount() {

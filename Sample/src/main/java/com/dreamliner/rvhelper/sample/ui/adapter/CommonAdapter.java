@@ -27,9 +27,10 @@ public class CommonAdapter extends BaseAdapter<String, CommonAdapter.ViewHolder>
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder createCustomViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(getView(R.layout.item_text, parent), getItemClickListener());
     }
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -43,7 +44,7 @@ public class CommonAdapter extends BaseAdapter<String, CommonAdapter.ViewHolder>
         @BindView(R.id.item_text_textview)
         TextView mTextTv;
 
-        public ViewHolder(View itemView, ItemClickListener itemClickListener) {
+        ViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView, itemClickListener);
             ButterKnife.bind(this, itemView);
             mTextTv.setOnClickListener(this);

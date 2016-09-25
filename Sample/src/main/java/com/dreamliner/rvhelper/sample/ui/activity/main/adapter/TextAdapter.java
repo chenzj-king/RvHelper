@@ -30,7 +30,7 @@ public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder createCustomViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(getView(R.layout.item_text, parent), getItemClickListener());
     }
 

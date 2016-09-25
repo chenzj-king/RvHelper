@@ -2,16 +2,14 @@ package com.dreamliner.rvhelper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 
+import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
@@ -22,13 +20,13 @@ import com.dreamliner.rvhelper.util.FloatUtil;
 
 public class OptimumRecyclerview extends FrameLayout {
 
-    protected int ITEM_LEFT_TO_LOAD_MORE = 10;
+    protected RecyclerView mRecyclerView;
 
-    protected RecyclerView mRecycler;
-    protected ViewStub mEmpty;
-    protected View mProgressView;
-    protected View mMoreProgressView;
+    protected ViewStub mEmptyViewStub;
     protected View mEmptyView;
+
+    protected ViewStub mLoadingViewStub;
+    protected View mLoadingView;
 
     protected boolean mClipToPadding;
     protected int mPadding;
@@ -40,19 +38,12 @@ public class OptimumRecyclerview extends FrameLayout {
     protected int mEmptyId;
     protected int mMoreProgressId;
 
-    protected LAYOUT_MANAGER_TYPE layoutManagerType;
-
-    protected RecyclerView.OnScrollListener mInternalOnScrollListener;
-    protected RecyclerView.OnScrollListener mExternalOnScrollListener;
-
     protected OnRefreshListener mOnRefreshListener;
     protected OnMoreListener mOnMoreListener;
-    protected boolean isLoadingMore;
     protected PtrClassicFrameLayout mPtrLayout;
+    protected LoadMoreRecycleViewContainer mLoadMoreRecycleViewContainer;
 
     protected int mSuperRecyclerViewMainLayout;
-
-    private int[] lastScrollPositions;
 
     //下拉刷新的头部相关信息
     private int mPtrBgColor;
@@ -68,7 +59,7 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     public RecyclerView getRecyclerView() {
-        return mRecycler;
+        return mRecyclerView;
     }
 
     public OptimumRecyclerview(Context context) {
@@ -127,11 +118,11 @@ public class OptimumRecyclerview extends FrameLayout {
         }
         View v = LayoutInflater.from(getContext()).inflate(mSuperRecyclerViewMainLayout, this);
 
-        mEmpty = (ViewStub) v.findViewById(R.id.empty);
-        mEmpty.setLayoutResource(mEmptyId);
+        mEmptyViewStub = (ViewStub) v.findViewById(R.id.empty_viewstub);
+        mEmptyViewStub.setLayoutResource(mEmptyId);
         if (mEmptyId != 0)
-            mEmptyView = mEmpty.inflate();
-        mEmpty.setVisibility(View.GONE);
+            mEmptyView = mEmptyViewStub.inflate();
+        mEmptyViewStub.setVisibility(View.GONE);
 
         inituptrView(v);
         initRecyclerView(v);
@@ -159,88 +150,23 @@ public class OptimumRecyclerview extends FrameLayout {
         View recyclerView = view.findViewById(android.R.id.list);
 
         if (recyclerView instanceof RecyclerView)
-            mRecycler = (RecyclerView) recyclerView;
+            mRecyclerView = (RecyclerView) recyclerView;
         else
             throw new IllegalArgumentException("SuperRecyclerView works with a RecyclerView!");
 
 
-        mRecycler.setClipToPadding(mClipToPadding);
+        mRecyclerView.setClipToPadding(mClipToPadding);
 
         if (!FloatUtil.compareFloats(mPadding, -1.0f)) {
-            mRecycler.setPadding(mPadding, mPadding, mPadding, mPadding);
+            mRecyclerView.setPadding(mPadding, mPadding, mPadding, mPadding);
         } else {
-            mRecycler.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
+            mRecyclerView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
         }
 
         if (mScrollbarStyle != -1) {
-            mRecycler.setScrollBarStyle(mScrollbarStyle);
+            mRecyclerView.setScrollBarStyle(mScrollbarStyle);
         }
-        mRecycler.setNestedScrollingEnabled(false);
-    }
-
-    private void processOnMore() {
-        RecyclerView.LayoutManager layoutManager = mRecycler.getLayoutManager();
-        int lastVisibleItemPosition = getLastVisibleItemPosition(layoutManager);
-        int visibleItemCount = layoutManager.getChildCount();
-        int totalItemCount = layoutManager.getItemCount();
-
-        if (((totalItemCount - lastVisibleItemPosition) <= ITEM_LEFT_TO_LOAD_MORE ||
-                (totalItemCount - lastVisibleItemPosition) == 0 && totalItemCount > visibleItemCount)
-                && !isLoadingMore) {
-
-            isLoadingMore = true;
-            if (mOnMoreListener != null) {
-                mOnMoreListener.onMoreAsked(mRecycler.getAdapter().getItemCount(), ITEM_LEFT_TO_LOAD_MORE, lastVisibleItemPosition);
-            }
-        }
-    }
-
-    private int getLastVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
-        int lastVisibleItemPosition = -1;
-        if (layoutManagerType == null) {
-            if (layoutManager instanceof GridLayoutManager) {
-                layoutManagerType = LAYOUT_MANAGER_TYPE.GRID;
-            } else if (layoutManager instanceof LinearLayoutManager) {
-                layoutManagerType = LAYOUT_MANAGER_TYPE.LINEAR;
-            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-                layoutManagerType = LAYOUT_MANAGER_TYPE.STAGGERED_GRID;
-            } else {
-                throw new RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager " +
-                        "and StaggeredGridLayoutManager");
-            }
-        }
-
-        switch (layoutManagerType) {
-            case LINEAR:
-                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-                break;
-            case GRID:
-                lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
-                break;
-            case STAGGERED_GRID:
-                lastVisibleItemPosition = caseStaggeredGrid(layoutManager);
-                break;
-        }
-        return lastVisibleItemPosition;
-    }
-
-    private int caseStaggeredGrid(RecyclerView.LayoutManager layoutManager) {
-        StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
-        if (lastScrollPositions == null)
-            lastScrollPositions = new int[staggeredGridLayoutManager.getSpanCount()];
-
-        staggeredGridLayoutManager.findLastVisibleItemPositions(lastScrollPositions);
-        return findMax(lastScrollPositions);
-    }
-
-
-    private int findMax(int[] lastPositions) {
-        int max = Integer.MIN_VALUE;
-        for (int value : lastPositions) {
-            if (value > max)
-                max = value;
-        }
-        return max;
+        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     /**
@@ -255,12 +181,12 @@ public class OptimumRecyclerview extends FrameLayout {
     private void setAdapterInternal(RecyclerView.Adapter adapter, boolean compatibleWithPrevious,
                                     boolean removeAndRecycleExistingViews) {
         if (compatibleWithPrevious)
-            mRecycler.swapAdapter(adapter, removeAndRecycleExistingViews);
+            mRecyclerView.swapAdapter(adapter, removeAndRecycleExistingViews);
         else
-            mRecycler.setAdapter(adapter);
+            mRecyclerView.setAdapter(adapter);
 
         //mProgress.setVisibility(View.GONE);
-        mRecycler.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
 
         // TODO: 2016/6/12 默认关闭下拉刷新
         //mPtrLayout.setRefreshing(false);
@@ -298,20 +224,19 @@ public class OptimumRecyclerview extends FrameLayout {
                 }
 
                 private void update() {
-                    isLoadingMore = false;
                     // TODO: 2016/6/12  数据更新之后.禁用一下刷新.
                     //mPtrLayout.setRefreshing(false);
                     mPtrLayout.refreshComplete();
-                    if (mRecycler.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
-                        mEmpty.setVisibility(View.VISIBLE);
+                    if (mRecyclerView.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
+                        mEmptyViewStub.setVisibility(View.VISIBLE);
                     } else if (mEmptyId != 0) {
-                        mEmpty.setVisibility(View.GONE);
+                        mEmptyViewStub.setVisibility(View.GONE);
                     }
                 }
             });
 
         if (mEmptyId != 0) {
-            mEmpty.setVisibility(null != adapter && adapter.getItemCount() > 0
+            mEmptyViewStub.setVisibility(null != adapter && adapter.getItemCount() > 0
                     ? View.GONE
                     : View.VISIBLE);
         }
@@ -321,7 +246,7 @@ public class OptimumRecyclerview extends FrameLayout {
      * Set the layout manager to the recycler
      */
     public void setLayoutManager(RecyclerView.LayoutManager manager) {
-        mRecycler.setLayoutManager(manager);
+        mRecyclerView.setLayoutManager(manager);
     }
 
     /**
@@ -348,7 +273,7 @@ public class OptimumRecyclerview extends FrameLayout {
      * Remove the adapter from the recycler
      */
     public void clear() {
-        mRecycler.setAdapter(null);
+        mRecyclerView.setAdapter(null);
     }
 
     /**
@@ -356,54 +281,47 @@ public class OptimumRecyclerview extends FrameLayout {
      */
     public void showProgress() {
         hideRecycler();
-        if (mEmptyId != 0) mEmpty.setVisibility(View.INVISIBLE);
+        if (mEmptyId != 0) mEmptyViewStub.setVisibility(View.INVISIBLE);
     }
 
     /**
      * Hide the progressbar and show the recycler
      */
     public void showRecycler() {
-        if (mRecycler.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
-            mEmpty.setVisibility(View.VISIBLE);
+        if (mRecyclerView.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
+            mEmptyViewStub.setVisibility(View.VISIBLE);
         } else if (mEmptyId != 0) {
-            mEmpty.setVisibility(View.GONE);
+            mEmptyViewStub.setVisibility(View.GONE);
         }
-        mRecycler.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     /**
      * Hide the recycler
      */
     public void hideRecycler() {
-        mRecycler.setVisibility(View.GONE);
-    }
-
-    /**
-     * Set the scroll listener for the recycler
-     */
-    public void addOnScrollListener(RecyclerView.OnScrollListener listener) {
-        mExternalOnScrollListener = listener;
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     /**
      * Add the onItemTouchListener for the recycler
      */
     public void addOnItemTouchListener(RecyclerView.OnItemTouchListener listener) {
-        mRecycler.addOnItemTouchListener(listener);
+        mRecyclerView.addOnItemTouchListener(listener);
     }
 
     /**
      * Remove the onItemTouchListener for the recycler
      */
     public void removeOnItemTouchListener(RecyclerView.OnItemTouchListener listener) {
-        mRecycler.removeOnItemTouchListener(listener);
+        mRecyclerView.removeOnItemTouchListener(listener);
     }
 
     /**
      * @return the recycler adapter
      */
     public RecyclerView.Adapter getAdapter() {
-        return mRecycler.getAdapter();
+        return mRecyclerView.getAdapter();
     }
 
     /**
@@ -435,7 +353,7 @@ public class OptimumRecyclerview extends FrameLayout {
      */
     public void setupMoreListener(OnMoreListener onMoreListener, int max) {
         mOnMoreListener = onMoreListener;
-        ITEM_LEFT_TO_LOAD_MORE = max;
+        mLoadMoreRecycleViewContainer.setItemLeftToLoadMore(max);
     }
 
     public void setOnMoreListener(OnMoreListener onMoreListener) {
@@ -443,56 +361,30 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     public void setNumberBeforeMoreIsCalled(int max) {
-        ITEM_LEFT_TO_LOAD_MORE = max;
+        mLoadMoreRecycleViewContainer.setItemLeftToLoadMore(max);
     }
-
-    public boolean isLoadingMore() {
-        return isLoadingMore;
-    }
-
-    /**
-     * Enable/Disable the More event
-     */
-    public void setLoadingMore(boolean isLoadingMore) {
-        this.isLoadingMore = isLoadingMore;
-    }
-
-    /**
-     * Remove the moreListener
-     */
-    public void removeMoreListener() {
-        mOnMoreListener = null;
-    }
-
 
     public void setOnTouchListener(OnTouchListener listener) {
-        mRecycler.setOnTouchListener(listener);
+        mRecyclerView.setOnTouchListener(listener);
     }
 
     public void addItemDecoration(RecyclerView.ItemDecoration itemDecoration) {
-        mRecycler.addItemDecoration(itemDecoration);
+        mRecyclerView.addItemDecoration(itemDecoration);
     }
 
     public void addItemDecoration(RecyclerView.ItemDecoration itemDecoration, int index) {
-        mRecycler.addItemDecoration(itemDecoration, index);
+        mRecyclerView.addItemDecoration(itemDecoration, index);
     }
 
     public void removeItemDecoration(RecyclerView.ItemDecoration itemDecoration) {
-        mRecycler.removeItemDecoration(itemDecoration);
+        mRecyclerView.removeItemDecoration(itemDecoration);
     }
 
     /**
      * @return inflated progress view or null
      */
-    public View getProgressView() {
-        return mProgressView;
-    }
-
-    /**
-     * @return inflated more progress view or null
-     */
-    public View getMoreProgressView() {
-        return mMoreProgressView;
+    public View getLoadingView() {
+        return mLoadingView;
     }
 
     /**
@@ -509,12 +401,6 @@ public class OptimumRecyclerview extends FrameLayout {
      * @param dy Pixels to scroll vertically
      */
     public void smoothScrollBy(int dx, int dy) {
-        mRecycler.smoothScrollBy(dx, dy);
-    }
-
-    public enum LAYOUT_MANAGER_TYPE {
-        LINEAR,
-        GRID,
-        STAGGERED_GRID
+        mRecyclerView.smoothScrollBy(dx, dy);
     }
 }

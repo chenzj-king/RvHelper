@@ -70,16 +70,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
 
     @Override
     public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-        if (overallItemsCount < 100) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    updateData();
-                }
-            }, 5000);
-        } else {
-            mOptimumRecyclerview.removeMoreListener();
-        }
     }
 
     protected void updateData() {
