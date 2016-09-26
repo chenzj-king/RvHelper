@@ -86,7 +86,11 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        if (null != mFooterView && position == getItemCount() - 1) {
+            return FOOTER_TPYE;
+        } else {
+            return super.getItemViewType(position);
+        }
     }
 
     @Override
@@ -105,7 +109,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     @Override
     public int getItemCount() {
         if (null != mDatas) {
-            return mDatas.size();
+            return mDatas.size() + (null != mFooterView ? 1 : 0);
         } else {
             return 0;
         }

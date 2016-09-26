@@ -52,7 +52,7 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
 
     public void useDefaultFooter() {
         LoadMoreDefaultFooterView footerView = new LoadMoreDefaultFooterView(getContext());
-        footerView.setVisibility(GONE);
+        footerView.setVisibility(VISIBLE);
         setLoadMoreView(footerView);
         setLoadMoreUIHandler(footerView);
     }
