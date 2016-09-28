@@ -193,7 +193,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         updateData(false);
                     }
-                }, 3000);
+                }, 1500);
             }
         });
 
