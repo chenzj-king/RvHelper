@@ -81,6 +81,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private final int NO_RESULT = 1;
     private final int NET_ERROR = 2;
 
+    private int status = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +175,19 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 mPtrLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        updateData(true);
+
+                        if (status % 3 == NET_ERROR) {
+                            mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_net_error));
+                            setEmptyTv(mEmtptTipTv, "亲,网络有点差哦 ", "重新加载");
+                            showEmpty();
+                        } else if (status % 3 == NO_RESULT) {
+                            mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_empty_result));
+                            setEmptyTv(mEmtptTipTv, "亲，暂无数据", "");
+                            showEmpty();
+                        } else {
+                            updateData(true);
+                        }
+                        status += 1;
                         mPtrLayout.refreshComplete();
                     }
                 }, 1000);
@@ -200,20 +214,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                boolean isNetError = false;
-                boolean isNoResult = false;
                 hideProgress();
-                if (isNetError) {
-                    mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_net_error));
-                    setEmptyTv(mEmtptTipTv, "亲,网络有点差哦 ", "重新加载");
-                    showEmpty();
-                } else if (isNoResult) {
-                    mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_empty_result));
-                    setEmptyTv(mEmtptTipTv, "亲，暂无数据", "");
-                    showEmpty();
-                } else {
-                    updateData(true);
-                }
+                updateData(true);
             }
         }, 3000);
     }
