@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.rvhelper.OptimumRecyclerview;
 import com.dreamliner.rvhelper.interfaces.ItemClickListener;
-import com.dreamliner.rvhelper.interfaces.OnMoreListener;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -32,7 +31,7 @@ import butterknife.ButterKnife;
  * @date 2016/6/12 17:06
  * @email admin@chenzhongjin.cn
  */
-public class MainActivity extends AppCompatActivity implements OnRefreshListener, OnMoreListener {
+public class MainActivity extends AppCompatActivity implements OnRefreshListener {
 
     @BindView(R.id.optimum_rv)
     OptimumRecyclerview mOptimumRecyclerview;
@@ -58,19 +57,17 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         mOptimumRecyclerview.getRecyclerView().addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
         mOptimumRecyclerview.setAdapter(mAdapter);
         mOptimumRecyclerview.setRefreshListener(this);
-        mOptimumRecyclerview.setupMoreListener(this, 1);
     }
 
     @Override
     public void onRefresh(PtrFrameLayout ptrFrameLayout) {
         mAdapter.clear();
         updateData();
-        mOptimumRecyclerview.setOnMoreListener(this);
     }
 
-    @Override
-    public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-    }
+//    @Override
+//    public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+//    }
 
     protected void updateData() {
         ArrayList<String> strings = new ArrayList<>();

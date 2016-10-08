@@ -9,7 +9,8 @@
         android:id="@+id/empty_status_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_list_status_net_error"/>
+        android:src="@drawable/ic_list_status_net_error"
+        />
 
     <TextView
         android:id="@+id/empty_status_tv"
@@ -20,7 +21,6 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:lineSpacingExtra="2dp"
-        android:text=""
         android:textColor="#333333"
         android:textSize="14sp"
         />

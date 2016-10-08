@@ -8,25 +8,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
-import com.dreamliner.rvhelper.interfaces.OnMoreListener;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
 public class OptimumRecyclerview extends FrameLayout {
 
+    //主界面
+    protected PtrClassicFrameLayout mPtrLayout;
+    protected LoadMoreRecycleViewContainer mLoadmoreContainer;
     protected RecyclerView mRecyclerView;
 
-    protected ViewStub mEmptyViewStub;
-    protected View mEmptyView;
+    //下拉刷新回调
+    protected OnRefreshListener mOnRefreshListener;
 
-    protected ViewStub mLoadingViewStub;
-    protected View mLoadingView;
+    //加载中页面
+    ViewStub mProgressViewStub;
+    private boolean isLoading = false;
+    private View mLoadingView;
+    private ImageView mLoadingIv;
+    private TextView mLoadingTipTv;
+
+    //空白页面
+    ViewStub mEmptyViewStub;
+    private View mEmptyView;
+    private ImageView mEmptyIv;
+    private TextView mEmtptTipTv;
 
     protected boolean mClipToPadding;
     protected int mPadding;
@@ -37,11 +51,6 @@ public class OptimumRecyclerview extends FrameLayout {
     protected int mScrollbarStyle;
     protected int mEmptyId;
     protected int mMoreProgressId;
-
-    protected OnRefreshListener mOnRefreshListener;
-    protected OnMoreListener mOnMoreListener;
-    protected PtrClassicFrameLayout mPtrLayout;
-    protected LoadMoreRecycleViewContainer mLoadMoreRecycleViewContainer;
 
     protected int mSuperRecyclerViewMainLayout;
 
@@ -95,8 +104,8 @@ public class OptimumRecyclerview extends FrameLayout {
             mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingRight, 0.0f);
             mScrollbarStyle = optimumRvArr.getInt(R.styleable.superrecyclerview_scrollbarStyle, -1);
             mEmptyId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_empty, 0);
-            mMoreProgressId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_moreProgress,
-                    R.layout.layout_more_progress);
+//            mMoreProgressId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_moreProgress,
+//                    R.layout.layout_more_progress);
 
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
@@ -346,22 +355,8 @@ public class OptimumRecyclerview extends FrameLayout {
         });
     }
 
-    /**
-     * Sets the More listener
-     *
-     * @param max Number of items before loading more
-     */
-    public void setupMoreListener(OnMoreListener onMoreListener, int max) {
-        mOnMoreListener = onMoreListener;
-        mLoadMoreRecycleViewContainer.setItemLeftToLoadMore(max);
-    }
-
-    public void setOnMoreListener(OnMoreListener onMoreListener) {
-        mOnMoreListener = onMoreListener;
-    }
-
     public void setNumberBeforeMoreIsCalled(int max) {
-        mLoadMoreRecycleViewContainer.setItemLeftToLoadMore(max);
+        mLoadmoreContainer.setItemLeftToLoadMore(max);
     }
 
     public void setOnTouchListener(OnTouchListener listener) {

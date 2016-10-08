@@ -78,8 +78,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     private MyHandler mHandler;
 
-    private final int NO_RESULT = 1;
-    private final int NET_ERROR = 2;
+    private final int NO_RESULT = 0;
+    private final int NET_ERROR = 1;
 
     private int status = 0;
 
@@ -95,7 +95,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         mProgressView = mProgressViewstub.inflate();
         mLoadingIv = (ImageView) mProgressView.findViewById(R.id.loading_iv);
         mLoadingTipTv = (TextView) mProgressView.findViewById(R.id.loading_tip_tv);
-        showProgress();
 
         mEmptyViewstub.setLayoutResource(R.layout.layout_default_empty);
         mEmptyView = mEmptyViewstub.inflate();
@@ -150,7 +149,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             private void loadEmptyView() {
-                Log.i(TAG, "loadEmptyView and hideProgress");
+                Log.i(TAG, "try loadEmptyView and hide the hideProgress");
                 hideProgress();
                 if (mAdapter.getItemCount() == 0) {
                     showEmpty();
@@ -163,11 +162,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         mPtrLayout.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                if (isLoading) {
-                    return false;
-                } else {
-                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, mRecyclerView, header);
-                }
+                return !isLoading && PtrDefaultHandler.checkContentCanBePulledDown(frame, mRecyclerView, header);
             }
 
             @Override
@@ -177,13 +172,17 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
 
                         if (status % 3 == NET_ERROR) {
+
                             mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_net_error));
-                            setEmptyTv(mEmtptTipTv, "亲,网络有点差哦 ", "重新加载");
+                            setEmptyTv(mEmtptTipTv, "亲,网络有点差哦", "重新加载");
                             showEmpty();
+
                         } else if (status % 3 == NO_RESULT) {
+
                             mEmptyIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_list_status_empty_result));
                             setEmptyTv(mEmtptTipTv, "亲，暂无数据", "");
                             showEmpty();
+
                         } else {
                             updateData(true);
                         }
@@ -201,7 +200,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         mLoadmoreContainer.setLoadMoreHandler(new LoadMoreHandler() {
             @Override
             public void onLoadMore(LoadMoreContainer loadMoreContainer) {
-                Log.i(TAG, "onLoadMore");
+                Log.i(TAG, "onLoadMore- itemCount=" + mAdapter.getItemCount());
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -211,13 +210,15 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        showProgress();
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 hideProgress();
                 updateData(true);
             }
-        }, 3000);
+        }, 1500);
     }
 
     private void showProgress() {
@@ -232,11 +233,11 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         isLoading = false;
         mProgressViewstub.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyViewstub.setVisibility(View.VISIBLE);
         ((AnimationDrawable) mLoadingIv.getDrawable()).stop();
     }
 
     private void showEmpty() {
-        hideProgress();
         mRecyclerView.setVisibility(View.GONE);
         mEmptyViewstub.setVisibility(View.VISIBLE);
     }
@@ -265,7 +266,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (!isNeedClear) {
-            if (mAdapter.getItemCount() > 120) {
+            if (mAdapter.getItemCount() > 100) {
                 mLoadmoreContainer.loadMoreFinish(false, false);
             } else {
                 mLoadmoreContainer.loadMoreFinish(false, true);
@@ -313,7 +314,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleMessage(Message msg) {
-        //
+        Log.i(TAG, "handleMessage: " + msg.toString());
     }
 
 }

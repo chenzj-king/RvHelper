@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:padding="15dp"
-        android:text="测试"
+        android:text=""
         />
 </LinearLayout>

@@ -26,15 +26,16 @@
                 android:id="@+id/progress_viewstub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+                android:visibility="visible"
                 />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:visibility="visible"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical"
+                android:visibility="gone"
                 />
 
             <ViewStub
@@ -42,8 +43,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@android:id/list"
-                android:visibility="visible"
+                android:visibility="gone"
                 />
+
 
         </com.dreamliner.loadmore.LoadMoreRecycleViewContainer>
     </com.dreamliner.ptrlib.PtrClassicFrameLayout>

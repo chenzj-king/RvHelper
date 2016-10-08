@@ -3,12 +3,12 @@ package com.dreamliner.loadmore;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 /**
  * @author huqiu.lhq
  */
-public abstract class LoadMoreContainerBase extends RelativeLayout implements LoadMoreContainer {
+public abstract class LoadMoreContainerBase extends LinearLayout implements LoadMoreContainer {
 
     protected int mVisibleThreshold = 0;
 
