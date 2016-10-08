@@ -33,7 +33,7 @@ import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.activity.main.adapter.TextAdapter;
 import com.dreamliner.rvhelper.sample.utils.DividerUtil;
-import com.dreamliner.rvhelper.sample.view.CustomizedClickableSpan;
+import com.dreamliner.rvhelper.view.CustomizedClickableSpan;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     @BindView(R.id.empty_viewstub)
     ViewStub mEmptyViewstub;
-    @BindView(R.id.progress_viewstub)
+    @BindView(R.id.loading_viewstub)
     ViewStub mProgressViewstub;
 
     private boolean isLoading = false;
@@ -91,7 +91,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
         mHandler = new MyHandler(this);
 
-        mProgressViewstub.setLayoutResource(R.layout.layout_default_progress);
+        mProgressViewstub.setLayoutResource(R.layout.layout_default_loading);
         mProgressView = mProgressViewstub.inflate();
         mLoadingIv = (ImageView) mProgressView.findViewById(R.id.loading_iv);
         mLoadingTipTv = (TextView) mProgressView.findViewById(R.id.loading_tip_tv);
@@ -280,8 +280,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         textView.setText(tipStr);
         if (!TextUtils.isEmpty(clickStr)) {
             SpannableString spStr = new SpannableString(clickStr);
-            ClickableSpan clickSpan = new CustomizedClickableSpan(clickStr, this instanceof View.OnClickListener ?
-                    (View.OnClickListener) this : null);
+            ClickableSpan clickSpan = new CustomizedClickableSpan(clickStr, getApplicationContext(), this);
             spStr.setSpan(clickSpan, 0, clickStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             textView.append(spStr);
             textView.setMovementMethod(LinkMovementMethod.getInstance());

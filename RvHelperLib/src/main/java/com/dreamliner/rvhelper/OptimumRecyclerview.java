@@ -8,15 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
+import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
+import com.dreamliner.rvhelper.loading.LoadingLayout;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
 public class OptimumRecyclerview extends FrameLayout {
@@ -30,18 +30,16 @@ public class OptimumRecyclerview extends FrameLayout {
     protected OnRefreshListener mOnRefreshListener;
 
     //加载中页面
-    ViewStub mProgressViewStub;
     private boolean isLoading = false;
-    private View mLoadingView;
-    private ImageView mLoadingIv;
-    private TextView mLoadingTipTv;
+    ViewStub mLoadingViewStub;
+    private LoadingLayout mLoadingLayout;
 
     //空白页面
     ViewStub mEmptyViewStub;
-    private View mEmptyView;
-    private ImageView mEmptyIv;
-    private TextView mEmtptTipTv;
+    private EmptyLayout mEmptyLayout;
 
+    protected int mEmptyId;
+    protected int mLoadingId;
     protected boolean mClipToPadding;
     protected int mPadding;
     protected int mPaddingTop;
@@ -49,10 +47,6 @@ public class OptimumRecyclerview extends FrameLayout {
     protected int mPaddingLeft;
     protected int mPaddingRight;
     protected int mScrollbarStyle;
-    protected int mEmptyId;
-    protected int mMoreProgressId;
-
-    protected int mSuperRecyclerViewMainLayout;
 
     //下拉刷新的头部相关信息
     private int mPtrBgColor;
@@ -94,8 +88,8 @@ public class OptimumRecyclerview extends FrameLayout {
 
         try {
             //初始化rv相关
-            mSuperRecyclerViewMainLayout = R.layout.layout_rvhelper_verticalscroll;
-
+            mEmptyId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_empty, R.layout.layout_default_empty);
+            mLoadingId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_loading, R.layout.layout_default_loading);
             mClipToPadding = optimumRvArr.getBoolean(R.styleable.superrecyclerview_recyclerClipToPadding, false);
             mPadding = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPadding, -1.0f);
             mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingTop, 0.0f);
@@ -103,9 +97,6 @@ public class OptimumRecyclerview extends FrameLayout {
             mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingLeft, 0.0f);
             mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingRight, 0.0f);
             mScrollbarStyle = optimumRvArr.getInt(R.styleable.superrecyclerview_scrollbarStyle, -1);
-            mEmptyId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_empty, 0);
-//            mMoreProgressId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_moreProgress,
-//                    R.layout.layout_more_progress);
 
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
@@ -125,16 +116,33 @@ public class OptimumRecyclerview extends FrameLayout {
         if (isInEditMode()) {
             return;
         }
-        View v = LayoutInflater.from(getContext()).inflate(mSuperRecyclerViewMainLayout, this);
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_rvhelper, this);
 
+        //初始化加载中界面
+        mLoadingViewStub = (ViewStub) v.findViewById(R.id.loading_viewstub);
+        mLoadingViewStub.setLayoutResource(mLoadingId);
+        if (0 != mLoadingId) {
+            View loadingView = mLoadingViewStub.inflate();
+            if (loadingView instanceof LoadingLayout) {
+                mLoadingLayout = (LoadingLayout) loadingView;
+            }
+        }
+
+        //初始化空白页面界面
         mEmptyViewStub = (ViewStub) v.findViewById(R.id.empty_viewstub);
         mEmptyViewStub.setLayoutResource(mEmptyId);
-        if (mEmptyId != 0)
-            mEmptyView = mEmptyViewStub.inflate();
-        mEmptyViewStub.setVisibility(View.GONE);
+        if (0 != mEmptyId) {
+            View emptyView = mEmptyViewStub.inflate();
+            if (emptyView instanceof EmptyLayout) {
+                mEmptyLayout = (EmptyLayout) emptyView;
+            }
+        }
 
         inituptrView(v);
         initRecyclerView(v);
+
+        //默认先显示加载中界面
+        showLoadingView();
     }
 
     private void inituptrView(View v) {
@@ -375,18 +383,65 @@ public class OptimumRecyclerview extends FrameLayout {
         mRecyclerView.removeItemDecoration(itemDecoration);
     }
 
+    private void showLoadingView() {
+        isLoading = true;
+        mLoadingViewStub.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        mEmptyViewStub.setVisibility(View.GONE);
+        doDefaultLoadingView(true);
+    }
+
+    private void hideLoadingView() {
+        isLoading = false;
+        mLoadingViewStub.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyViewStub.setVisibility(View.VISIBLE);
+        if (null != mLoadingLayout) {
+            mLoadingLayout.onHideLoading();
+        }
+        doDefaultLoadingView(false);
+    }
+
+    private void doDefaultLoadingView(boolean isLoading) {
+        if (null == mLoadingLayout) {
+            return;
+        }
+        if (isLoading) {
+            mLoadingLayout.onShowLoading();
+        } else {
+            mLoadingLayout.onHideLoading();
+        }
+    }
+
+    protected void setEmptyType(int type) {
+        if (null == mEmptyLayout) {
+            return;
+        }
+        mEmptyLayout.setEmptyType(type);
+    }
+
+    private void showEmptyView() {
+        mRecyclerView.setVisibility(View.GONE);
+        mEmptyViewStub.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmptyView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyViewStub.setVisibility(View.GONE);
+    }
+
     /**
      * @return inflated progress view or null
      */
-    public View getLoadingView() {
-        return mLoadingView;
+    public LoadingLayout getLoadingLayout() {
+        return mLoadingLayout;
     }
 
     /**
      * @return inflated empty view or null
      */
-    public View getEmptyView() {
-        return mEmptyView;
+    public EmptyLayout getEmptyLayout() {
+        return mEmptyLayout;
     }
 
     /**
