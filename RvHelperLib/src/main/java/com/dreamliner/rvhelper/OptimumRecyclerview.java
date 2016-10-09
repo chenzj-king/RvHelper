@@ -2,6 +2,7 @@ package com.dreamliner.rvhelper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,10 +13,12 @@ import android.widget.FrameLayout;
 
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
+import com.dreamliner.loadmore.LoadMoreUIHandler;
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
+import com.dreamliner.ptrlib.PtrUIHandler;
 import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
 import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
@@ -320,6 +323,14 @@ public class OptimumRecyclerview extends FrameLayout {
         });
     }
 
+    public void setHeaderView(@NonNull View headerView) {
+        if (!(headerView instanceof PtrUIHandler)) {
+            throw new RuntimeException("headerView must implements PtrUIHandler");
+        }
+        mPtrLayout.setHeaderView(headerView);
+        mPtrLayout.addPtrUIHandler((PtrUIHandler) headerView);
+    }
+
     public void refreshComplete() {
         mPtrLayout.refreshComplete();
     }
@@ -335,6 +346,24 @@ public class OptimumRecyclerview extends FrameLayout {
         mLoadmoreContainer.setEnableLoadmore(true);
         mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
         mLoadmoreContainer.useDefaultFooter();
+        mLoadmoreContainer.setAutoLoadMore(true);
+        mLoadmoreContainer.setShowLoadingForFirstPage(true);
+        mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+    }
+
+    public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler, View loadmoreView) {
+        if (!(loadmoreView instanceof LoadMoreUIHandler)) {
+            throw new RuntimeException("loadmoreview must implements LoadMoreUIHandler");
+        }
+        mLoadMoreHandler = loadMoreHandler;
+
+        //配置loadmore
+        mLoadmoreContainer.setEnableLoadmore(true);
+        mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+
+        mLoadmoreContainer.setLoadMoreView(loadmoreView);
+        mLoadmoreContainer.setLoadMoreUIHandler((LoadMoreUIHandler) loadmoreView);
+
         mLoadmoreContainer.setAutoLoadMore(true);
         mLoadmoreContainer.setShowLoadingForFirstPage(true);
         mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);

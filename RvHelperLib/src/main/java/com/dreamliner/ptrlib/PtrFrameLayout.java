@@ -2,6 +2,7 @@ package com.dreamliner.ptrlib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -892,7 +893,7 @@ public class PtrFrameLayout extends ViewGroup {
         return mHeaderView;
     }
 
-    public void setHeaderView(View header) {
+    public void setHeaderView(@NonNull View header) {
         if (mHeaderView != null && header != null && mHeaderView != header) {
             removeView(mHeaderView);
         }

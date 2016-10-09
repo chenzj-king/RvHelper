@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -149,19 +150,25 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!TextUtils.isEmpty(msg)) {
-                    mToast = Toast.makeText(BaseActivity.this, "" + msg, Toast.LENGTH_SHORT);
+                    if (mToast == null) {
+                        mToast = Toast.makeText(getApplicationContext(), "" + msg, Toast.LENGTH_SHORT);
+                    }
+                    mToast.setText(msg);
                     mToast.show();
                 }
             }
         });
     }
 
-    public void showToast(final int resId) {
+    public void showToast(@StringRes final int resId) {
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                mToast = Toast.makeText(BaseActivity.this, resId, Toast.LENGTH_SHORT);
+                if (mToast == null) {
+                    mToast = Toast.makeText(getApplicationContext(), resId, Toast.LENGTH_SHORT);
+                }
+                mToast.setText(resId);
                 mToast.show();
             }
         });

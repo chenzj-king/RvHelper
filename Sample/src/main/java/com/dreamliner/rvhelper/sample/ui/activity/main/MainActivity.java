@@ -1,14 +1,10 @@
 package com.dreamliner.rvhelper.sample.ui.activity.main;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreHandler;
@@ -19,9 +15,11 @@ import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.activity.main.adapter.MainAdapter;
+import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 import com.dreamliner.rvhelper.sample.utils.DividerUtil;
+import com.dreamliner.rvhelper.sample.view.Sq580HeaderView;
+import com.dreamliner.rvhelper.sample.view.Sq580LoadmoreView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,7 +36,7 @@ import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
  * @date 2016/6/12 17:06
  * @email admin@chenzhongjin.cn
  */
-public class MainActivity extends AppCompatActivity implements OnRefreshListener, LoadMoreHandler, View.OnClickListener {
+public class MainActivity extends BaseActivity implements OnRefreshListener, LoadMoreHandler, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -46,13 +44,46 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
     OptimumRecyclerview mOptimumRecyclerview;
     private MainAdapter mAdapter;
 
-    private MyHandler mHandler;
-    private int status = 0;
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_main);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_net_error) {
+            mOptimumRecyclerview.setEmptyType(NET_ERROR);
+            mOptimumRecyclerview.getPtrLayout().autoRefresh();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.clear();
+                }
+            }, 1000);
+            return true;
+        } else if (id == R.id.action_no_result) {
+            mOptimumRecyclerview.setEmptyType(NO_RESULT);
+            mOptimumRecyclerview.getPtrLayout().autoRefresh();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.clear();
+                }
+            }, 1000);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void initViews() {
         ButterKnife.bind(this);
         mHandler = new MyHandler(this);
 
@@ -70,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         mOptimumRecyclerview.setLoadMoreHandler(this);
 
         mOptimumRecyclerview.setEmptyOnClick(this);
+        mOptimumRecyclerview.setHeaderView(new Sq580HeaderView(this));
+        mOptimumRecyclerview.setLoadMoreHandler(this, new Sq580LoadmoreView(this));
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -94,23 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                switch (status) {
-                    case NET_ERROR:
-                        mOptimumRecyclerview.setEmptyType(NET_ERROR);
-                        mAdapter.clear();
-                        status = NO_RESULT;
-                        break;
-                    case NO_RESULT:
-                        mOptimumRecyclerview.setEmptyType(NO_RESULT);
-                        mAdapter.clear();
-                        status = -1;
-                        break;
-                    default:
-                        updateData(true);
-                        status = NET_ERROR;
-                        break;
-                }
-                mOptimumRecyclerview.refreshComplete();
+                updateData(true);
             }
         }, 1000);
     }
@@ -123,10 +140,11 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
             public void run() {
                 updateData(false);
             }
-        }, 1500);
+        }, 1000);
     }
 
     protected void updateData(boolean isNeedClear) {
+
         ArrayList<String> strings = new ArrayList<>();
         int size = new Random().nextInt(50);
         size = size < 15 ? 15 : size;
@@ -140,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         }
         if (isNeedClear) {
             mAdapter.update(strings);
-            status = NET_ERROR;
         } else {
             mAdapter.addAll(strings);
         }
@@ -154,44 +171,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshListener
         } else {
             mOptimumRecyclerview.loadMoreFinish(false, true);
         }
-    }
-
-    private static class MyHandler extends Handler {
-
-        private WeakReference<MainActivity> mActivityWeakReference;
-
-        MyHandler(MainActivity activityWeakReference) {
-            mActivityWeakReference = new WeakReference<>(activityWeakReference);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity mainActivity = mActivityWeakReference.get();
-            if (null != mainActivity) {
-                mainActivity.handleMessage(msg);
-            }
-        }
-    }
-
-    private void handleMessage(Message msg) {
-        //
-    }
-
-    private Toast mToast;
-
-    public void showToast(final String msg) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!TextUtils.isEmpty(msg)) {
-                    if (mToast == null) {
-                        mToast = Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT);
-                    }
-                    mToast.setText(msg);
-                    mToast.show();
-                }
-            }
-        });
     }
 }
 

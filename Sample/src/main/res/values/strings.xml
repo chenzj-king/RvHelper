@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">@string/APP_NAME</string>
+
+    <string name="net_error">网络错误</string>
+    <string name="no_result">没有数据</string>
+
 </resources>
