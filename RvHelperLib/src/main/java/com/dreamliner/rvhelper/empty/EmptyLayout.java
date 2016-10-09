@@ -31,4 +31,5 @@ public abstract class EmptyLayout extends LinearLayout implements EmptyUIHandler
     public EmptyLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
 }

@@ -99,20 +99,20 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     protected void initAttrs(AttributeSet attrs) {
-        TypedArray optimumRvArr = getContext().obtainStyledAttributes(attrs, R.styleable.superrecyclerview);
+        TypedArray optimumRvArr = getContext().obtainStyledAttributes(attrs, R.styleable.OptimumRecyclerview);
         TypedArray ptrArr = getContext().obtainStyledAttributes(attrs, R.styleable.PtrFrameLayout);
 
         try {
             //初始化rv相关
-            mEmptyId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_empty, R.layout.layout_default_empty);
-            mLoadingId = optimumRvArr.getResourceId(R.styleable.superrecyclerview_layout_loading, R.layout.layout_default_loading);
-            mClipToPadding = optimumRvArr.getBoolean(R.styleable.superrecyclerview_recyclerClipToPadding, false);
-            mPadding = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPadding, -1.0f);
-            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingTop, 0.0f);
-            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingBottom, 0.0f);
-            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingLeft, 0.0f);
-            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.superrecyclerview_recyclerPaddingRight, 0.0f);
-            mScrollbarStyle = optimumRvArr.getInt(R.styleable.superrecyclerview_scrollbarStyle, -1);
+            mEmptyId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_layout_empty, R.layout.layout_default_empty);
+            mLoadingId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_layout_loading, R.layout.layout_default_loading);
+            mClipToPadding = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerview_recyclerClipToPadding, false);
+            mPadding = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPadding, -1.0f);
+            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingTop, 0.0f);
+            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingBottom, 0.0f);
+            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingLeft, 0.0f);
+            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingRight, 0.0f);
+            mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerview_scrollbarStyle, -1);
 
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
@@ -454,11 +454,11 @@ public class OptimumRecyclerview extends FrameLayout {
         return mEmptyLayout;
     }
 
-    protected void move(int n) {
+    public void move(int n) {
         move(n, true);
     }
 
-    protected void move(int n, boolean smooth) {
+    public void move(int n, boolean smooth) {
         if (n < 0 || n >= getAdapter().getItemCount()) {
             Log.e(TAG, "move: index error");
             return;

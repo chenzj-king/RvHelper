@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_net_error) {
+            mOptimumRecyclerview.move(0, false);
             mOptimumRecyclerview.setEmptyType(NET_ERROR);
             mOptimumRecyclerview.getPtrLayout().autoRefresh();
             mHandler.postDelayed(new Runnable() {
@@ -69,6 +70,7 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
             }, 1000);
             return true;
         } else if (id == R.id.action_no_result) {
+            mOptimumRecyclerview.move(0, false);
             mOptimumRecyclerview.setEmptyType(NO_RESULT);
             mOptimumRecyclerview.getPtrLayout().autoRefresh();
             mHandler.postDelayed(new Runnable() {
