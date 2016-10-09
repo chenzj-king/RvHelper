@@ -6,16 +6,11 @@
 
 
     <com.dreamliner.rvhelper.OptimumRecyclerview
-        android:id="@+id/list"
+        android:id="@+id/optimum_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transcriptMode="normal"
-        app:layout_empty="@layout/layout_emptyview"
-        app:layout_moreProgress="@layout/view_more_progress"
-        app:mainLayoutId="@layout/layout_rvhelper_verticalscroll"
-        app:recyclerClipToPadding="false"
-        app:scrollbarStyle="insideInset"
+        android:background="#f2f5f6"
+        android:scrollbars="none"
         />
-
 
 </RelativeLayout>

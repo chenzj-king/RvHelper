@@ -3,6 +3,7 @@ package com.dreamliner.rvhelper.adapter;
 import com.dreamliner.rvhelper.interfaces.ItemClickListener;
 import com.dreamliner.rvhelper.interfaces.ItemLongListener;
 import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
+import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
 
 /**
  * @author chenzj
@@ -30,11 +31,10 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends BaseData
     }
 
     @Override
-    public final void onBindViewHolder(VH holder, int position) {
-        bindView(holder, position);
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
+        if (!(holder instanceof FooterViewHolder)) {
+            bindView((VH) holder, position);
+        }
     }
-
-    protected abstract void bindView(VH holder, int position);
-
 }
 

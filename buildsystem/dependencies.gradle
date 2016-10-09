@@ -1,6 +1,6 @@
 ext.versions = [
-        code       : 3,
-        name       : '1.4.4',
+        code       : 4,
+        name       : '1.5.0',
 
         minSdk     : 15,
         targetSdk  : 23,
@@ -33,5 +33,6 @@ ext.libraries = [
         logger             : "com.github.orhanobut:logger:1.15",
 
         loadingView        : "com.github.chenzj-king:AVLoadingIndicatorView:2.1.1",
+        flexibledivider      : "com.yqritc:recyclerview-flexibledivider:1.4.0",
 ]
 

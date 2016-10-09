@@ -2,6 +2,8 @@ package com.dreamliner.rvhelper.sample;
 
 import android.app.Application;
 
+import com.dreamliner.rvhelper.sample.utils.PixelUtil;
+
 /**
  * @author chenzj
  * @Title: AppContext
@@ -25,6 +27,7 @@ public class AppContext extends Application {
         mInstance = this;
         initDebug();
         initNet();
+        PixelUtil.init(this);
         //如初始化net一样.把相关的图片加载框架/Log/其他有debug开关的一些依赖.都可以进行差异化构建
     }
 

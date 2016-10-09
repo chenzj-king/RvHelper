@@ -43,7 +43,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         if (null != mItemClickListener) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                mItemClickListener.onItemClick(v, getAdapterPosition());
+                mItemClickListener.onItemClick(v, position);
             }
         }
     }
@@ -53,7 +53,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         if (null != mItemLongListener) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                mItemLongListener.onLongClick(v, getAdapterPosition());
+                mItemLongListener.onLongClick(v, position);
             }
             return true;
         }
