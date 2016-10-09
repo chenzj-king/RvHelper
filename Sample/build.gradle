@@ -11,7 +11,7 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode versions.code
         versionName versions.name
-
+        manifestPlaceholders = [CHANNEL_VALUE: "dreamliner"]
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -62,9 +62,9 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent + "/${variant.buildType.name}",
-                    "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}.apk".toLowerCase())
+            output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", "${variant.buildType.name}".contains("release")
+                    ? "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}-${variant.productFlavors[0].name}.apk".toLowerCase()
+                    : "dreamliner-rvhelperSample-${variant.buildType.name}.apk".toLowerCase())
         }
     }
 
@@ -78,6 +78,12 @@ android {
     dexOptions {
         preDexLibraries = false
         javaMaxHeapSize "4g"
+    }
+
+    productFlavors {
+        dreamliner {
+            manifestPlaceholders = [CHANNEL_VALUE: name]
+        }
     }
 }
 

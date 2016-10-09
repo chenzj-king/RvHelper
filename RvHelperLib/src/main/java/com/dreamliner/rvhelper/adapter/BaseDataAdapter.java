@@ -109,7 +109,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     @Override
     public int getItemCount() {
         if (null != mDatas) {
-            return mDatas.size() + (null != mFooterView ? 1 : 0);
+            int dataSize = mDatas.size();
+            return dataSize == 0 ? 0 : dataSize + (null != mFooterView ? 1 : 0);
         } else {
             return 0;
         }

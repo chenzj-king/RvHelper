@@ -14,18 +14,18 @@ import butterknife.ButterKnife;
 
 /**
  * @author chenzj
- * @Title: TextAdapter
+ * @Title: MainAdapter
  * @Description: 类的描述 -
  * @date 2016/6/13 09:58
  * @email admin@chenzhongjin.cn
  */
-public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
+public class MainAdapter extends BaseAdapter<String, MainAdapter.ViewHolder> {
 
-    public TextAdapter() {
+    public MainAdapter() {
         super();
     }
 
-    public TextAdapter(ItemClickListener itemClickListener) {
+    public MainAdapter(ItemClickListener itemClickListener) {
         super(itemClickListener);
     }
 

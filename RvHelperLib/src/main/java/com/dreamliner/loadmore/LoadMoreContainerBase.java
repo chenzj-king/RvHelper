@@ -20,7 +20,7 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
     private boolean mLoadError = false;
     private boolean mListEmpty = true;
     private boolean mShowLoadingForFirstPage = false;
-    private View mFooterView;
+    protected View mFooterView;
 
     public LoadMoreContainerBase(Context context) {
         super(context);
@@ -74,7 +74,7 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
         }
         final LoadMoreContainerBase loadMoreContainerBase = this;
         if (null != mLoadMoreHandler) {
-            this.post(new Runnable() {
+            post(new Runnable() {
                 @Override
                 public void run() {
                     mLoadMoreHandler.onLoadMore(loadMoreContainerBase);
@@ -168,9 +168,11 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
         }
     }
 
-    protected abstract void addFooterView(View view);
+    public abstract void addFooterView(View view);
 
-    protected abstract void removeFooterView(View view);
+    public abstract void removeFooterView(View view);
+
+    public abstract void refreshList();
 
     protected abstract Object retrieveListView();
 }

@@ -4,22 +4,30 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 
+import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
 import com.dreamliner.ptrlib.PtrClassicFrameLayout;
 import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
+import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
 import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.loading.LoadingLayout;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
+import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getFirstVisibleItemPosition;
+import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getLastVisibleItemPosition;
+
 public class OptimumRecyclerview extends FrameLayout {
+
+    private static final String TAG = "OptimumRecyclerview";
 
     //主界面
     protected PtrClassicFrameLayout mPtrLayout;
@@ -28,6 +36,7 @@ public class OptimumRecyclerview extends FrameLayout {
 
     //下拉刷新回调
     protected OnRefreshListener mOnRefreshListener;
+    protected LoadMoreHandler mLoadMoreHandler;
 
     //加载中页面
     private boolean isLoading = false;
@@ -56,6 +65,10 @@ public class OptimumRecyclerview extends FrameLayout {
     private boolean mPullToFresh;
     private float mRatioOfHedaerHeightToRefresh;
     private float mResistance;
+
+
+    protected boolean isRecyclerMove = false;
+    protected int mRecyclerviewIndex = 0;
 
     public PtrClassicFrameLayout getPtrLayout() {
         return mPtrLayout;
@@ -138,14 +151,15 @@ public class OptimumRecyclerview extends FrameLayout {
             }
         }
 
-        inituptrView(v);
+        initPtrView(v);
         initRecyclerView(v);
+        initLoadmoreView(v);
 
         //默认先显示加载中界面
         showLoadingView();
     }
 
-    private void inituptrView(View v) {
+    private void initPtrView(View v) {
         mPtrLayout = (PtrClassicFrameLayout) v.findViewById(R.id.ptr_layout);
         mPtrLayout.setEnabled(false);
 
@@ -169,8 +183,7 @@ public class OptimumRecyclerview extends FrameLayout {
         if (recyclerView instanceof RecyclerView)
             mRecyclerView = (RecyclerView) recyclerView;
         else
-            throw new IllegalArgumentException("SuperRecyclerView works with a RecyclerView!");
-
+            throw new IllegalArgumentException("OptimumRecyclerview works with a RecyclerView!");
 
         mRecyclerView.setClipToPadding(mClipToPadding);
 
@@ -179,84 +192,16 @@ public class OptimumRecyclerview extends FrameLayout {
         } else {
             mRecyclerView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
         }
-
         if (mScrollbarStyle != -1) {
             mRecyclerView.setScrollBarStyle(mScrollbarStyle);
         }
-        mRecyclerView.setNestedScrollingEnabled(false);
+
+        mRecyclerView.addOnScrollListener(new CustomOnScrollListener());
     }
 
-    /**
-     * @param adapter                       The new adapter to set, or null to set no adapter
-     * @param compatibleWithPrevious        Should be set to true if new adapter uses the same {@android.support.v7.widget
-     *                                      .RecyclerView.ViewHolder}
-     *                                      as previous one
-     * @param removeAndRecycleExistingViews If set to true, RecyclerView will recycle all existing Views. If adapters
-     *                                      have stable ids and/or you want to animate the disappearing views, you may
-     *                                      prefer to set this to false
-     */
-    private void setAdapterInternal(RecyclerView.Adapter adapter, boolean compatibleWithPrevious,
-                                    boolean removeAndRecycleExistingViews) {
-        if (compatibleWithPrevious)
-            mRecyclerView.swapAdapter(adapter, removeAndRecycleExistingViews);
-        else
-            mRecyclerView.setAdapter(adapter);
-
-        //mProgress.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-
-        // TODO: 2016/6/12 默认关闭下拉刷新
-        //mPtrLayout.setRefreshing(false);
-        mPtrLayout.refreshComplete();
-        if (null != adapter)
-            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onItemRangeChanged(int positionStart, int itemCount) {
-                    super.onItemRangeChanged(positionStart, itemCount);
-                    update();
-                }
-
-                @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-                    super.onItemRangeInserted(positionStart, itemCount);
-                    update();
-                }
-
-                @Override
-                public void onItemRangeRemoved(int positionStart, int itemCount) {
-                    super.onItemRangeRemoved(positionStart, itemCount);
-                    update();
-                }
-
-                @Override
-                public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-                    super.onItemRangeMoved(fromPosition, toPosition, itemCount);
-                    update();
-                }
-
-                @Override
-                public void onChanged() {
-                    super.onChanged();
-                    update();
-                }
-
-                private void update() {
-                    // TODO: 2016/6/12  数据更新之后.禁用一下刷新.
-                    //mPtrLayout.setRefreshing(false);
-                    mPtrLayout.refreshComplete();
-                    if (mRecyclerView.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
-                        mEmptyViewStub.setVisibility(View.VISIBLE);
-                    } else if (mEmptyId != 0) {
-                        mEmptyViewStub.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-        if (mEmptyId != 0) {
-            mEmptyViewStub.setVisibility(null != adapter && adapter.getItemCount() > 0
-                    ? View.GONE
-                    : View.VISIBLE);
-        }
+    private void initLoadmoreView(View v) {
+        mLoadmoreContainer = (LoadMoreRecycleViewContainer) v.findViewById(R.id.loadmore_container);
+        mLoadmoreContainer.setEnableLoadmore(false);
     }
 
     /**
@@ -267,57 +212,64 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     /**
-     * Set the adapter to the recycler
-     * Automatically hide the progressbar
-     * Set the refresh to false
-     * If adapter is empty, then the emptyview is shown
+     * Set the adapter to the recyclerview
      */
     public void setAdapter(RecyclerView.Adapter adapter) {
-        setAdapterInternal(adapter, false, true);
-    }
 
-    /**
-     * @param adapter                       The new adapter to , or null to set no adapter.
-     * @param removeAndRecycleExistingViews If set to true, RecyclerView will recycle all existing Views. If adapters
-     *                                      have stable ids and/or you want to animate the disappearing views, you may
-     *                                      prefer to set this to false.
-     */
-    public void swapAdapter(RecyclerView.Adapter adapter, boolean removeAndRecycleExistingViews) {
-        setAdapterInternal(adapter, true, removeAndRecycleExistingViews);
-    }
+        if (null != adapter) {
+            mRecyclerView.setAdapter(adapter);
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    super.onChanged();
+                    loadEmptyView();
+                }
 
-    /**
-     * Remove the adapter from the recycler
-     */
-    public void clear() {
-        mRecyclerView.setAdapter(null);
-    }
+                @Override
+                public void onItemRangeChanged(int positionStart, int itemCount) {
+                    super.onItemRangeChanged(positionStart, itemCount);
+                    loadEmptyView();
+                }
 
-    /**
-     * Show the progressbar
-     */
-    public void showProgress() {
-        hideRecycler();
-        if (mEmptyId != 0) mEmptyViewStub.setVisibility(View.INVISIBLE);
-    }
+                @Override
+                public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+                    super.onItemRangeChanged(positionStart, itemCount, payload);
+                    loadEmptyView();
+                }
 
-    /**
-     * Hide the progressbar and show the recycler
-     */
-    public void showRecycler() {
-        if (mRecyclerView.getAdapter().getItemCount() == 0 && mEmptyId != 0) {
-            mEmptyViewStub.setVisibility(View.VISIBLE);
-        } else if (mEmptyId != 0) {
-            mEmptyViewStub.setVisibility(View.GONE);
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    super.onItemRangeInserted(positionStart, itemCount);
+                    loadEmptyView();
+                }
+
+                @Override
+                public void onItemRangeRemoved(int positionStart, int itemCount) {
+                    super.onItemRangeRemoved(positionStart, itemCount);
+                    loadEmptyView();
+                }
+
+                @Override
+                public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                    super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                    loadEmptyView();
+                }
+
+                private void loadEmptyView() {
+                    Log.i(TAG, "try loadEmptyView and hide the hideProgress");
+
+                    hideLoadingView();
+                    mPtrLayout.refreshComplete();
+                    if (null != mEmptyLayout) {
+                        if (getAdapter().getItemCount() == 0) {
+                            showEmptyView();
+                        } else {
+                            hideEmptyView();
+                        }
+                    }
+                }
+            });
         }
-        mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Hide the recycler
-     */
-    public void hideRecycler() {
-        mRecyclerView.setVisibility(View.GONE);
     }
 
     /**
@@ -335,22 +287,27 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     /**
-     * @return the recycler adapter
+     * @return the recyclerview adapter
      */
     public RecyclerView.Adapter getAdapter() {
         return mRecyclerView.getAdapter();
     }
 
+    public RecyclerView.LayoutManager getLayoutManager() {
+        return mRecyclerView.getLayoutManager();
+    }
+
     /**
-     * Sets the onRefresh listener
+     * Set the onRefresh listener
      */
     public void setRefreshListener(OnRefreshListener onRefreshListener) {
         mPtrLayout.setEnabled(true);
-        this.mOnRefreshListener = onRefreshListener;
-
+        mOnRefreshListener = onRefreshListener;
         mPtrLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
+                //下拉刷新的话.把loadmore取消掉.
+                mLoadmoreContainer.refreshList();
                 if (null != mOnRefreshListener) {
                     mOnRefreshListener.onRefresh(frame);
                 }
@@ -358,13 +315,37 @@ public class OptimumRecyclerview extends FrameLayout {
 
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                return !isLoading && PtrDefaultHandler.checkContentCanBePulledDown(frame, mRecyclerView, header);
             }
         });
     }
 
+    public void refreshComplete() {
+        mPtrLayout.refreshComplete();
+    }
+
+    public LoadMoreHandler getLoadMoreHandler() {
+        return mLoadMoreHandler;
+    }
+
+    public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler) {
+        mLoadMoreHandler = loadMoreHandler;
+
+        //配置loadmore
+        mLoadmoreContainer.setEnableLoadmore(true);
+        mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+        mLoadmoreContainer.useDefaultFooter();
+        mLoadmoreContainer.setAutoLoadMore(true);
+        mLoadmoreContainer.setShowLoadingForFirstPage(true);
+        mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+    }
+
     public void setNumberBeforeMoreIsCalled(int max) {
         mLoadmoreContainer.setItemLeftToLoadMore(max);
+    }
+
+    public void loadMoreFinish(boolean emptyResult, boolean hasMore) {
+        mLoadmoreContainer.loadMoreFinish(emptyResult, hasMore);
     }
 
     public void setOnTouchListener(OnTouchListener listener) {
@@ -413,7 +394,7 @@ public class OptimumRecyclerview extends FrameLayout {
         }
     }
 
-    protected void setEmptyType(int type) {
+    public void setEmptyType(int type) {
         if (null == mEmptyLayout) {
             return;
         }
@@ -444,13 +425,85 @@ public class OptimumRecyclerview extends FrameLayout {
         return mEmptyLayout;
     }
 
-    /**
-     * Animate a scroll by the given amount of pixels along either axis.
-     *
-     * @param dx Pixels to scroll horizontally
-     * @param dy Pixels to scroll vertically
-     */
-    public void smoothScrollBy(int dx, int dy) {
-        mRecyclerView.smoothScrollBy(dx, dy);
+    protected void move(int n) {
+        move(n, true);
+    }
+
+    protected void move(int n, boolean smooth) {
+        if (n < 0 || n >= getAdapter().getItemCount()) {
+            Log.e(TAG, "move: index error");
+            return;
+        }
+        mRecyclerviewIndex = n;
+        mRecyclerView.stopScroll();
+        if (smooth) {
+            smoothMoveToPosition(n);
+        } else {
+            moveToPosition(n);
+        }
+    }
+
+    private void moveToPosition(int n) {
+
+        int firstItem = getFirstVisibleItemPosition(getLayoutManager());
+        int lastItem = getLastVisibleItemPosition(getLayoutManager());
+        if (n <= firstItem) {
+            mRecyclerView.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
+            mRecyclerView.smoothScrollBy(0, top);
+        } else {
+            mRecyclerView.scrollToPosition(n);
+            isRecyclerMove = true;
+        }
+    }
+
+    private void smoothMoveToPosition(int n) {
+
+        int firstItem = getFirstVisibleItemPosition(getLayoutManager());
+        int lastItem = getLastVisibleItemPosition(getLayoutManager());
+        if (n <= firstItem) {
+            mRecyclerView.smoothScrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
+            mRecyclerView.smoothScrollBy(0, top);
+        } else {
+            mRecyclerView.smoothScrollToPosition(n);
+            isRecyclerMove = true;
+        }
+    }
+
+    public void setEmptyOnClick(OnClickListener emptyOnClick) {
+        mEmptyLayout.setOnClickListener(emptyOnClick);
+    }
+
+    class CustomOnScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+
+            if (isRecyclerMove && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                isRecyclerMove = false;
+                int n = mRecyclerviewIndex - getFirstVisibleItemPosition(getLayoutManager());
+                if (0 <= n && n < mRecyclerView.getChildCount()) {
+                    int top = mRecyclerView.getChildAt(n).getTop();
+                    mRecyclerView.smoothScrollBy(0, top);
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            if (isRecyclerMove) {
+                isRecyclerMove = false;
+                int n = mRecyclerviewIndex - getFirstVisibleItemPosition(getLayoutManager());
+                if (0 <= n && n < mRecyclerView.getChildCount()) {
+                    int top = mRecyclerView.getChildAt(n).getTop();
+                    mRecyclerView.scrollBy(0, top);
+                }
+            }
+        }
     }
 }
