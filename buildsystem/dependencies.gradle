@@ -31,8 +31,8 @@ ext.libraries = [
 
         //cool log
         logger             : "com.github.orhanobut:logger:1.15",
+        flexibledivider    : "com.yqritc:recyclerview-flexibledivider:1.4.0",
 
-        loadingView        : "com.github.chenzj-king:AVLoadingIndicatorView:2.1.1",
-        flexibledivider      : "com.yqritc:recyclerview-flexibledivider:1.4.0",
+        loadingDrawable    : "com.github.chenzj-king:LoadingDrawable:1.0",
 ]
 

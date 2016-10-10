@@ -18,7 +18,7 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
     private RecyclerView mRecyclerView;
     private BaseDataAdapter<?, ?> mAdapter;
 
-    protected int ITEM_LEFT_TO_LOAD_MORE = 10;
+    protected int mItemLeftToLoadMore = 10;
 
     protected boolean isEnableLoadmore = false;
 
@@ -64,7 +64,7 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
                     int visibleItemCount = layoutManager.getChildCount();
                     int totalItemCount = layoutManager.getItemCount();
 
-                    if (((totalItemCount - lastVisibleItemPosition) <= ITEM_LEFT_TO_LOAD_MORE ||
+                    if (((totalItemCount - lastVisibleItemPosition) <= mItemLeftToLoadMore ||
                             (totalItemCount - lastVisibleItemPosition) == 0 && totalItemCount > visibleItemCount)) {
                         onReachBottom();
                     }
@@ -89,7 +89,8 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
 
     @Override
     public void refreshList() {
-        mFooterView.setVisibility(GONE);
+        if (null != mFooterView)
+            mFooterView.setVisibility(GONE);
     }
 
     @Override
@@ -106,11 +107,11 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
     }
 
     public int getItemLeftToLoadMore() {
-        return ITEM_LEFT_TO_LOAD_MORE;
+        return mItemLeftToLoadMore;
     }
 
     public void setItemLeftToLoadMore(int itemLeftToLoadMore) {
-        this.ITEM_LEFT_TO_LOAD_MORE = itemLeftToLoadMore;
+        this.mItemLeftToLoadMore = itemLeftToLoadMore;
     }
 
     public boolean isEnableLoadmore() {

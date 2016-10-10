@@ -168,6 +168,10 @@ public abstract class LoadMoreContainerBase extends LinearLayout implements Load
         }
     }
 
+    public View getFooterView() {
+        return mFooterView;
+    }
+
     public abstract void addFooterView(View view);
 
     public abstract void removeFooterView(View view);

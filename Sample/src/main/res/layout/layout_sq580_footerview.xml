@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/footer_indicatorview"
-        style="@style/AVLoadingIndicatorView"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_centerInParent="true"
-        app:indicatorColor="@android:color/holo_red_light"
-        app:indicatorName="BallSpinFadeLoaderIndicator"
-        />
-
-    <TextView
-        android:id="@+id/footer_tv"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text=""
-        android:textColor="#333333"
-        android:textSize="14sp"
-        />
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:visibility="invisible"/>
+
+        <com.dreamliner.loadingdrawable.LoadingView
+            android:id="@+id/footer_indicatorview"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            app:loading_color="@array/loadingColor"
+            />
+
+        <TextView
+            android:id="@+id/footer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#333333"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

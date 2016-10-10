@@ -96,7 +96,7 @@ dependencies {
     compile libraries.butterknife
     apt libraries.butterknifeApt
 
-    compile libraries.loadingView
+    compile libraries.loadingDrawable
     compile libraries.flexibledivider
 
     compile project(':RvHelperLib')

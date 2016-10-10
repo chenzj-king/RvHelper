@@ -2,14 +2,15 @@ package com.dreamliner.rvhelper.sample.view;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dreamliner.loadingdrawable.LoadingView;
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreUIHandler;
 import com.dreamliner.rvhelper.sample.R;
-import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * @author chenzj
@@ -20,25 +21,32 @@ import com.wang.avi.AVLoadingIndicatorView;
  */
 public class Sq580LoadmoreView extends RelativeLayout implements LoadMoreUIHandler {
 
-    private AVLoadingIndicatorView mFooterIndicatorView;
+    private LoadingView mLoadingView;
     private TextView mFooterTv;
 
     public Sq580LoadmoreView(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public Sq580LoadmoreView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public Sq580LoadmoreView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         setupViews();
     }
 
     private void setupViews() {
         LayoutInflater.from(getContext()).inflate(R.layout.layout_sq580_footerview, this);
-        mFooterIndicatorView = (AVLoadingIndicatorView) findViewById(R.id.footer_indicatorview);
+        mLoadingView = (LoadingView) findViewById(R.id.footer_indicatorview);
         mFooterTv = (TextView) findViewById(R.id.footer_tv);
     }
 
     @Override
     public void onLoading(LoadMoreContainer container) {
         setVisibility(VISIBLE);
-        mFooterIndicatorView.setVisibility(VISIBLE);
-        mFooterTv.setVisibility(GONE);
+        mLoadingView.setVisibility(VISIBLE);
         mFooterTv.setText(R.string.cube_views_load_more_loading);
     }
 
@@ -67,7 +75,7 @@ public class Sq580LoadmoreView extends RelativeLayout implements LoadMoreUIHandl
 
     private void setFooterTv(@StringRes int stringId) {
         setVisibility(VISIBLE);
-        mFooterIndicatorView.setVisibility(GONE);
+        mLoadingView.setVisibility(GONE);
         mFooterTv.setVisibility(VISIBLE);
         mFooterTv.setText(stringId);
     }

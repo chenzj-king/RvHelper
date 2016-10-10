@@ -1,22 +1,18 @@
 package com.dreamliner.rvhelper.sample.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.dreamliner.loadingdrawable.LoadingView;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrUIHandler;
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
 import com.dreamliner.rvhelper.sample.R;
-import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * @author chenzj
@@ -32,40 +28,27 @@ public class Sq580HeaderView extends FrameLayout implements PtrUIHandler {
     private RotateAnimation mReverseFlipAnimation;
 
     private ImageView mLogoIv;
-    private AVLoadingIndicatorView mOnRefreshView;
+    private LoadingView mOnRefreshView;
 
     public Sq580HeaderView(Context context) {
-        super(context);
-        initViews(null);
+        this(context, null);
     }
 
     public Sq580HeaderView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initViews(attrs);
+        this(context, attrs, 0);
     }
 
-    public Sq580HeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initViews(attrs);
+    public Sq580HeaderView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        setupViews();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Sq580HeaderView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initViews(attrs);
-    }
 
-    protected void initViews(AttributeSet attrs) {
-        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.PtrClassicHeader, 0, 0);
-        if (arr != null) {
-            mRotateAniTime = arr.getInt(R.styleable.PtrClassicHeader_ptr_rotate_ani_time, mRotateAniTime);
-        }
+    private void setupViews() {
         buildAnimation();
-        View header = LayoutInflater.from(getContext()).inflate(R.layout.layout_sq580_header, this);
-
-        mLogoIv = (ImageView) header.findViewById(R.id.before_refresh_iv);
-        mOnRefreshView = (AVLoadingIndicatorView) header.findViewById(R.id.onfresh_view);
-
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_sq580_header, this);
+        mLogoIv = (ImageView) findViewById(R.id.before_refresh_iv);
+        mOnRefreshView = (LoadingView) findViewById(R.id.onfresh_view);
         resetView();
     }
 
@@ -99,7 +82,6 @@ public class Sq580HeaderView extends FrameLayout implements PtrUIHandler {
 
     @Override
     public void onUIRefreshPrepare(PtrFrameLayout frame) {
-
         mOnRefreshView.setVisibility(INVISIBLE);
         mLogoIv.setVisibility(VISIBLE);
     }

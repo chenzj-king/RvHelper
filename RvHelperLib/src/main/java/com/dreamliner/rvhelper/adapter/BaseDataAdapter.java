@@ -37,7 +37,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
 
-    protected int FOOTER_TPYE = Integer.MAX_VALUE;
+    public static int FOOTER_TPYE = Integer.MAX_VALUE;
     private View mFooterView;
 
     private final Object mLock = new Object();

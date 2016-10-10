@@ -1,12 +1,11 @@
 package com.dreamliner.rvhelper.view;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
-
-import com.dreamliner.rvhelper.R;
 
 import java.lang.ref.WeakReference;
 
@@ -19,19 +18,19 @@ import java.lang.ref.WeakReference;
  */
 public class CustomizedClickableSpan extends ClickableSpan {
 
-    private String mTextStr;
+    private int mColorId;
     private Context mContext;
     private WeakReference<OnClickListener> mOnClickListener;
 
-    public CustomizedClickableSpan(String text, Context context, OnClickListener onClickListener) {
-        mTextStr = text;
+    public CustomizedClickableSpan(@ColorRes int colorId, Context context, OnClickListener onClickListener) {
+        mColorId = colorId;
         mContext = context;
         mOnClickListener = new WeakReference<>(onClickListener);
     }
 
     @Override
     public void updateDrawState(TextPaint ds) {
-        ds.setColor(mContext.getResources().getColor(R.color.new_bg));
+        ds.setColor(mContext.getResources().getColor(mColorId));
     }
 
     @Override

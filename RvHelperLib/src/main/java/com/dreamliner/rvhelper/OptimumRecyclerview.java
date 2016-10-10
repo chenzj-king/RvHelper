@@ -33,32 +33,32 @@ public class OptimumRecyclerview extends FrameLayout {
     private static final String TAG = "OptimumRecyclerview";
 
     //主界面
-    protected PtrClassicFrameLayout mPtrLayout;
-    protected LoadMoreRecycleViewContainer mLoadmoreContainer;
-    protected RecyclerView mRecyclerView;
+    private PtrClassicFrameLayout mPtrLayout;
+    private LoadMoreRecycleViewContainer mLoadmoreContainer;
+    private RecyclerView mRecyclerView;
 
     //下拉刷新回调
-    protected OnRefreshListener mOnRefreshListener;
-    protected LoadMoreHandler mLoadMoreHandler;
+    private OnRefreshListener mOnRefreshListener;
+    private LoadMoreHandler mLoadMoreHandler;
 
     //加载中页面
     private boolean isLoading = false;
-    ViewStub mLoadingViewStub;
+    private ViewStub mLoadingViewStub;
     private LoadingLayout mLoadingLayout;
 
     //空白页面
-    ViewStub mEmptyViewStub;
+    private ViewStub mEmptyViewStub;
     private EmptyLayout mEmptyLayout;
 
-    protected int mEmptyId;
-    protected int mLoadingId;
-    protected boolean mClipToPadding;
-    protected int mPadding;
-    protected int mPaddingTop;
-    protected int mPaddingBottom;
-    protected int mPaddingLeft;
-    protected int mPaddingRight;
-    protected int mScrollbarStyle;
+    private int mEmptyId;
+    private int mLoadingId;
+    private boolean mClipToPadding;
+    private int mPadding;
+    private int mPaddingTop;
+    private int mPaddingBottom;
+    private int mPaddingLeft;
+    private int mPaddingRight;
+    private int mScrollbarStyle;
 
     //下拉刷新的头部相关信息
     private int mPtrBgColor;
@@ -70,8 +70,8 @@ public class OptimumRecyclerview extends FrameLayout {
     private float mResistance;
 
 
-    protected boolean isRecyclerMove = false;
-    protected int mRecyclerviewIndex = 0;
+    private boolean isRecyclerMove = false;
+    private int mRecyclerviewIndex = 0;
 
     public PtrClassicFrameLayout getPtrLayout() {
         return mPtrLayout;
@@ -104,15 +104,17 @@ public class OptimumRecyclerview extends FrameLayout {
 
         try {
             //初始化rv相关
-            mEmptyId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_layout_empty, R.layout.layout_default_empty);
-            mLoadingId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_layout_loading, R.layout.layout_default_loading);
-            mClipToPadding = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerview_recyclerClipToPadding, false);
-            mPadding = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPadding, -1.0f);
-            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingTop, 0.0f);
-            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingBottom, 0.0f);
-            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingLeft, 0.0f);
-            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_recyclerPaddingRight, 0.0f);
-            mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerview_scrollbarStyle, -1);
+            mEmptyId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_rvhelp_layout_empty, R.layout.layout_default_empty);
+            mLoadingId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_rvhelp_layout_loading,
+                    R.layout.layout_default_loading);
+
+            mClipToPadding = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerview_rvhelp_recyclerClipToPadding, false);
+            mPadding = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPadding, -1.0f);
+            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingTop, 0.0f);
+            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingBottom, 0.0f);
+            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingLeft, 0.0f);
+            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingRight, 0.0f);
+            mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerview_rvhelp_scrollbarStyle, -1);
 
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
@@ -165,7 +167,6 @@ public class OptimumRecyclerview extends FrameLayout {
     private void initPtrView(View v) {
         mPtrLayout = (PtrClassicFrameLayout) v.findViewById(R.id.ptr_layout);
         mPtrLayout.setEnabled(false);
-
         mPtrLayout.setBackgroundColor(mPtrBgColor);
         mPtrLayout.setDurationToClose(mDurationToClose);
         mPtrLayout.setDurationToCloseHeader(mDurationToCloseHeader);
@@ -309,8 +310,6 @@ public class OptimumRecyclerview extends FrameLayout {
         mPtrLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                //下拉刷新的话.把loadmore取消掉.
-                mLoadmoreContainer.refreshList();
                 if (null != mOnRefreshListener) {
                     mOnRefreshListener.onRefresh(frame);
                 }
@@ -323,12 +322,22 @@ public class OptimumRecyclerview extends FrameLayout {
         });
     }
 
-    public void setHeaderView(@NonNull View headerView) {
+    public void setRefreshListener(OnRefreshListener onRefreshListener, @NonNull View headerView) {
+        setRefreshListener(onRefreshListener);
+        setHeaderView(headerView);
+    }
+
+    private void setHeaderView(@NonNull View headerView) {
         if (!(headerView instanceof PtrUIHandler)) {
             throw new RuntimeException("headerView must implements PtrUIHandler");
         }
+        mPtrLayout.setEnabled(true);
         mPtrLayout.setHeaderView(headerView);
         mPtrLayout.addPtrUIHandler((PtrUIHandler) headerView);
+    }
+
+    public OnRefreshListener getOnRefreshListener() {
+        return mOnRefreshListener;
     }
 
     public void refreshComplete() {
@@ -340,6 +349,15 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler) {
+        mLoadMoreHandler = loadMoreHandler;
+        if (null == mLoadmoreContainer.getFooterView()) {
+            setDefaultLoadMoreHandler(loadMoreHandler);
+        } else {
+            mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+        }
+    }
+
+    public void setDefaultLoadMoreHandler(LoadMoreHandler loadMoreHandler) {
         mLoadMoreHandler = loadMoreHandler;
 
         //配置loadmore
@@ -355,8 +373,8 @@ public class OptimumRecyclerview extends FrameLayout {
         if (!(loadmoreView instanceof LoadMoreUIHandler)) {
             throw new RuntimeException("loadmoreview must implements LoadMoreUIHandler");
         }
-        mLoadMoreHandler = loadMoreHandler;
 
+        mLoadMoreHandler = loadMoreHandler;
         //配置loadmore
         mLoadmoreContainer.setEnableLoadmore(true);
         mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
@@ -393,7 +411,7 @@ public class OptimumRecyclerview extends FrameLayout {
         mRecyclerView.removeItemDecoration(itemDecoration);
     }
 
-    private void showLoadingView() {
+    public void showLoadingView() {
         isLoading = true;
         mLoadingViewStub.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
@@ -406,9 +424,6 @@ public class OptimumRecyclerview extends FrameLayout {
         mLoadingViewStub.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mEmptyViewStub.setVisibility(View.VISIBLE);
-        if (null != mLoadingLayout) {
-            mLoadingLayout.onHideLoading();
-        }
         doDefaultLoadingView(false);
     }
 
@@ -503,7 +518,9 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     public void setEmptyOnClick(OnClickListener emptyOnClick) {
-        mEmptyLayout.setOnClickListener(emptyOnClick);
+        if (null != mEmptyLayout) {
+            mEmptyLayout.setOnClickListener(emptyOnClick);
+        }
     }
 
     class CustomOnScrollListener extends RecyclerView.OnScrollListener {

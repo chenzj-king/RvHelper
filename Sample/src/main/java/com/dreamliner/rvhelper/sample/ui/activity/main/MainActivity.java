@@ -20,6 +20,7 @@ import com.dreamliner.rvhelper.sample.utils.DividerUtil;
 import com.dreamliner.rvhelper.sample.view.Sq580HeaderView;
 import com.dreamliner.rvhelper.sample.view.Sq580LoadmoreView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
 
     @BindView(R.id.optimum_rv)
     OptimumRecyclerview mOptimumRecyclerview;
+
     private MainAdapter mAdapter;
 
     @Override
@@ -61,24 +63,12 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
         if (id == R.id.action_net_error) {
             mOptimumRecyclerview.move(0, false);
             mOptimumRecyclerview.setEmptyType(NET_ERROR);
-            mOptimumRecyclerview.getPtrLayout().autoRefresh();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.clear();
-                }
-            }, 1000);
+            autoRefresh(true);
             return true;
         } else if (id == R.id.action_no_result) {
             mOptimumRecyclerview.move(0, false);
             mOptimumRecyclerview.setEmptyType(NO_RESULT);
-            mOptimumRecyclerview.getPtrLayout().autoRefresh();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.clear();
-                }
-            }, 1000);
+            autoRefresh(true);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -87,60 +77,75 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
     @Override
     protected void initViews() {
         ButterKnife.bind(this);
-        mHandler = new MyHandler(this);
 
-        mAdapter = new MainAdapter(new ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                showToast("click " + (position + 1) + " item");
-            }
-        });
+        mAdapter = new MainAdapter(new ItemClickIml(this));
         mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
         mOptimumRecyclerview.setAdapter(mAdapter);
-        mOptimumRecyclerview.setRefreshListener(this);
-        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this);
 
-        mOptimumRecyclerview.setEmptyOnClick(this);
-        mOptimumRecyclerview.setHeaderView(new Sq580HeaderView(this));
+        //设置下拉刷新
+        mOptimumRecyclerview.setRefreshListener(this, new Sq580HeaderView(this));
+
+        //设置加载更多
+        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
         mOptimumRecyclerview.setLoadMoreHandler(this, new Sq580LoadmoreView(this));
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateData(true);
-            }
-        }, 1500);
+        //设置空白页面中界面的点击事件
+        mOptimumRecyclerview.setEmptyOnClick(this);
+
+        getNewData(true);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.empty_status_tv:
-                mOptimumRecyclerview.getPtrLayout().autoRefresh();
+                autoRefresh(false);
                 break;
+        }
+    }
+
+    private void autoRefresh(boolean isGoEmpty) {
+        //根据具体业务需求.现在做法是如果不需要下拉刷新的话.那么全部加载中都用loadingView来进行交互.否则就是用下拉刷新的样式.
+        //自己在项目中抉择选择什么方式即可.
+        if (null == mOptimumRecyclerview.getOnRefreshListener()) {
+            mOptimumRecyclerview.showLoadingView();
+            if (!isGoEmpty) {
+                getNewData(true);
+            }
+        } else {
+            mOptimumRecyclerview.getPtrLayout().autoRefresh();
+        }
+        if (isGoEmpty) {
+            getNewData(false, true);
         }
     }
 
     @Override
     public void onRefresh(PtrFrameLayout ptrFrameLayout) {
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateData(true);
-            }
-        }, 1000);
+        getNewData(true);
     }
 
     @Override
     public void onLoadMore(LoadMoreContainer loadMoreContainer) {
         Log.i(TAG, "onLoadMore- itemCount=" + mAdapter.getItemCount());
+        getNewData(false);
+    }
+
+    private void getNewData(final boolean isNeedClear) {
+        getNewData(isNeedClear, false);
+    }
+
+    private void getNewData(final boolean isNeedClear, final boolean clearAdapter) {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                updateData(false);
+                if (clearAdapter) {
+                    mAdapter.clear();
+                } else {
+                    //get Data by db/server
+                    updateData(isNeedClear);
+                }
             }
         }, 1000);
     }
@@ -173,6 +178,27 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
         } else {
             mOptimumRecyclerview.loadMoreFinish(false, true);
         }
+    }
+
+    private static class ItemClickIml implements ItemClickListener {
+
+        private WeakReference<MainActivity> mWeakReference;
+
+        ItemClickIml(MainActivity mainActivity) {
+            mWeakReference = new WeakReference<>(mainActivity);
+        }
+
+        @Override
+        public void onItemClick(View view, int position) {
+            MainActivity mainActivity = mWeakReference.get();
+            if (null != mainActivity) {
+                mainActivity.onItemClick(view, position);
+            }
+        }
+    }
+
+    private void onItemClick(View view, int position) {
+        showToast("click " + (position + 1) + " item");
     }
 }
 

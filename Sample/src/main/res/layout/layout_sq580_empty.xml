@@ -10,7 +10,6 @@
         android:id="@+id/empty_status_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_list_status_net_error"
         />
 
     <TextView
