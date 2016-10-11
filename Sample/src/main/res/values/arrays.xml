@@ -5,4 +5,15 @@
         <item>#b10cddee</item>
         <item>#ff0cddee</item>
     </string-array>
+
+    <string-array name="custom_type">
+        <item>定制加载界面</item>
+        <item>定制空白页面</item>
+        <item>定制下拉刷新头部</item>
+        <item>定制加载更多</item>
+        <item>默认实现</item>
+        <item>全部定制</item>
+        <item>持续更新</item>
+    </string-array>
+
 </resources>

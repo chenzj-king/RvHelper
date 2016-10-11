@@ -4,21 +4,46 @@
 [![](https://jitpack.io/v/chenzj-king/RvHelper.svg)](https://jitpack.io/#chenzj-king/RvHelper)
 
 -----
-# [中文文档](https://github.com/chenzj-king/RvHelper/blob/master/README-cn.md)   #
 
+## [EngLish](https://github.com/chenzj-king/RvHelper/blob/master/README-EN.md)
 
-inspired and modified from  [liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr") and [SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView "SuperRecyclerView"), with some feature enhancement.  
+## 前言 ##
 
-This project make nice way to init our Recylcerview.  Simplify to new Adapter and easy to do custome onRefresh and loadmore. Also it can cutome the empty datas view. 
+这个项目的灵感来自于秋哥的[liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr")和[cube-Sdk](https://github.com/liaohuqiu/cube-sdk).RvHelper的V1.x是基于uptr+SuperRecycleView的方式来进行实现的.在实际项目中发现了loadmore的样式不太优雅.loadmore还是作为adapter的一个itemType比较友好.而这方面秋哥的cube-sdk之前就有实现loadmore-recyclerview的分支.我就提取出来.再加上自己实际项目中遇到的一些可能用到的场景.把这些都进行了定制.就这样.RvHelper V2.x诞生了.
 
-## Demo
-![](http://i.imgur.com/irhBX5s.gif)
+> RvHelper有如下的几个大功能点
+
+1. 随意定制loading页面(一般来讲第一次进入界面都需要一个loading页面)
+2. 随意定制空白页面(如网络错误/暂无数据/搜索无结果等等)
+3. 随意定制头部(具体可以看uptr的介绍)
+4. 随意定制底部(具体实现可以看cube-sdk中loadmore的实现)
+5. 更加简单的Adapter & ViewHoler.只需要关心createViewHolder和bindView的逻辑.ItemClick也更加优雅简单.
+
+## 例子
+
+**自定义加载框**
+![](http://oevl814u4.bkt.clouddn.com/customLoading.gif)
+
+**自定义空白页面**
+![](http://oevl814u4.bkt.clouddn.com/customEmpty.gif)
+
+**自定义头部**
+![](http://oevl814u4.bkt.clouddn.com/customHeader.gif)
+
+**自定义加载更多**
+![](http://oevl814u4.bkt.clouddn.com/customFooter.gif)
+
+**默认实现所有**
+![](http://oevl814u4.bkt.clouddn.com/defaultIml.gif)
+
+**自定义实现所有**
+![](http://oevl814u4.bkt.clouddn.com/customIml.gif)
 
 ## Usage
 
 ## JitPack.io
 
-I strongly recommend [jitpack.io](https://jitpack.io)
+我把项目放到了[jitpack.io](https://jitpack.io).如果要使用请按照如下对项目进行配置.
 
     repositories {
     	//...
@@ -30,55 +55,17 @@ I strongly recommend [jitpack.io](https://jitpack.io)
     	compile 'com.github.chenzj-king:RvHelper:2.0.0'
 	}
 
-##Usage
+# TODO #
 
-## Use directly OptimumRecyclerview:  
+##使用方式
 
-	    <com.dreamliner.rvhelper.OptimumRecyclerview
-	        android:id="@+id/list"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:transcriptMode="normal"
-	        app:layout_empty="@layout/layout_emptyview"
-	        app:layout_moreProgress="@layout/layout_progress"
-	        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
-	        app:recyclerClipToPadding="false"
-	        app:scrollbarStyle="insideInset"
-	        />
 
-## Use it in Java
-
-    mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));//setting layoutmanager
-    mOptimumRecyclerview.setAdapter(mAdapter);							 //set your Adapter
-    mOptimumRecyclerview.setRefreshListener(this);						 //set onRefresh listener
-    mOptimumRecyclerview.setupMoreListener(this, 1);					 //set moreListener and max size = 1.it meant if the itemcount is 100.when you scroll lastvisiable item is 100-1 = 99
-
-## Init Callback ##
-
-    @Override
-    public void onRefresh(PtrFrameLayout ptrFrameLayout) {
-        mAdapter.clear();
-		// Fetch more from Api or DB
-        mOptimumRecyclerview.setOnMoreListener(this);
-    }
-
-    @Override
-    public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-		//Item 120 just for test
-        if (overallItemsCount < 120) {
-			// Fetch more from Api or DB
-        } else {
-            mOptimumRecyclerview.hideMoreProgress();
-            mOptimumRecyclerview.removeMoreListener();
-        }
-    }
 
 ## Thanks ##
 
-1.  [butterknife](https://github.com/JakeWharton/butterknife) for bindview more easy.  
-2.  [android-Ultra-Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh) for pull to refresh.  
-3.  [SuperRecyclerView](https://github.com/Malinskiy/SuperRecyclerView) for loadmore & emptyView.  
-4.  [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) for loadmore custom view.  
+1.  [butterknife](https://github.com/JakeWharton/butterknife) - 优化findviewById等逻辑
+2.  [android-Ultra-Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh) - 下拉刷新
+3.  [cube-sdk](https://github.com/liaohuqiu/cube-sdk) - 加载更多
 
 ## License ##
 

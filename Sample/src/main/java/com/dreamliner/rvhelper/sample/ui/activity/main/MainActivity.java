@@ -1,34 +1,24 @@
 package com.dreamliner.rvhelper.sample.ui.activity.main;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.GridLayoutManager;
+import android.util.SparseArray;
 import android.view.View;
 
-import com.dreamliner.loadmore.LoadMoreContainer;
-import com.dreamliner.loadmore.LoadMoreHandler;
-import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.rvhelper.OptimumRecyclerview;
-import com.dreamliner.rvhelper.interfaces.ItemClickListener;
-import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
-import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
-import com.dreamliner.rvhelper.sample.ui.activity.main.adapter.MainAdapter;
+import com.dreamliner.rvhelper.sample.ui.activity.customall.CustomAllActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.customempty.CustomEmptyActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.customfooter.CustomFooterActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.customheader.CustomHeaderActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.customloading.CustomLoadingActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.defaultall.DefaultAllActivity;
+import com.dreamliner.rvhelper.sample.ui.adapter.TypeAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
-import com.dreamliner.rvhelper.sample.utils.DividerUtil;
-import com.dreamliner.rvhelper.sample.view.Sq580HeaderView;
-import com.dreamliner.rvhelper.sample.view.Sq580LoadmoreView;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NET_ERROR;
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
 
 /**
  * @author chenzj
@@ -37,14 +27,23 @@ import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
  * @date 2016/6/12 17:06
  * @email admin@chenzhongjin.cn
  */
-public class MainActivity extends BaseActivity implements OnRefreshListener, LoadMoreHandler, View.OnClickListener {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
 
     @BindView(R.id.optimum_rv)
     OptimumRecyclerview mOptimumRecyclerview;
 
-    private MainAdapter mAdapter;
+    private TypeAdapter mAdapter;
+
+    private SparseArray<String> mStringSparseArray = new SparseArray<>();
+
+    private final int CUSTOM_LOADING = 0;
+    private final int CUSTOM_EMPTY = 1;
+    private final int CUSTOM_HEAD = 2;
+    private final int CUSTOM_FOOTER = 3;
+    private final int DEFAUTL_ALL = 4;
+    private final int CUSTOM_ALL = 5;
 
     @Override
     protected int getLayoutId() {
@@ -52,153 +51,46 @@ public class MainActivity extends BaseActivity implements OnRefreshListener, Loa
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_net_error) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NET_ERROR);
-            autoRefresh(true);
-            return true;
-        } else if (id == R.id.action_no_result) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NO_RESULT);
-            autoRefresh(true);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void initViews() {
         ButterKnife.bind(this);
 
-        mAdapter = new MainAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mAdapter = new TypeAdapter(new ItemClickIml(this));
+        mOptimumRecyclerview.setLayoutManager(new GridLayoutManager(this, 3));
         mOptimumRecyclerview.setAdapter(mAdapter);
 
-        //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this, new Sq580HeaderView(this));
-
-        //设置加载更多
-        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this, new Sq580LoadmoreView(this));
-
-        //设置空白页面中界面的点击事件
-        mOptimumRecyclerview.setEmptyOnClick(this);
-
-        getNewData(true);
+        String[] strings = getResources().getStringArray(R.array.custom_type);
+        for (int i = 0; i < strings.length; i++) {
+            mStringSparseArray.put(i, strings[i]);
+        }
+        mAdapter.update(Arrays.asList(strings));
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.empty_status_tv:
-                autoRefresh(false);
+    protected void onItemClick(View view, int position) {
+
+        switch (mStringSparseArray.indexOfValue(mAdapter.getItem(position))) {
+            case CUSTOM_LOADING:
+                readyGo(CustomLoadingActivity.class);
+                break;
+            case CUSTOM_EMPTY:
+                readyGo(CustomEmptyActivity.class);
+                break;
+            case CUSTOM_HEAD:
+                readyGo(CustomHeaderActivity.class);
+                break;
+            case CUSTOM_FOOTER:
+                readyGo(CustomFooterActivity.class);
+                break;
+            case DEFAUTL_ALL:
+                readyGo(DefaultAllActivity.class);
+                break;
+            case CUSTOM_ALL:
+                readyGo(CustomAllActivity.class);
+                break;
+            default:
+                showToast("持续更新");
                 break;
         }
-    }
-
-    private void autoRefresh(boolean isGoEmpty) {
-        //根据具体业务需求.现在做法是如果不需要下拉刷新的话.那么全部加载中都用loadingView来进行交互.否则就是用下拉刷新的样式.
-        //自己在项目中抉择选择什么方式即可.
-        if (null == mOptimumRecyclerview.getOnRefreshListener()) {
-            mOptimumRecyclerview.showLoadingView();
-            if (!isGoEmpty) {
-                getNewData(true);
-            }
-        } else {
-            mOptimumRecyclerview.getPtrLayout().autoRefresh();
-        }
-        if (isGoEmpty) {
-            getNewData(false, true);
-        }
-    }
-
-    @Override
-    public void onRefresh(PtrFrameLayout ptrFrameLayout) {
-        getNewData(true);
-    }
-
-    @Override
-    public void onLoadMore(LoadMoreContainer loadMoreContainer) {
-        Log.i(TAG, "onLoadMore- itemCount=" + mAdapter.getItemCount());
-        getNewData(false);
-    }
-
-    private void getNewData(final boolean isNeedClear) {
-        getNewData(isNeedClear, false);
-    }
-
-    private void getNewData(final boolean isNeedClear, final boolean clearAdapter) {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (clearAdapter) {
-                    mAdapter.clear();
-                } else {
-                    //get Data by db/server
-                    updateData(isNeedClear);
-                }
-            }
-        }, 1000);
-    }
-
-    protected void updateData(boolean isNeedClear) {
-
-        ArrayList<String> strings = new ArrayList<>();
-        int size = new Random().nextInt(50);
-        size = size < 15 ? 15 : size;
-
-        int itemCount = mAdapter.getItemCount();
-        if (isNeedClear) {
-            itemCount = 0;
-        }
-        for (int i = itemCount; i < size + itemCount; i++) {
-            strings.add("测试数据 " + (i + 1));
-        }
-        if (isNeedClear) {
-            mAdapter.update(strings);
-        } else {
-            mAdapter.addAll(strings);
-        }
-
-        if (!isNeedClear) {
-            if (mAdapter.getItemCount() > 100) {
-                mOptimumRecyclerview.loadMoreFinish(false, false);
-            } else {
-                mOptimumRecyclerview.loadMoreFinish(false, true);
-            }
-        } else {
-            mOptimumRecyclerview.loadMoreFinish(false, true);
-        }
-    }
-
-    private static class ItemClickIml implements ItemClickListener {
-
-        private WeakReference<MainActivity> mWeakReference;
-
-        ItemClickIml(MainActivity mainActivity) {
-            mWeakReference = new WeakReference<>(mainActivity);
-        }
-
-        @Override
-        public void onItemClick(View view, int position) {
-            MainActivity mainActivity = mWeakReference.get();
-            if (null != mainActivity) {
-                mainActivity.onItemClick(view, position);
-            }
-        }
-    }
-
-    private void onItemClick(View view, int position) {
-        showToast("click " + (position + 1) + " item");
     }
 }
 

@@ -53,9 +53,11 @@ public class Sq580EmptyLayout extends EmptyLayout {
     public void setEmptyType(int type) {
         switch (type) {
             case NET_ERROR:
+                mEmptyIv.setImageResource(R.drawable.ic_list_status_net_error);
                 setEmptyTv(mEmtptTipTv, "亲,网络有点差哦", "自定义重新加载");
                 break;
             case NO_RESULT:
+                mEmptyIv.setImageResource(R.drawable.ic_list_status_no_result);
                 setEmptyTv(mEmtptTipTv, "亲，暂无数据", "自定义重新加载");
                 break;
         }

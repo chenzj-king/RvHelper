@@ -18,6 +18,36 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.activity.customloading.CustomLoadingActivity"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".ui.activity.customempty.CustomEmptyActivity"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".ui.activity.customheader.CustomHeaderActivity"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".ui.activity.customfooter.CustomFooterActivity"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".ui.activity.defaultall.DefaultAllActivity"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".ui.activity.customall.CustomAllActivity"
+            android:theme="@style/AppTheme"
+            />
+
     </application>
 
 </manifest>

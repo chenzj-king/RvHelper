@@ -7,9 +7,14 @@ import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
+import com.dreamliner.rvhelper.interfaces.ItemClickListener;
+
 import java.lang.ref.WeakReference;
+
+import butterknife.ButterKnife;
 
 /**
  * @author chenzj
@@ -35,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutId());
 
         mHandler = new MyHandler(this);
+        ButterKnife.bind(this);
         initViews();
     }
 
@@ -172,5 +178,25 @@ public abstract class BaseActivity extends AppCompatActivity {
                 mToast.show();
             }
         });
+    }
+
+    protected static class ItemClickIml implements ItemClickListener {
+
+        private WeakReference<BaseActivity> mWeakReference;
+
+        public ItemClickIml(BaseActivity baseActivity) {
+            mWeakReference = new WeakReference<>(baseActivity);
+        }
+
+        @Override
+        public void onItemClick(View view, int position) {
+            BaseActivity baseActivity = mWeakReference.get();
+            if (null != baseActivity) {
+                baseActivity.onItemClick(view, position);
+            }
+        }
+    }
+
+    protected void onItemClick(View view, int position) {
     }
 }

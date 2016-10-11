@@ -3,5 +3,6 @@
 
     <string name="net_error">网络错误</string>
     <string name="no_result">没有数据</string>
+    <string name="try_loading">重新加载</string>
 
 </resources>

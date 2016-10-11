@@ -1,5 +1,6 @@
-package com.dreamliner.rvhelper.sample.ui.activity.main.adapter;
+package com.dreamliner.rvhelper.sample.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,18 +15,18 @@ import butterknife.ButterKnife;
 
 /**
  * @author chenzj
- * @Title: MainAdapter
+ * @Title: TextAdapter
  * @Description: 类的描述 -
  * @date 2016/6/13 09:58
  * @email admin@chenzhongjin.cn
  */
-public class MainAdapter extends BaseAdapter<String, MainAdapter.ViewHolder> {
+public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
 
-    public MainAdapter() {
+    public TextAdapter() {
         super();
     }
 
-    public MainAdapter(ItemClickListener itemClickListener) {
+    public TextAdapter(ItemClickListener itemClickListener) {
         super(itemClickListener);
     }
 
@@ -34,6 +35,7 @@ public class MainAdapter extends BaseAdapter<String, MainAdapter.ViewHolder> {
         return new ViewHolder(getView(R.layout.item_text, parent), getItemClickListener());
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void bindView(ViewHolder holder, int position) {
         String itemData = getItem(position);
@@ -46,7 +48,7 @@ public class MainAdapter extends BaseAdapter<String, MainAdapter.ViewHolder> {
         @BindView(R.id.item_text_textview)
         TextView mTextTv;
 
-        public ViewHolder(View itemView, ItemClickListener itemClickListener) {
+        ViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView, itemClickListener);
             ButterKnife.bind(this, itemView);
             mTextTv.setOnClickListener(this);

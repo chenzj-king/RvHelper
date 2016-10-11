@@ -34,5 +34,6 @@ ext.libraries = [
         flexibledivider    : "com.yqritc:recyclerview-flexibledivider:1.4.0",
 
         loadingDrawable    : "com.github.chenzj-king:LoadingDrawable:1.0",
+        percentSupport     : "com.zhy:percent-support-extends:1.1.1",
 ]
 
