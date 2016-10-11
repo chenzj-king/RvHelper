@@ -10,25 +10,25 @@ import com.dreamliner.rvhelper.sample.R;
 
 /**
  * @author chenzj
- * @Title: Sq580LoadLayout
+ * @Title: DlLoadingLayout
  * @Description: 类的描述 -
  * @date 2016/10/9 22:57
  * @email admin@chenzhongjin.cn
  */
-public class Sq580LoadingLayout extends LoadingLayout {
+public class DlLoadingLayout extends LoadingLayout {
 
     private ProgressBar mLoadingPb;
     private TextView mLoadingTipTv;
 
-    public Sq580LoadingLayout(Context context) {
+    public DlLoadingLayout(Context context) {
         this(context, null);
     }
 
-    public Sq580LoadingLayout(Context context, AttributeSet attrs) {
+    public DlLoadingLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Sq580LoadingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DlLoadingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

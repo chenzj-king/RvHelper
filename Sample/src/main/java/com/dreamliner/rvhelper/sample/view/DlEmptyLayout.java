@@ -18,27 +18,27 @@ import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
 
 /**
  * @author chenzj
- * @Title: Sq580EmptyLayout
+ * @Title: DlEmptyLayout
  * @Description: 类的描述 -
  * @date 2016/10/9 22:57
  * @email admin@chenzhongjin.cn
  */
-public class Sq580EmptyLayout extends EmptyLayout {
+public class DlEmptyLayout extends EmptyLayout {
 
     private ImageView mEmptyIv;
     private TextView mEmtptTipTv;
     private CustomizedClickableSpan mClickableSpan;
     private OnClickListener mOnClickListener;
 
-    public Sq580EmptyLayout(Context context) {
+    public DlEmptyLayout(Context context) {
         this(context, null);
     }
 
-    public Sq580EmptyLayout(Context context, AttributeSet attrs) {
+    public DlEmptyLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Sq580EmptyLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DlEmptyLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

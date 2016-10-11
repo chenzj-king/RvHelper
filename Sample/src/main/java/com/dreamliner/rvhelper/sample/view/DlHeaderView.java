@@ -16,12 +16,12 @@ import com.dreamliner.rvhelper.sample.R;
 
 /**
  * @author chenzj
- * @Title: Sq580HeaderView
+ * @Title: DlHeaderView
  * @Description: 类的描述 -
  * @date 2016/9/9 14:39
  * @email admin@chenzhongjin.cn
  */
-public class Sq580HeaderView extends FrameLayout implements PtrUIHandler {
+public class DlHeaderView extends FrameLayout implements PtrUIHandler {
 
     private int mRotateAniTime = 150;
     private RotateAnimation mFlipAnimation;
@@ -30,15 +30,15 @@ public class Sq580HeaderView extends FrameLayout implements PtrUIHandler {
     private ImageView mLogoIv;
     private LoadingView mOnRefreshView;
 
-    public Sq580HeaderView(Context context) {
+    public DlHeaderView(Context context) {
         this(context, null);
     }
 
-    public Sq580HeaderView(Context context, AttributeSet attrs) {
+    public DlHeaderView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Sq580HeaderView(Context context, AttributeSet attrs, int defStyle) {
+    public DlHeaderView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setupViews();
     }
@@ -46,7 +46,7 @@ public class Sq580HeaderView extends FrameLayout implements PtrUIHandler {
 
     private void setupViews() {
         buildAnimation();
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_sq580_header, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_dl_header, this);
         mLogoIv = (ImageView) findViewById(R.id.before_refresh_iv);
         mOnRefreshView = (LoadingView) findViewById(R.id.onfresh_view);
         resetView();

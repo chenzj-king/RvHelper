@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.dreamliner.rvhelper.sample.view.Sq580EmptyLayout
+<com.dreamliner.rvhelper.sample.view.DlEmptyLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,4 +24,4 @@
         android:textColor="#333333"
         android:textSize="14sp"
         />
-</com.dreamliner.rvhelper.sample.view.Sq580EmptyLayout>
+</com.dreamliner.rvhelper.sample.view.DlEmptyLayout>

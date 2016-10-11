@@ -4,12 +4,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+
     <com.dreamliner.rvhelper.OptimumRecyclerview
         android:id="@+id/optimum_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/default_bg_color"
-        app:rvhelp_layout_loading="@layout/layout_sq580_loading"
+        app:rvhelp_layout_loading="@layout/layout_dl_loading"
         />
 
 </RelativeLayout>

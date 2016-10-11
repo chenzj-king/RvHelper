@@ -16,8 +16,8 @@ import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.adapter.TextAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 import com.dreamliner.rvhelper.sample.utils.DividerUtil;
-import com.dreamliner.rvhelper.sample.view.Sq580HeaderView;
-import com.dreamliner.rvhelper.sample.view.Sq580LoadmoreView;
+import com.dreamliner.rvhelper.sample.view.DlHeaderView;
+import com.dreamliner.rvhelper.sample.view.DlLoadmoreView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -82,11 +82,11 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
         mOptimumRecyclerview.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this, new Sq580HeaderView(this));
+        mOptimumRecyclerview.setRefreshListener(this, new DlHeaderView(this));
 
         //设置加载更多
         mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this, new Sq580LoadmoreView(this));
+        mOptimumRecyclerview.setLoadMoreHandler(this, new DlLoadmoreView(this));
 
         //设置空白页面中界面的点击事件
         mOptimumRecyclerview.setEmptyOnClick(this);

@@ -11,7 +11,7 @@ import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.adapter.TextAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 import com.dreamliner.rvhelper.sample.utils.DividerUtil;
-import com.dreamliner.rvhelper.sample.view.Sq580HeaderView;
+import com.dreamliner.rvhelper.sample.view.DlHeaderView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,7 +48,7 @@ public class CustomHeaderActivity extends BaseActivity implements OnRefreshListe
         mOptimumRecyclerview.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this, new Sq580HeaderView(this));
+        mOptimumRecyclerview.setRefreshListener(this, new DlHeaderView(this));
         getNewData();
     }
 

@@ -14,31 +14,31 @@ import com.dreamliner.rvhelper.sample.R;
 
 /**
  * @author chenzj
- * @Title: Sq580LoadmoreView
+ * @Title: DlLoadmoreView
  * @Description: 类的描述 -
  * @date 2016/10/9 22:18
  * @email admin@chenzhongjin.cn
  */
-public class Sq580LoadmoreView extends RelativeLayout implements LoadMoreUIHandler {
+public class DlLoadmoreView extends RelativeLayout implements LoadMoreUIHandler {
 
     private LoadingView mLoadingView;
     private TextView mFooterTv;
 
-    public Sq580LoadmoreView(Context context) {
+    public DlLoadmoreView(Context context) {
         this(context, null);
     }
 
-    public Sq580LoadmoreView(Context context, AttributeSet attrs) {
+    public DlLoadmoreView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Sq580LoadmoreView(Context context, AttributeSet attrs, int defStyle) {
+    public DlLoadmoreView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setupViews();
     }
 
     private void setupViews() {
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_sq580_footerview, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_dl_footerview, this);
         mLoadingView = (LoadingView) findViewById(R.id.footer_indicatorview);
         mFooterTv = (TextView) findViewById(R.id.footer_tv);
     }

@@ -14,7 +14,7 @@ import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.adapter.TextAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 import com.dreamliner.rvhelper.sample.utils.DividerUtil;
-import com.dreamliner.rvhelper.sample.view.Sq580LoadmoreView;
+import com.dreamliner.rvhelper.sample.view.DlLoadmoreView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -55,7 +55,7 @@ public class CustomFooterActivity extends BaseActivity implements OnRefreshListe
 
         //设置加载更多
         mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this, new Sq580LoadmoreView(this));
+        mOptimumRecyclerview.setLoadMoreHandler(this, new DlLoadmoreView(this));
 
         getNewData(true);
     }
