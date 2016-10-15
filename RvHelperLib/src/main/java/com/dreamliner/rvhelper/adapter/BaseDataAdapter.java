@@ -69,12 +69,10 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void addFooterView(View view) {
         mFooterView = view;
-        // TODO: 2016/9/25 addFooterView;
     }
 
     public void removeFooterView(View view) {
         mFooterView = null;
-        // TODO: 2016/9/25 removeFooterView;
     }
 
     protected View getView(@LayoutRes int layoutId, ViewGroup parent) {

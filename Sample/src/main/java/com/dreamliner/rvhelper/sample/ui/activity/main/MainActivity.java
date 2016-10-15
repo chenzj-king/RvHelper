@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.dreamliner.rvhelper.OptimumRecyclerview;
 import com.dreamliner.rvhelper.sample.R;
+import com.dreamliner.rvhelper.sample.ui.activity.addressbook.AddressbookActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customall.CustomAllActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customempty.CustomEmptyActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customfooter.CustomFooterActivity;
@@ -44,6 +45,7 @@ public class MainActivity extends BaseActivity {
     private final int CUSTOM_FOOTER = 3;
     private final int DEFAUTL_ALL = 4;
     private final int CUSTOM_ALL = 5;
+    private final int ADDRESS_BOOK = 6;
 
     @Override
     protected int getLayoutId() {
@@ -86,6 +88,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case CUSTOM_ALL:
                 readyGo(CustomAllActivity.class);
+                break;
+            case ADDRESS_BOOK:
+                readyGo(AddressbookActivity.class);
                 break;
             default:
                 showToast("持续更新");

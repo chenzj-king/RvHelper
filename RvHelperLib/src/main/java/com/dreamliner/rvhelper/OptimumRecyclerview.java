@@ -474,6 +474,14 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     public void move(int n, boolean smooth) {
+        move(n, smooth, false, false);
+    }
+
+    public void moveWithItemDecoration(int n, boolean smooth) {
+        move(n, smooth, true, true);
+    }
+
+    public void move(int n, boolean smooth, boolean isAllMove, boolean isWithItemDecoration) {
         if (n < 0 || n >= getAdapter().getItemCount()) {
             Log.e(TAG, "move: index error");
             return;
@@ -483,19 +491,33 @@ public class OptimumRecyclerview extends FrameLayout {
         if (smooth) {
             smoothMoveToPosition(n);
         } else {
-            moveToPosition(n);
+            moveToPosition(n, isAllMove, isWithItemDecoration);
         }
     }
 
-    private void moveToPosition(int n) {
+    private void moveToPosition(int n, boolean isAllmove, boolean isWithItemDecoration) {
 
         int firstItem = getFirstVisibleItemPosition(getLayoutManager());
         int lastItem = getLastVisibleItemPosition(getLayoutManager());
+
         if (n <= firstItem) {
             mRecyclerView.scrollToPosition(n);
         } else if (n <= lastItem) {
-            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
-            mRecyclerView.smoothScrollBy(0, top);
+
+            int index = n - firstItem;
+            int top = mRecyclerView.getChildAt(index).getTop();
+            if (isWithItemDecoration) {
+                try {
+                    top -= getLayoutManager().getTopDecorationHeight(mRecyclerView.getChildAt(index));
+                } catch (Exception ex) {
+                }
+            }
+
+            if (isAllmove) {
+                mRecyclerView.scrollBy(0, top);
+            } else {
+                mRecyclerView.smoothScrollBy(0, top);
+            }
         } else {
             mRecyclerView.scrollToPosition(n);
             isRecyclerMove = true;

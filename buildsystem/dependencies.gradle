@@ -5,7 +5,7 @@ ext.versions = [
         minSdk     : 15,
         targetSdk  : 23,
         compileSdk : 24,
-        buildTools : '24.0.2',
+        buildTools : '24.0.3',
 
         // Library versions
         junit      : '4.12',

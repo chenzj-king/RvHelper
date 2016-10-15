@@ -101,5 +101,6 @@ dependencies {
     compile libraries.percentSupport
     //compile project(':RvHelperLib')
     //user this in your project
-    compile 'com.github.chenzj-king:RvHelper:2.0.0'
+    compile 'com.dreamliner.lib:RvHelper:1.0.2'
+    //compile 'com.github.chenzj-king:RvHelper:2.0.0'
 }

@@ -1,7 +1,8 @@
-[![](https://jitpack.io/v/chenzj-king/RvHelper.svg)](https://jitpack.io/#chenzj-king/RvHelper)
-
+[![](https://img.shields.io/badge/%20maven%20central%20-1.0.2-green.svg)](https://bintray.com/chenzj-king/maven/RvHelper)
 
 ## [EngLish](https://github.com/chenzj-king/RvHelper/blob/master/README-EN.md)
+
+# RvHelper
 
 这个项目的灵感来自于秋哥的[liaohuqiu-uptr](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh "liaohuqiu-uptr")和[cube-Sdk](https://github.com/liaohuqiu/cube-sdk).RvHelper的V1.x是基于uptr+SuperRecycleView的方式来进行实现的.在实际项目中发现了loadmore的样式不太优雅.loadmore还是作为adapter的一个itemType比较友好.而这方面秋哥的cube-sdk之前就有实现loadmore-recyclerview的分支.我就提取出来.再加上自己实际项目中遇到的一些可能用到的场景.把这些都进行了定制.就这样.RvHelper V2.x诞生了.
 
@@ -17,18 +18,13 @@
 
 ![](http://oevl814u4.bkt.clouddn.com/customIml.gif)
 
-## JitPack.io
+## Jecenter
 
-我把项目放到了[jitpack.io](https://jitpack.io).如果要使用请按照如下对项目进行配置.
-
-    repositories {
-    	//...
-    	maven { url "https://jitpack.io" }
-	}
+我把项目放到了[RvHelper](https://bintray.com/chenzj-king/maven/RvHelper).如果要使用请按照如下对项目进行配置.
 
 	dependencies {
 		//...
-    	compile 'com.github.chenzj-king:RvHelper:2.0.0'
+    	compile 'compile 'com.dreamliner.lib:RvHelper:1.0.2'
 	}
 
 ##使用方式
