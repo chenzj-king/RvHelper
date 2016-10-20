@@ -19,8 +19,9 @@ import java.util.Random;
 
 import butterknife.BindView;
 
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NET_ERROR;
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
+import static com.dreamliner.rvhelper.util.StatusConstant.NET_ERROR;
+import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
+
 
 /**
  * @author chenzj

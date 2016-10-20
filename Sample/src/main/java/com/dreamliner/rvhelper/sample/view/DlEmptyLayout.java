@@ -13,9 +13,10 @@ import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.view.CustomizedClickableSpan;
 
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.DEFAULT_NULL;
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NET_ERROR;
-import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
+import static com.dreamliner.rvhelper.util.StatusConstant.DEFAULT_NULL;
+import static com.dreamliner.rvhelper.util.StatusConstant.NET_ERROR;
+import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
+
 
 /**
  * @author chenzj
