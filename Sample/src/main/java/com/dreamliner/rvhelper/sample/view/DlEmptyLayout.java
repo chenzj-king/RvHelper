@@ -13,6 +13,7 @@ import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.view.CustomizedClickableSpan;
 
+import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.DEFAULT_NULL;
 import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NET_ERROR;
 import static com.dreamliner.rvhelper.empty.DefaultEmptyLayout.NO_RESULT;
 
@@ -60,6 +61,10 @@ public class DlEmptyLayout extends EmptyLayout {
                 mEmptyIv.setImageResource(R.drawable.ic_list_status_no_result);
                 setEmptyTv(mEmtptTipTv, "亲，暂无数据", "自定义重新加载");
                 break;
+            case DEFAULT_NULL:
+                mEmptyIv.setImageDrawable(null);
+                setEmptyTv(mEmtptTipTv, "", "");
+                break;
         }
     }
 
@@ -75,7 +80,6 @@ public class DlEmptyLayout extends EmptyLayout {
 
     @Override
     public void setOnClickListener(OnClickListener onClickListener) {
-        super.setOnClickListener(onClickListener);
         mOnClickListener = onClickListener;
     }
 }

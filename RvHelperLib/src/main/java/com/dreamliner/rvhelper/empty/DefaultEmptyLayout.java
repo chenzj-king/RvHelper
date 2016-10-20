@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.dreamliner.rvhelper.R;
 import com.dreamliner.rvhelper.view.CustomizedClickableSpan;
 
+import static com.dreamliner.rvhelper.util.StatusConstant.DEFAULT_NULL;
+import static com.dreamliner.rvhelper.util.StatusConstant.NET_ERROR;
+import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
+
 /**
  * @author chenzj
  * @Title: DefaultEmptyLayout
@@ -24,9 +28,6 @@ public class DefaultEmptyLayout extends EmptyLayout {
     private CustomizedClickableSpan mClickableSpan;
 
     private OnClickListener mOnClickListener;
-
-    public static final int NET_ERROR = Integer.MAX_VALUE;
-    public static final int NO_RESULT = Integer.MAX_VALUE - 1;
 
     public DefaultEmptyLayout(Context context) {
         this(context, null);
@@ -65,12 +66,14 @@ public class DefaultEmptyLayout extends EmptyLayout {
             case NO_RESULT:
                 setEmptyTv(mEmtptTipTv, "亲，暂无数据", "重新加载");
                 break;
+            case DEFAULT_NULL:
+                setEmptyTv(mEmtptTipTv, "", "");
+                break;
         }
     }
 
     @Override
     public void setOnClickListener(OnClickListener onClickListener) {
-        super.setOnClickListener(onClickListener);
         mOnClickListener = onClickListener;
     }
 }

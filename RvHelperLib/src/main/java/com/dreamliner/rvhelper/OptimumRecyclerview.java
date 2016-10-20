@@ -419,7 +419,7 @@ public class OptimumRecyclerview extends FrameLayout {
         doDefaultLoadingView(true);
     }
 
-    private void hideLoadingView() {
+    public void hideLoadingView() {
         isLoading = false;
         mLoadingViewStub.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
@@ -445,12 +445,12 @@ public class OptimumRecyclerview extends FrameLayout {
         mEmptyLayout.setEmptyType(type);
     }
 
-    private void showEmptyView() {
+    public void showEmptyView() {
         mRecyclerView.setVisibility(View.GONE);
         mEmptyViewStub.setVisibility(View.VISIBLE);
     }
 
-    private void hideEmptyView() {
+    public void hideEmptyView() {
         mRecyclerView.setVisibility(View.VISIBLE);
         mEmptyViewStub.setVisibility(View.GONE);
     }
