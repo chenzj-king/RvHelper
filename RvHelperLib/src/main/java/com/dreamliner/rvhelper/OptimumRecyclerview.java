@@ -348,6 +348,14 @@ public class OptimumRecyclerview extends FrameLayout {
         return mLoadMoreHandler;
     }
 
+    public LoadMoreRecycleViewContainer getLoadmoreContainer() {
+        return mLoadmoreContainer;
+    }
+
+    public void setLoadmoreContainer(LoadMoreRecycleViewContainer loadmoreContainer) {
+        mLoadmoreContainer = loadmoreContainer;
+    }
+
     public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler) {
         mLoadMoreHandler = loadMoreHandler;
         if (null == mLoadmoreContainer.getFooterView()) {
@@ -393,6 +401,10 @@ public class OptimumRecyclerview extends FrameLayout {
 
     public void loadMoreFinish(boolean emptyResult, boolean hasMore) {
         mLoadmoreContainer.loadMoreFinish(emptyResult, hasMore);
+    }
+
+    public void loadMoreError(int errorCode, String errorMessage) {
+        mLoadmoreContainer.loadMoreError(errorCode, errorMessage);
     }
 
     public void setOnTouchListener(OnTouchListener listener) {

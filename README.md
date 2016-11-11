@@ -24,7 +24,7 @@
 
 	dependencies {
 		//...
-    	compile 'compile 'com.dreamliner.lib:RvHelper:1.0.2'
+    	compile 'compile 'com.dreamliner.lib:RvHelper:1.0.6'
 	}
 
 ##使用方式
