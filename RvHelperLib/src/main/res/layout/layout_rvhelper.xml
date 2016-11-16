@@ -17,7 +17,7 @@
         cube_ptr:ptr_resistance="1.7">
 
         <com.dreamliner.loadmore.LoadMoreRecycleViewContainer
-            android:id="@+id/loadmore_container"
+            android:id="@+id/load_more_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -32,7 +32,7 @@
                 />
 
             <ViewStub
-                android:id="@+id/empty_viewstub"
+                android:id="@+id/empty_view_stub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@android:id/list"
@@ -40,7 +40,7 @@
                 />
 
             <ViewStub
-                android:id="@+id/loading_viewstub"
+                android:id="@+id/loading_view_stub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible"

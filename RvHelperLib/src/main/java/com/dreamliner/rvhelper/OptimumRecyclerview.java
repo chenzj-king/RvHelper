@@ -28,13 +28,13 @@ import com.dreamliner.rvhelper.util.FloatUtil;
 import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getFirstVisibleItemPosition;
 import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getLastVisibleItemPosition;
 
-public class OptimumRecyclerview extends FrameLayout {
+public class OptimumRecyclerView extends FrameLayout {
 
-    private static final String TAG = "OptimumRecyclerview";
+    private static final String TAG = "OptimumRecyclerView";
 
     //主界面
     private PtrClassicFrameLayout mPtrLayout;
-    private LoadMoreRecycleViewContainer mLoadmoreContainer;
+    private LoadMoreRecycleViewContainer mLoadMoreContainer;
     private RecyclerView mRecyclerView;
 
     //下拉刷新回调
@@ -47,6 +47,7 @@ public class OptimumRecyclerview extends FrameLayout {
     private LoadingLayout mLoadingLayout;
 
     //空白页面
+    private int mEmptyType = -1;
     private ViewStub mEmptyViewStub;
     private EmptyLayout mEmptyLayout;
 
@@ -64,14 +65,14 @@ public class OptimumRecyclerview extends FrameLayout {
     private int mPtrBgColor;
     private int mDurationToClose;
     private int mDurationToCloseHeader;
-    private boolean mKeepHeaderWhenREfresh;
+    private boolean mKeepHeaderWhenRefresh;
     private boolean mPullToFresh;
-    private float mRatioOfHedaerHeightToRefresh;
+    private float mRatioOfHeaderHeightToRefresh;
     private float mResistance;
 
 
     private boolean isRecyclerMove = false;
-    private int mRecyclerviewIndex = 0;
+    private int mRecyclerViewIndex = 0;
 
     public PtrClassicFrameLayout getPtrLayout() {
         return mPtrLayout;
@@ -81,48 +82,48 @@ public class OptimumRecyclerview extends FrameLayout {
         return mRecyclerView;
     }
 
-    public OptimumRecyclerview(Context context) {
+    public OptimumRecyclerView(Context context) {
         super(context);
         initView();
     }
 
-    public OptimumRecyclerview(Context context, AttributeSet attrs) {
+    public OptimumRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(attrs);
         initView();
     }
 
-    public OptimumRecyclerview(Context context, AttributeSet attrs, int defStyle) {
+    public OptimumRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initAttrs(attrs);
         initView();
     }
 
     protected void initAttrs(AttributeSet attrs) {
-        TypedArray optimumRvArr = getContext().obtainStyledAttributes(attrs, R.styleable.OptimumRecyclerview);
+        TypedArray optimumRvArr = getContext().obtainStyledAttributes(attrs, R.styleable.OptimumRecyclerView);
         TypedArray ptrArr = getContext().obtainStyledAttributes(attrs, R.styleable.PtrFrameLayout);
 
         try {
             //初始化rv相关
-            mEmptyId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_rvhelp_layout_empty, R.layout.layout_default_empty);
-            mLoadingId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerview_rvhelp_layout_loading,
+            mEmptyId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerView_rvhelp_layout_empty, R.layout.layout_default_empty);
+            mLoadingId = optimumRvArr.getResourceId(R.styleable.OptimumRecyclerView_rvhelp_layout_loading,
                     R.layout.layout_default_loading);
 
-            mClipToPadding = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerview_rvhelp_recyclerClipToPadding, false);
-            mPadding = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPadding, -1.0f);
-            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingTop, 0.0f);
-            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingBottom, 0.0f);
-            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingLeft, 0.0f);
-            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerview_rvhelp_recyclerPaddingRight, 0.0f);
-            mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerview_rvhelp_scrollbarStyle, -1);
+            mClipToPadding = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerView_rvhelp_recyclerClipToPadding, false);
+            mPadding = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPadding, -1.0f);
+            mPaddingTop = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPaddingTop, 0.0f);
+            mPaddingBottom = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPaddingBottom, 0.0f);
+            mPaddingLeft = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPaddingLeft, 0.0f);
+            mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPaddingRight, 0.0f);
+            mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerView_rvhelp_scrollbarStyle, -1);
 
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
             mDurationToClose = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close, 200);
             mDurationToCloseHeader = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close_header, 1000);
-            mKeepHeaderWhenREfresh = ptrArr.getBoolean(R.styleable.PtrFrameLayout_ptr_duration_to_close, true);
+            mKeepHeaderWhenRefresh = ptrArr.getBoolean(R.styleable.PtrFrameLayout_ptr_duration_to_close, true);
             mPullToFresh = ptrArr.getBoolean(R.styleable.PtrFrameLayout_ptr_duration_to_close, false);
-            mRatioOfHedaerHeightToRefresh = ptrArr.getFloat(R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, 1.2f);
+            mRatioOfHeaderHeightToRefresh = ptrArr.getFloat(R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, 1.2f);
             mResistance = ptrArr.getFloat(R.styleable.PtrFrameLayout_ptr_resistance, 1.7f);
         } finally {
             optimumRvArr.recycle();
@@ -137,7 +138,7 @@ public class OptimumRecyclerview extends FrameLayout {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_rvhelper, this);
 
         //初始化加载中界面
-        mLoadingViewStub = (ViewStub) v.findViewById(R.id.loading_viewstub);
+        mLoadingViewStub = (ViewStub) v.findViewById(R.id.loading_view_stub);
         mLoadingViewStub.setLayoutResource(mLoadingId);
         if (0 != mLoadingId) {
             View loadingView = mLoadingViewStub.inflate();
@@ -147,7 +148,7 @@ public class OptimumRecyclerview extends FrameLayout {
         }
 
         //初始化空白页面界面
-        mEmptyViewStub = (ViewStub) v.findViewById(R.id.empty_viewstub);
+        mEmptyViewStub = (ViewStub) v.findViewById(R.id.empty_view_stub);
         mEmptyViewStub.setLayoutResource(mEmptyId);
         if (0 != mEmptyId) {
             View emptyView = mEmptyViewStub.inflate();
@@ -170,9 +171,9 @@ public class OptimumRecyclerview extends FrameLayout {
         mPtrLayout.setBackgroundColor(mPtrBgColor);
         mPtrLayout.setDurationToClose(mDurationToClose);
         mPtrLayout.setDurationToCloseHeader(mDurationToCloseHeader);
-        mPtrLayout.setKeepHeaderWhenRefresh(mKeepHeaderWhenREfresh);
+        mPtrLayout.setKeepHeaderWhenRefresh(mKeepHeaderWhenRefresh);
         mPtrLayout.setPullToRefresh(mPullToFresh);
-        mPtrLayout.setRatioOfHeaderHeightToRefresh(mRatioOfHedaerHeightToRefresh);
+        mPtrLayout.setRatioOfHeaderHeightToRefresh(mRatioOfHeaderHeightToRefresh);
         mPtrLayout.setResistance(mResistance);
 
         mPtrLayout.setLastUpdateTimeRelateObject(this);
@@ -204,8 +205,8 @@ public class OptimumRecyclerview extends FrameLayout {
     }
 
     private void initLoadmoreView(View v) {
-        mLoadmoreContainer = (LoadMoreRecycleViewContainer) v.findViewById(R.id.loadmore_container);
-        mLoadmoreContainer.setEnableLoadmore(false);
+        mLoadMoreContainer = (LoadMoreRecycleViewContainer) v.findViewById(R.id.load_more_container);
+        mLoadMoreContainer.setEnableLoadMore(false);
     }
 
     /**
@@ -348,20 +349,20 @@ public class OptimumRecyclerview extends FrameLayout {
         return mLoadMoreHandler;
     }
 
-    public LoadMoreRecycleViewContainer getLoadmoreContainer() {
-        return mLoadmoreContainer;
+    public LoadMoreRecycleViewContainer getLoadMoreContainer() {
+        return mLoadMoreContainer;
     }
 
-    public void setLoadmoreContainer(LoadMoreRecycleViewContainer loadmoreContainer) {
-        mLoadmoreContainer = loadmoreContainer;
+    public void setLoadMoreContainer(LoadMoreRecycleViewContainer loadMoreContainer) {
+        mLoadMoreContainer = loadMoreContainer;
     }
 
     public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler) {
         mLoadMoreHandler = loadMoreHandler;
-        if (null == mLoadmoreContainer.getFooterView()) {
+        if (null == mLoadMoreContainer.getFooterView()) {
             setDefaultLoadMoreHandler(loadMoreHandler);
         } else {
-            mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+            mLoadMoreContainer.setLoadMoreHandler(mLoadMoreHandler);
         }
     }
 
@@ -369,42 +370,42 @@ public class OptimumRecyclerview extends FrameLayout {
         mLoadMoreHandler = loadMoreHandler;
 
         //配置loadmore
-        mLoadmoreContainer.setEnableLoadmore(true);
-        mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
-        mLoadmoreContainer.useDefaultFooter();
-        mLoadmoreContainer.setAutoLoadMore(true);
-        mLoadmoreContainer.setShowLoadingForFirstPage(true);
-        mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+        mLoadMoreContainer.setEnableLoadMore(true);
+        mLoadMoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+        mLoadMoreContainer.useDefaultFooter();
+        mLoadMoreContainer.setAutoLoadMore(true);
+        mLoadMoreContainer.setShowLoadingForFirstPage(true);
+        mLoadMoreContainer.setLoadMoreHandler(mLoadMoreHandler);
     }
 
     public void setLoadMoreHandler(LoadMoreHandler loadMoreHandler, View loadmoreView) {
         if (!(loadmoreView instanceof LoadMoreUIHandler)) {
-            throw new RuntimeException("loadmoreview must implements LoadMoreUIHandler");
+            throw new RuntimeException("loadMoreView must implements LoadMoreUIHandler");
         }
 
         mLoadMoreHandler = loadMoreHandler;
         //配置loadmore
-        mLoadmoreContainer.setEnableLoadmore(true);
-        mLoadmoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+        mLoadMoreContainer.setEnableLoadMore(true);
+        mLoadMoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
 
-        mLoadmoreContainer.setLoadMoreView(loadmoreView);
-        mLoadmoreContainer.setLoadMoreUIHandler((LoadMoreUIHandler) loadmoreView);
+        mLoadMoreContainer.setLoadMoreView(loadmoreView);
+        mLoadMoreContainer.setLoadMoreUIHandler((LoadMoreUIHandler) loadmoreView);
 
-        mLoadmoreContainer.setAutoLoadMore(true);
-        mLoadmoreContainer.setShowLoadingForFirstPage(true);
-        mLoadmoreContainer.setLoadMoreHandler(mLoadMoreHandler);
+        mLoadMoreContainer.setAutoLoadMore(true);
+        mLoadMoreContainer.setShowLoadingForFirstPage(true);
+        mLoadMoreContainer.setLoadMoreHandler(mLoadMoreHandler);
     }
 
     public void setNumberBeforeMoreIsCalled(int max) {
-        mLoadmoreContainer.setItemLeftToLoadMore(max);
+        mLoadMoreContainer.setItemLeftToLoadMore(max);
     }
 
     public void loadMoreFinish(boolean emptyResult, boolean hasMore) {
-        mLoadmoreContainer.loadMoreFinish(emptyResult, hasMore);
+        mLoadMoreContainer.loadMoreFinish(emptyResult, hasMore);
     }
 
     public void loadMoreError(int errorCode, String errorMessage) {
-        mLoadmoreContainer.loadMoreError(errorCode, errorMessage);
+        mLoadMoreContainer.loadMoreError(errorCode, errorMessage);
     }
 
     public void setOnTouchListener(OnTouchListener listener) {
@@ -454,7 +455,12 @@ public class OptimumRecyclerview extends FrameLayout {
         if (null == mEmptyLayout) {
             return;
         }
+        mEmptyType = type;
         mEmptyLayout.setEmptyType(type);
+    }
+
+    public int getEmptyType() {
+        return mEmptyType;
     }
 
     public void showEmptyView() {
@@ -498,7 +504,7 @@ public class OptimumRecyclerview extends FrameLayout {
             Log.e(TAG, "move: index error");
             return;
         }
-        mRecyclerviewIndex = n;
+        mRecyclerViewIndex = n;
         mRecyclerView.stopScroll();
         if (smooth) {
             smoothMoveToPosition(n);
@@ -507,7 +513,7 @@ public class OptimumRecyclerview extends FrameLayout {
         }
     }
 
-    private void moveToPosition(int n, boolean isAllmove, boolean isWithItemDecoration) {
+    private void moveToPosition(int n, boolean isAllMove, boolean isWithItemDecoration) {
 
         int firstItem = getFirstVisibleItemPosition(getLayoutManager());
         int lastItem = getLastVisibleItemPosition(getLayoutManager());
@@ -525,7 +531,7 @@ public class OptimumRecyclerview extends FrameLayout {
                 }
             }
 
-            if (isAllmove) {
+            if (isAllMove) {
                 mRecyclerView.scrollBy(0, top);
             } else {
                 mRecyclerView.smoothScrollBy(0, top);
@@ -564,7 +570,7 @@ public class OptimumRecyclerview extends FrameLayout {
 
             if (isRecyclerMove && newState == RecyclerView.SCROLL_STATE_IDLE) {
                 isRecyclerMove = false;
-                int n = mRecyclerviewIndex - getFirstVisibleItemPosition(getLayoutManager());
+                int n = mRecyclerViewIndex - getFirstVisibleItemPosition(getLayoutManager());
                 if (0 <= n && n < mRecyclerView.getChildCount()) {
                     int top = mRecyclerView.getChildAt(n).getTop();
                     mRecyclerView.smoothScrollBy(0, top);
@@ -578,7 +584,7 @@ public class OptimumRecyclerview extends FrameLayout {
 
             if (isRecyclerMove) {
                 isRecyclerMove = false;
-                int n = mRecyclerviewIndex - getFirstVisibleItemPosition(getLayoutManager());
+                int n = mRecyclerViewIndex - getFirstVisibleItemPosition(getLayoutManager());
                 if (0 <= n && n < mRecyclerView.getChildCount()) {
                     int top = mRecyclerView.getChildAt(n).getTop();
                     mRecyclerView.scrollBy(0, top);

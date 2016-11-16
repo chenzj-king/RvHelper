@@ -20,7 +20,7 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
 
     protected int mItemLeftToLoadMore = 10;
 
-    protected boolean isEnableLoadmore = false;
+    protected boolean isEnableLoadMore = false;
 
     public LoadMoreRecycleViewContainer(Context context) {
         super(context);
@@ -55,7 +55,7 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (isEnableLoadmore()) {
+                if (isEnableLoadMore()) {
                     RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
                     if (null == layoutManager) {
                         return;
@@ -114,13 +114,13 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
         this.mItemLeftToLoadMore = itemLeftToLoadMore;
     }
 
-    public boolean isEnableLoadmore() {
-        return isEnableLoadmore;
+    public boolean isEnableLoadMore() {
+        return isEnableLoadMore;
     }
 
-    public void setEnableLoadmore(boolean enableLoadmore) {
-        isEnableLoadmore = enableLoadmore;
-        if (!enableLoadmore) {
+    public void setEnableLoadMore(boolean enableLoadMore) {
+        isEnableLoadMore = enableLoadMore;
+        if (!enableLoadMore) {
             removeFooterView(null);
         }
     }

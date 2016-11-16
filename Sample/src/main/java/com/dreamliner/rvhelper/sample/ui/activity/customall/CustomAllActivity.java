@@ -9,7 +9,7 @@ import android.view.View;
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -41,7 +41,7 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
     private static final String TAG = "CustomAllActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -60,13 +60,13 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_net_error) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NET_ERROR);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NET_ERROR);
             autoRefresh(true);
             return true;
         } else if (id == R.id.action_no_result) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NO_RESULT);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NO_RESULT);
             autoRefresh(true);
             return true;
         }
@@ -78,19 +78,19 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
         ButterKnife.bind(this);
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this, new DlHeaderView(this));
+        mOptimumRecyclerView.setRefreshListener(this, new DlHeaderView(this));
 
         //设置加载更多
-        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this, new DlLoadmoreView(this));
+        mOptimumRecyclerView.setNumberBeforeMoreIsCalled(1);
+        mOptimumRecyclerView.setLoadMoreHandler(this, new DlLoadmoreView(this));
 
         //设置空白页面中界面的点击事件
-        mOptimumRecyclerview.setEmptyOnClick(this);
+        mOptimumRecyclerView.setEmptyOnClick(this);
 
         getNewData(true);
     }
@@ -107,13 +107,13 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
     private void autoRefresh(boolean isGoEmpty) {
         //根据具体业务需求.现在做法是如果不需要下拉刷新的话.那么全部加载中都用loadingView来进行交互.否则就是用下拉刷新的样式.
         //自己在项目中抉择选择什么方式即可.
-        if (null == mOptimumRecyclerview.getOnRefreshListener()) {
-            mOptimumRecyclerview.showLoadingView();
+        if (null == mOptimumRecyclerView.getOnRefreshListener()) {
+            mOptimumRecyclerView.showLoadingView();
             if (!isGoEmpty) {
                 getNewData(true);
             }
         } else {
-            mOptimumRecyclerview.getPtrLayout().autoRefresh();
+            mOptimumRecyclerView.getPtrLayout().autoRefresh();
         }
         if (isGoEmpty) {
             getNewData(false, true);
@@ -170,12 +170,12 @@ public class CustomAllActivity extends BaseActivity implements OnRefreshListener
 
         if (!isNeedClear) {
             if (mAdapter.getItemCount() > 100) {
-                mOptimumRecyclerview.loadMoreFinish(false, false);
+                mOptimumRecyclerView.loadMoreFinish(false, false);
             } else {
-                mOptimumRecyclerview.loadMoreFinish(false, true);
+                mOptimumRecyclerView.loadMoreFinish(false, true);
             }
         } else {
-            mOptimumRecyclerview.loadMoreFinish(false, true);
+            mOptimumRecyclerView.loadMoreFinish(false, true);
         }
     }
 

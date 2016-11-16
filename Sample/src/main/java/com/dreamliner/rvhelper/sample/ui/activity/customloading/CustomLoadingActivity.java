@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -31,7 +31,7 @@ public class CustomLoadingActivity extends BaseActivity implements OnRefreshList
     private static final String TAG = "CustomLoadingActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -50,7 +50,7 @@ public class CustomLoadingActivity extends BaseActivity implements OnRefreshList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_try_loading) {
-            mOptimumRecyclerview.showLoadingView();
+            mOptimumRecyclerView.showLoadingView();
             getNewData();
             return true;
         }
@@ -61,12 +61,12 @@ public class CustomLoadingActivity extends BaseActivity implements OnRefreshList
     protected void initViews() {
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this);
+        mOptimumRecyclerView.setRefreshListener(this);
         getNewData();
     }
 
@@ -96,7 +96,7 @@ public class CustomLoadingActivity extends BaseActivity implements OnRefreshList
         }
 
         mAdapter.update(strings);
-        mOptimumRecyclerview.loadMoreFinish(false, true);
+        mOptimumRecyclerView.loadMoreFinish(false, true);
     }
 
     @Override

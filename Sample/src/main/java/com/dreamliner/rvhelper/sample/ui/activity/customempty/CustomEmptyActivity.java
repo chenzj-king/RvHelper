@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -33,7 +33,7 @@ import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
 public class CustomEmptyActivity extends BaseActivity implements OnRefreshListener, View.OnClickListener {
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -52,13 +52,13 @@ public class CustomEmptyActivity extends BaseActivity implements OnRefreshListen
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_net_error) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NET_ERROR);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NET_ERROR);
             autoRefresh(true);
             return true;
         } else if (id == R.id.action_no_result) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NO_RESULT);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NO_RESULT);
             autoRefresh(true);
             return true;
         }
@@ -69,15 +69,15 @@ public class CustomEmptyActivity extends BaseActivity implements OnRefreshListen
     protected void initViews() {
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this);
+        mOptimumRecyclerView.setRefreshListener(this);
 
         //设置空白页面中界面的点击事件
-        mOptimumRecyclerview.setEmptyOnClick(this);
+        mOptimumRecyclerView.setEmptyOnClick(this);
 
         getNewData(false);
     }
@@ -92,7 +92,7 @@ public class CustomEmptyActivity extends BaseActivity implements OnRefreshListen
     }
 
     private void autoRefresh(boolean isGoEmpty) {
-        mOptimumRecyclerview.getPtrLayout().autoRefresh();
+        mOptimumRecyclerView.getPtrLayout().autoRefresh();
         if (isGoEmpty) {
             getNewData(true);
         }
@@ -128,7 +128,7 @@ public class CustomEmptyActivity extends BaseActivity implements OnRefreshListen
         }
 
         mAdapter.update(strings);
-        mOptimumRecyclerview.loadMoreFinish(false, true);
+        mOptimumRecyclerView.loadMoreFinish(false, true);
     }
 
     @Override

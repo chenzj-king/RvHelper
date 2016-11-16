@@ -48,7 +48,7 @@ public class AddressbookAdapter extends BaseMixtureAdapter<Addressbook> {
             return NEW_SIGN;
         } else if (position == LABEL) {
             return LABEL;
-        } else if (super.getItemViewType(position) != FOOTER_TPYE) {
+        } else if (super.getItemViewType(position) != FOOTER_TYPE) {
             return NORAML;
         } else {
             return super.getItemViewType(position);

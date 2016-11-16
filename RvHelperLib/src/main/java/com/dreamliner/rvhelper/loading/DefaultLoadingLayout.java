@@ -14,20 +14,20 @@ import com.dreamliner.rvhelper.R;
  * @date 2016/10/8 23:31
  * @email admin@chenzhongjin.cn
  */
-public class DefaultLoadindLayout extends LoadingLayout {
+public class DefaultLoadingLayout extends LoadingLayout {
 
     private ProgressBar mLoadingIv;
     private TextView mLoadingTipTv;
 
-    public DefaultLoadindLayout(Context context) {
+    public DefaultLoadingLayout(Context context) {
         this(context, null);
     }
 
-    public DefaultLoadindLayout(Context context, AttributeSet attrs) {
+    public DefaultLoadingLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DefaultLoadindLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DefaultLoadingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

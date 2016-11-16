@@ -9,7 +9,7 @@ import android.view.View;
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -38,7 +38,7 @@ public class DefaultAllActivity extends BaseActivity implements OnRefreshListene
     private static final String TAG = "DefaultAllActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -57,13 +57,13 @@ public class DefaultAllActivity extends BaseActivity implements OnRefreshListene
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_net_error) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NET_ERROR);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NET_ERROR);
             autoRefresh(true);
             return true;
         } else if (id == R.id.action_no_result) {
-            mOptimumRecyclerview.move(0, false);
-            mOptimumRecyclerview.setEmptyType(NO_RESULT);
+            mOptimumRecyclerView.move(0, false);
+            mOptimumRecyclerView.setEmptyType(NO_RESULT);
             autoRefresh(true);
             return true;
         }
@@ -74,19 +74,19 @@ public class DefaultAllActivity extends BaseActivity implements OnRefreshListene
     protected void initViews() {
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this);
+        mOptimumRecyclerView.setRefreshListener(this);
 
         //设置加载更多
-        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this);
+        mOptimumRecyclerView.setNumberBeforeMoreIsCalled(1);
+        mOptimumRecyclerView.setLoadMoreHandler(this);
 
         //设置空白页面中界面的点击事件
-        mOptimumRecyclerview.setEmptyOnClick(this);
+        mOptimumRecyclerView.setEmptyOnClick(this);
 
         getNewData(true);
     }
@@ -101,7 +101,7 @@ public class DefaultAllActivity extends BaseActivity implements OnRefreshListene
     }
 
     private void autoRefresh(boolean isGoEmpty) {
-        mOptimumRecyclerview.getPtrLayout().autoRefresh();
+        mOptimumRecyclerView.getPtrLayout().autoRefresh();
         if (isGoEmpty) {
             getNewData(false, true);
         }
@@ -157,12 +157,12 @@ public class DefaultAllActivity extends BaseActivity implements OnRefreshListene
 
         if (!isNeedClear) {
             if (mAdapter.getItemCount() > 100) {
-                mOptimumRecyclerview.loadMoreFinish(false, false);
+                mOptimumRecyclerView.loadMoreFinish(false, false);
             } else {
-                mOptimumRecyclerview.loadMoreFinish(false, true);
+                mOptimumRecyclerView.loadMoreFinish(false, true);
             }
         } else {
-            mOptimumRecyclerview.loadMoreFinish(false, true);
+            mOptimumRecyclerView.loadMoreFinish(false, true);
         }
     }
 

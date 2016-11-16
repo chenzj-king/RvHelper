@@ -4,7 +4,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.activity.addressbook.AddressbookActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customall.CustomAllActivity;
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TypeAdapter mAdapter;
 
@@ -57,8 +57,8 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mAdapter = new TypeAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new GridLayoutManager(this, 3));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         String[] strings = getResources().getStringArray(R.array.custom_type);
         for (int i = 0; i < strings.length; i++) {

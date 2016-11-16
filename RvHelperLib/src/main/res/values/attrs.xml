@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="OptimumRecyclerview">
+    <declare-styleable name="OptimumRecyclerView">
         <!-- -->
         <attr name="rvhelp_mainLayoutId" format="reference"/>
         <attr name="rvhelp_layout_loading" format="reference"/>

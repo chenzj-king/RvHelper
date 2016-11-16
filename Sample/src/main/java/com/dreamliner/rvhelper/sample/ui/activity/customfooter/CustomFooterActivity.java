@@ -7,7 +7,7 @@ import android.view.View;
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -33,7 +33,7 @@ public class CustomFooterActivity extends BaseActivity implements OnRefreshListe
     private static final String TAG = "CustomFooterActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -46,16 +46,16 @@ public class CustomFooterActivity extends BaseActivity implements OnRefreshListe
     protected void initViews() {
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this);
+        mOptimumRecyclerView.setRefreshListener(this);
 
         //设置加载更多
-        mOptimumRecyclerview.setNumberBeforeMoreIsCalled(1);
-        mOptimumRecyclerview.setLoadMoreHandler(this, new DlLoadmoreView(this));
+        mOptimumRecyclerView.setNumberBeforeMoreIsCalled(1);
+        mOptimumRecyclerView.setLoadMoreHandler(this, new DlLoadmoreView(this));
 
         getNewData(true);
     }
@@ -102,12 +102,12 @@ public class CustomFooterActivity extends BaseActivity implements OnRefreshListe
 
         if (!isNeedClear) {
             if (mAdapter.getItemCount() > 100) {
-                mOptimumRecyclerview.loadMoreFinish(false, false);
+                mOptimumRecyclerView.loadMoreFinish(false, false);
             } else {
-                mOptimumRecyclerview.loadMoreFinish(false, true);
+                mOptimumRecyclerView.loadMoreFinish(false, true);
             }
         } else {
-            mOptimumRecyclerview.loadMoreFinish(false, true);
+            mOptimumRecyclerView.loadMoreFinish(false, true);
         }
     }
 

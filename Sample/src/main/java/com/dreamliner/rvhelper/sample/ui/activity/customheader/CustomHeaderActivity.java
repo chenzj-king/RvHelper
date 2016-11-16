@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.dreamliner.ptrlib.PtrFrameLayout;
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -30,7 +30,7 @@ public class CustomHeaderActivity extends BaseActivity implements OnRefreshListe
     private static final String TAG = "CustomHeaderActivity";
 
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRecyclerview;
+    OptimumRecyclerView mOptimumRecyclerView;
 
     private TextAdapter mAdapter;
 
@@ -43,12 +43,12 @@ public class CustomHeaderActivity extends BaseActivity implements OnRefreshListe
     protected void initViews() {
 
         mAdapter = new TextAdapter(new ItemClickIml(this));
-        mOptimumRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mOptimumRecyclerview.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
-        mOptimumRecyclerview.setAdapter(mAdapter);
+        mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
+        mOptimumRecyclerView.setAdapter(mAdapter);
 
         //设置下拉刷新
-        mOptimumRecyclerview.setRefreshListener(this, new DlHeaderView(this));
+        mOptimumRecyclerView.setRefreshListener(this, new DlHeaderView(this));
         getNewData();
     }
 
@@ -77,7 +77,7 @@ public class CustomHeaderActivity extends BaseActivity implements OnRefreshListe
             strings.add("测试数据 " + (i + 1));
         }
         mAdapter.update(strings);
-        mOptimumRecyclerview.loadMoreFinish(false, true);
+        mOptimumRecyclerView.loadMoreFinish(false, true);
     }
 
     @Override

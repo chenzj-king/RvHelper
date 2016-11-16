@@ -3,7 +3,7 @@ package com.dreamliner.rvhelper.sample.ui.activity.addressbook;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.TextView;
 
-import com.dreamliner.rvhelper.OptimumRecyclerview;
+import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.entity.Addressbook;
@@ -31,7 +31,7 @@ public class AddressbookActivity extends BaseActivity implements LetterView.OnTo
     @BindView(R.id.search_tv)
     TextView mSearchTv;
     @BindView(R.id.optimum_rv)
-    OptimumRecyclerview mOptimumRv;
+    OptimumRecyclerView mOptimumRv;
     @BindView(R.id.letter_tip_tv)
     TextView mLetterTipTv;
     @BindView(R.id.right_letter)

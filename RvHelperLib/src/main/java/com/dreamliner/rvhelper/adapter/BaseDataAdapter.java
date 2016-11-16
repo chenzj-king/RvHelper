@@ -33,18 +33,18 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     private Context mContext;
 
-    private List<T> mDatas;
+    private List<T> mDataList;
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
 
-    public static int FOOTER_TPYE = Integer.MAX_VALUE;
+    public static int FOOTER_TYPE = Integer.MAX_VALUE;
     private View mFooterView;
 
     private final Object mLock = new Object();
 
     public BaseDataAdapter() {
         super();
-        mDatas = new ArrayList<>();
+        mDataList = new ArrayList<>();
     }
 
     public BaseDataAdapter(ItemClickListener itemClickListener) {
@@ -85,7 +85,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     @Override
     public int getItemViewType(int position) {
         if (null != mFooterView && position == getItemCount() - 1) {
-            return FOOTER_TPYE;
+            return FOOTER_TYPE;
         } else {
             return super.getItemViewType(position);
         }
@@ -93,7 +93,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == FOOTER_TPYE) {
+        if (viewType == FOOTER_TYPE) {
             return new FooterViewHolder(mFooterView);
         } else {
             return createCustomViewHolder(parent, viewType);
@@ -106,8 +106,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     @Override
     public int getItemCount() {
-        if (null != mDatas) {
-            int dataSize = mDatas.size();
+        if (null != mDataList) {
+            int dataSize = mDataList.size();
             return dataSize == 0 ? 0 : dataSize + (null != mFooterView ? 1 : 0);
         } else {
             return 0;
@@ -116,8 +116,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void add(@NonNull T object) {
         synchronized (mLock) {
-            if (null != mDatas) {
-                mDatas.add(object);
+            if (null != mDataList) {
+                mDataList.add(object);
             }
         }
         notifyItemInserted(getItemCount() - 1);
@@ -125,8 +125,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void addAll(@NonNull Collection<? extends T> collection) {
         synchronized (mLock) {
-            if (null != mDatas) {
-                mDatas.addAll(collection);
+            if (null != mDataList) {
+                mDataList.addAll(collection);
             }
         }
         if (getItemCount() - collection.size() != 0) {
@@ -139,8 +139,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     @SafeVarargs
     public final void addAll(@NonNull T... items) {
         synchronized (mLock) {
-            if (null != mDatas) {
-                Collections.addAll(mDatas, items);
+            if (null != mDataList) {
+                Collections.addAll(mDataList, items);
             }
         }
         if (getItemCount() - items.length != 0) {
@@ -156,8 +156,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
             return;
         }
         synchronized (mLock) {
-            if (null != mDatas) {
-                mDatas.add(index, object);
+            if (null != mDataList) {
+                mDataList.add(index, object);
             }
         }
         notifyItemInserted(index);
@@ -169,8 +169,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
             return;
         }
         synchronized (mLock) {
-            if (null != mDatas) {
-                mDatas.addAll(index, collection);
+            if (null != mDataList) {
+                mDataList.addAll(index, collection);
             }
         }
         notifyItemRangeInserted(index, collection.size());
@@ -183,7 +183,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
             return;
         }
         synchronized (mLock) {
-            mDatas.remove(index);
+            mDataList.remove(index);
         }
         notifyItemRemoved(index);
     }
@@ -197,8 +197,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
                     removeIndex = index;
                 }
             }
-            if (mDatas != null) {
-                removeSuccess = mDatas.remove(object);
+            if (mDataList != null) {
+                removeSuccess = mDataList.remove(object);
             }
         }
         if (removeSuccess) {
@@ -210,8 +210,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void clear() {
         synchronized (mLock) {
-            if (mDatas != null) {
-                mDatas.clear();
+            if (mDataList != null) {
+                mDataList.clear();
             }
         }
         notifyDataSetChanged();
@@ -219,8 +219,8 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void sort(Comparator<? super T> comparator) {
         synchronized (mLock) {
-            if (mDatas != null) {
-                Collections.sort(mDatas, comparator);
+            if (mDataList != null) {
+                Collections.sort(mDataList, comparator);
             }
         }
         notifyDataSetChanged();
@@ -228,22 +228,22 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void update(@NonNull List<T> mDatas) {
         synchronized (mLock) {
-            this.mDatas = mDatas;
+            this.mDataList = mDatas;
         }
         notifyDataSetChanged();
     }
 
     public T getItem(int position) {
-        return mDatas.get(position);
+        return mDataList.get(position);
     }
 
     public int getPosition(T item) {
-        return mDatas.indexOf(item);
+        return mDataList.indexOf(item);
     }
 
     public List<T> getData() {
-        if (null != mDatas) {
-            return mDatas;
+        if (null != mDataList) {
+            return mDataList;
         } else {
             return new ArrayList<>();
         }

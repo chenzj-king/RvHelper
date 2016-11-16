@@ -3,7 +3,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <com.dreamliner.rvhelper.OptimumRecyclerview
+    <com.dreamliner.rvhelper.OptimumRecyclerView
         android:id="@+id/optimum_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

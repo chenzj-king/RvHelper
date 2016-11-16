@@ -24,7 +24,7 @@ import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
  */
 public class DefaultEmptyLayout extends EmptyLayout {
 
-    private TextView mEmtptTipTv;
+    private TextView mEmptyTipTv;
     private CustomizedClickableSpan mClickableSpan;
 
     private OnClickListener mOnClickListener;
@@ -44,7 +44,7 @@ public class DefaultEmptyLayout extends EmptyLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mEmtptTipTv = (TextView) findViewById(R.id.empty_status_tv);
+        mEmptyTipTv = (TextView) findViewById(R.id.empty_status_tv);
     }
 
     private void setEmptyTv(TextView textView, String tipStr, String clickStr) {
@@ -61,13 +61,13 @@ public class DefaultEmptyLayout extends EmptyLayout {
     public void setEmptyType(int type) {
         switch (type) {
             case NET_ERROR:
-                setEmptyTv(mEmtptTipTv, "亲,网络有点差哦", "重新加载");
+                setEmptyTv(mEmptyTipTv, "亲,网络有点差哦", "重新加载");
                 break;
             case NO_RESULT:
-                setEmptyTv(mEmtptTipTv, "亲，暂无数据", "重新加载");
+                setEmptyTv(mEmptyTipTv, "亲，暂无数据", "重新加载");
                 break;
             case DEFAULT_NULL:
-                setEmptyTv(mEmtptTipTv, "", "");
+                setEmptyTv(mEmptyTipTv, "", "");
                 break;
         }
     }
