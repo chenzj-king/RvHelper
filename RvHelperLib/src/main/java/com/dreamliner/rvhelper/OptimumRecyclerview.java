@@ -159,7 +159,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
         initPtrView(v);
         initRecyclerView(v);
-        initLoadmoreView(v);
+        initLoadMoreView(v);
 
         //默认先显示加载中界面
         showLoadingView();
@@ -176,7 +176,7 @@ public class OptimumRecyclerView extends FrameLayout {
         mPtrLayout.setRatioOfHeaderHeightToRefresh(mRatioOfHeaderHeightToRefresh);
         mPtrLayout.setResistance(mResistance);
 
-        mPtrLayout.setLastUpdateTimeRelateObject(this);
+        mPtrLayout.setLastUpdateTimeRelateObject(getContext());
     }
 
     /**
@@ -204,7 +204,7 @@ public class OptimumRecyclerView extends FrameLayout {
         mRecyclerView.addOnScrollListener(new CustomOnScrollListener());
     }
 
-    private void initLoadmoreView(View v) {
+    private void initLoadMoreView(View v) {
         mLoadMoreContainer = (LoadMoreRecycleViewContainer) v.findViewById(R.id.load_more_container);
         mLoadMoreContainer.setEnableLoadMore(false);
     }

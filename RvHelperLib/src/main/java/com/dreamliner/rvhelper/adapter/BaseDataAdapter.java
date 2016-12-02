@@ -3,6 +3,7 @@ package com.dreamliner.rvhelper.adapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +38,12 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     private ItemClickListener mItemClickListener;
     private ItemLongListener mItemLongListener;
 
+    //更加更多相关配置
     public static int FOOTER_TYPE = Integer.MAX_VALUE;
     private View mFooterView;
+    private int mSpanCount = 1;
+    private GridSpanSizeLookup mGridSpanSizeLookup;
+    private GridLayoutManager mGridLayoutManager;
 
     private final Object mLock = new Object();
 
@@ -80,6 +85,33 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
             mContext = parent.getContext();
         }
         return LayoutInflater.from(mContext).inflate(layoutId, parent, false);
+    }
+
+    public GridSpanSizeLookup getGridSpanSizeLookup() {
+        return new GridSpanSizeLookup();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+
+        if (layoutManager instanceof GridLayoutManager) {
+            mGridLayoutManager = ((GridLayoutManager) layoutManager);
+            if (mGridSpanSizeLookup == null) {
+                mSpanCount = mGridLayoutManager.getSpanCount();
+                mGridSpanSizeLookup = getGridSpanSizeLookup();
+            }
+            mGridLayoutManager.setSpanSizeLookup(mGridSpanSizeLookup);
+        }
+        /*
+        else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            if (isHeader(position) || isFooter(position)) {
+                StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView
+                        .getLayoutParams();
+                layoutParams.setFullSpan(true);
+            }
+        }*/
     }
 
     @Override
@@ -263,5 +295,16 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void setItemLongListener(ItemLongListener itemLongListener) {
         mItemLongListener = itemLongListener;
+    }
+
+    class GridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+        @Override
+        public int getSpanSize(int position) {
+            if (position == getItemCount() - 1 && mFooterView != null) {
+                return mSpanCount;
+            } else {
+                return 1;
+            }
+        }
     }
 }

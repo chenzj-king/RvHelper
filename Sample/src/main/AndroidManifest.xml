@@ -53,6 +53,11 @@
             android:theme="@style/AppTheme"
             />
 
+        <activity
+            android:name=".ui.activity.gridloadmore.GridLoadMoreActivity"
+            android:theme="@style/AppTheme"
+            />
+
     </application>
 
 </manifest>

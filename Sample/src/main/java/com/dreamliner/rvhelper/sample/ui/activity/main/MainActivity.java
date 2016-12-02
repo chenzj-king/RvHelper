@@ -13,6 +13,7 @@ import com.dreamliner.rvhelper.sample.ui.activity.customfooter.CustomFooterActiv
 import com.dreamliner.rvhelper.sample.ui.activity.customheader.CustomHeaderActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customloading.CustomLoadingActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.defaultall.DefaultAllActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.gridloadmore.GridLoadMoreActivity;
 import com.dreamliner.rvhelper.sample.ui.adapter.TypeAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private final int DEFAUTL_ALL = 4;
     private final int CUSTOM_ALL = 5;
     private final int ADDRESS_BOOK = 6;
+    private final int GRID_LOADMORE = 7;
 
     @Override
     protected int getLayoutId() {
@@ -91,6 +93,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case ADDRESS_BOOK:
                 readyGo(AddressbookActivity.class);
+                break;
+            case GRID_LOADMORE:
+                readyGo(GridLoadMoreActivity.class);
                 break;
             default:
                 showToast("持续更新");

@@ -14,6 +14,8 @@ import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
  */
 public abstract class BaseMixtureAdapter<T> extends BaseDataAdapter<T, BaseViewHolder> {
 
+    int size[] = new int[2];
+
     public BaseMixtureAdapter() {
         super();
     }
