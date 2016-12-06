@@ -42,7 +42,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     public static int FOOTER_TYPE = Integer.MAX_VALUE;
     private View mFooterView;
     private int mSpanCount = 1;
-    private GridSpanSizeLookup mGridSpanSizeLookup;
+    private GridLayoutManager.SpanSizeLookup mGridSpanSizeLookup;
     private GridLayoutManager mGridLayoutManager;
 
     private final Object mLock = new Object();
@@ -87,7 +87,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
         return LayoutInflater.from(mContext).inflate(layoutId, parent, false);
     }
 
-    public GridSpanSizeLookup getGridSpanSizeLookup() {
+    public GridLayoutManager.SpanSizeLookup getGridSpanSizeLookup() {
         return new GridSpanSizeLookup();
     }
 
