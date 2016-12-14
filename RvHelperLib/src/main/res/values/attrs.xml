@@ -9,6 +9,8 @@
         <attr name="rvhelp_layout_refresh_head" format="reference"/>
         <attr name="rvhelp_layout_footerview" format="reference"/>
 
+        <attr name="rvhelp_loading" format="boolean"/>
+        <attr name="rvhelp_empty" format="boolean"/>
         <attr name="rvhelp_recyclerClipToPadding" format="boolean"/>
         <attr name="rvhelp_recyclerPadding" format="dimension"/>
         <attr name="rvhelp_recyclerPaddingTop" format="dimension"/>

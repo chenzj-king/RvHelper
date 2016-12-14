@@ -2,6 +2,7 @@ package com.dreamliner.ptrlib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
 import com.dreamliner.ptrlib.util.PtrCLog;
 import com.dreamliner.rvhelper.R;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This layout view for "Pull to Refresh(Ptr)" support all of the view, you can contain everything you want.
@@ -69,12 +72,7 @@ public class PtrFrameLayout extends ViewGroup {
     private long mLoadingStartTime = 0;
     private PtrIndicator mPtrIndicator;
     private boolean mHasSendCancelEvent = false;
-    private Runnable mPerformRefreshCompleteDelay = new Runnable() {
-        @Override
-        public void run() {
-            performRefreshComplete();
-        }
-    };
+    private Runnable mPerformRefreshCompleteDelay;
 
     public PtrFrameLayout(Context context) {
         this(context, null);
@@ -117,6 +115,8 @@ public class PtrFrameLayout extends ViewGroup {
 
         final ViewConfiguration conf = ViewConfiguration.get(getContext());
         mPagingTouchSlop = conf.getScaledTouchSlop() * 2;
+
+        mPerformRefreshCompleteDelay = new PerformRefreshCompleteDelay(this);
     }
 
     @Override
@@ -179,14 +179,19 @@ public class PtrFrameLayout extends ViewGroup {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         if (mScrollChecker != null) {
             mScrollChecker.destroy();
         }
-
         if (mPerformRefreshCompleteDelay != null) {
             removeCallbacks(mPerformRefreshCompleteDelay);
         }
+        Handler handler = getHandler();
+        if (null != handler) {
+            handler.removeCallbacks(null);
+        }
+        mScrollChecker = null;
+        mPerformRefreshCompleteDelay = null;
+        super.onDetachedFromWindow();
     }
 
     @Override
@@ -968,6 +973,22 @@ public class PtrFrameLayout extends ViewGroup {
 
         public LayoutParams(ViewGroup.LayoutParams source) {
             super(source);
+        }
+    }
+
+    static class PerformRefreshCompleteDelay implements Runnable {
+        private WeakReference<PtrFrameLayout> mWeakReference;
+
+        public PerformRefreshCompleteDelay(PtrFrameLayout weakReference) {
+            mWeakReference = new WeakReference<>(weakReference);
+        }
+
+        @Override
+        public void run() {
+            PtrFrameLayout ptrFrameLayout = mWeakReference.get();
+            if (null != ptrFrameLayout) {
+                ptrFrameLayout.performRefreshComplete();
+            }
         }
     }
 

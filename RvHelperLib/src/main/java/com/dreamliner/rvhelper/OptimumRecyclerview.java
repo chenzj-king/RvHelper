@@ -32,6 +32,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
     private static final String TAG = "OptimumRecyclerView";
 
+    private boolean isDebug = true;
     //主界面
     private PtrClassicFrameLayout mPtrLayout;
     private LoadMoreRecycleViewContainer mLoadMoreContainer;
@@ -60,6 +61,9 @@ public class OptimumRecyclerView extends FrameLayout {
     private int mPaddingLeft;
     private int mPaddingRight;
     private int mScrollbarStyle;
+
+    private boolean mLoadingSwitch;
+    private boolean mEmptySwitch;
 
     //下拉刷新的头部相关信息
     private int mPtrBgColor;
@@ -117,6 +121,9 @@ public class OptimumRecyclerView extends FrameLayout {
             mPaddingRight = (int) optimumRvArr.getDimension(R.styleable.OptimumRecyclerView_rvhelp_recyclerPaddingRight, 0.0f);
             mScrollbarStyle = optimumRvArr.getInt(R.styleable.OptimumRecyclerView_rvhelp_scrollbarStyle, -1);
 
+            mLoadingSwitch = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerView_rvhelp_loading, true);
+            mEmptySwitch = optimumRvArr.getBoolean(R.styleable.OptimumRecyclerView_rvhelp_empty, true);
+
             //初始化uptr相关
             mPtrBgColor = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_bg_color, 0xf1f1f1);
             mDurationToClose = ptrArr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close, 200);
@@ -162,7 +169,9 @@ public class OptimumRecyclerView extends FrameLayout {
         initLoadMoreView(v);
 
         //默认先显示加载中界面
-        showLoadingView();
+        if (mLoadingSwitch) {
+            showLoadingView();
+        }
     }
 
     private void initPtrView(View v) {
@@ -209,6 +218,10 @@ public class OptimumRecyclerView extends FrameLayout {
         mLoadMoreContainer.setEnableLoadMore(false);
     }
 
+    public void setDebug(boolean debug) {
+        isDebug = debug;
+    }
+
     /**
      * Set the layout manager to the recycler
      */
@@ -223,63 +236,67 @@ public class OptimumRecyclerView extends FrameLayout {
 
         if (null != adapter) {
             mRecyclerView.setAdapter(adapter);
-            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onChanged() {
-                    super.onChanged();
-                    loadEmptyView();
-                }
+            adapter.registerAdapterDataObserver(
+                    new RecyclerView.AdapterDataObserver() {
+                        @Override
+                        public void onChanged() {
+                            super.onChanged();
+                            loadEmptyView();
+                        }
 
-                @Override
-                public void onItemRangeChanged(int positionStart, int itemCount) {
-                    super.onItemRangeChanged(positionStart, itemCount);
-                    loadEmptyView();
-                }
+                        @Override
+                        public void onItemRangeChanged(int positionStart, int itemCount) {
+                            super.onItemRangeChanged(positionStart, itemCount);
+                            loadEmptyView();
+                        }
 
-                @Override
-                public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-                    super.onItemRangeChanged(positionStart, itemCount, payload);
-                    loadEmptyView();
-                }
+                        @Override
+                        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+                            super.onItemRangeChanged(positionStart, itemCount, payload);
+                            loadEmptyView();
+                        }
 
-                @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-                    super.onItemRangeInserted(positionStart, itemCount);
-                    loadEmptyView();
-                }
+                        @Override
+                        public void onItemRangeInserted(int positionStart, int itemCount) {
+                            super.onItemRangeInserted(positionStart, itemCount);
+                            loadEmptyView();
+                        }
 
-                @Override
-                public void onItemRangeRemoved(int positionStart, int itemCount) {
-                    super.onItemRangeRemoved(positionStart, itemCount);
-                    loadEmptyView();
-                }
+                        @Override
+                        public void onItemRangeRemoved(int positionStart, int itemCount) {
+                            super.onItemRangeRemoved(positionStart, itemCount);
+                            loadEmptyView();
+                        }
 
-                @Override
-                public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-                    super.onItemRangeMoved(fromPosition, toPosition, itemCount);
-                    loadEmptyView();
-                }
+                        @Override
+                        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                            super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                            loadEmptyView();
+                        }
 
-                private void loadEmptyView() {
-                    Log.i(TAG, "try loadEmptyView and hide the hideProgress");
-
-                    hideLoadingView();
-                    mPtrLayout.refreshComplete();
-                    if (null != mEmptyLayout) {
-                        if (getAdapter().getItemCount() == 0) {
-                            showEmptyView();
-                        } else {
-                            hideEmptyView();
+                        private void loadEmptyView() {
+                            if (isDebug) {
+                                Log.i(TAG, "try loadEmptyView and hide the hideProgress");
+                            }
+                            hideLoadingView();
+                            mPtrLayout.refreshComplete();
+                            if (null != mEmptyLayout) {
+                                if (getAdapter().getItemCount() == 0 && mEmptySwitch) {
+                                    showEmptyView();
+                                } else {
+                                    hideEmptyView();
+                                }
+                            }
                         }
                     }
-                }
-            });
+            );
         }
     }
 
     /**
      * Add the onItemTouchListener for the recycler
      */
+
     public void addOnItemTouchListener(RecyclerView.OnItemTouchListener listener) {
         mRecyclerView.addOnItemTouchListener(listener);
     }

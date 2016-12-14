@@ -41,7 +41,7 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     //更加更多相关配置
     public static int FOOTER_TYPE = Integer.MAX_VALUE;
     private View mFooterView;
-    private int mSpanCount = 1;
+    protected int mSpanCount = 1;
     private GridLayoutManager.SpanSizeLookup mGridSpanSizeLookup;
     private GridLayoutManager mGridLayoutManager;
 
