@@ -99,7 +99,7 @@ dependencies {
     compile libraries.loadingDrawable
     compile libraries.flexibledivider
     compile libraries.percentSupport
-    compile project(':RvHelperLib')
+    compile project(':Library')
     //user this in your project
     //compile 'com.dreamliner.lib:RvHelper:1.0.2'
 }
