@@ -3,6 +3,7 @@ package com.dreamliner.ptrlib;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
 import com.dreamliner.rvhelper.R;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,7 +35,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
     private String mLastUpdateTimeKey;
     private boolean mShouldShowLastUpdate;
 
-    private LastUpdateTimeUpdater mLastUpdateTimeUpdater = new LastUpdateTimeUpdater();
+    private LastUpdateTimeUpdater mLastUpdateTimeUpdater = new LastUpdateTimeUpdater(this);
 
     public PtrClassicDefaultHeader(Context context) {
         super(context);
@@ -71,6 +73,11 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
     protected void onDetachedFromWindow() {
         if (mLastUpdateTimeUpdater != null) {
             mLastUpdateTimeUpdater.stop();
+            removeCallbacks(mLastUpdateTimeUpdater);
+        }
+        Handler handler = getHandler();
+        if (null != handler) {
+            handler.removeCallbacks(null);
         }
         super.onDetachedFromWindow();
     }
@@ -276,29 +283,46 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         }
     }
 
-    private class LastUpdateTimeUpdater implements Runnable {
+    private static class LastUpdateTimeUpdater implements Runnable {
 
         private boolean mRunning = false;
 
+        private WeakReference<PtrClassicDefaultHeader> mWeakReference;
+
+        public LastUpdateTimeUpdater(PtrClassicDefaultHeader ptrClassicDefaultHeader) {
+            mWeakReference = new WeakReference<>(ptrClassicDefaultHeader);
+        }
+
         private void start() {
-            if (TextUtils.isEmpty(mLastUpdateTimeKey)) {
-                return;
+            PtrClassicDefaultHeader ptrClassicDefaultHeader = mWeakReference.get();
+            if (null != ptrClassicDefaultHeader) {
+                if (TextUtils.isEmpty(ptrClassicDefaultHeader.mLastUpdateTimeKey)) {
+                    return;
+                }
+                mRunning = true;
+                run();
             }
-            mRunning = true;
-            run();
         }
 
         private void stop() {
-            mRunning = false;
-            removeCallbacks(this);
+            PtrClassicDefaultHeader ptrClassicDefaultHeader = mWeakReference.get();
+            if (null != ptrClassicDefaultHeader) {
+                mRunning = false;
+                ptrClassicDefaultHeader.removeCallbacks(this);
+            }
+
         }
 
         @Override
         public void run() {
-            tryUpdateLastUpdateTime();
-            if (mRunning) {
-                postDelayed(this, 1000);
+            PtrClassicDefaultHeader ptrClassicDefaultHeader = mWeakReference.get();
+            if (null != ptrClassicDefaultHeader) {
+                ptrClassicDefaultHeader.tryUpdateLastUpdateTime();
+                if (mRunning) {
+                    ptrClassicDefaultHeader.postDelayed(this, 1000);
+                }
             }
+
         }
     }
 }

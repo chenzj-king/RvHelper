@@ -28,6 +28,12 @@ public class PtrClassicFrameLayout extends PtrFrameLayout {
         addPtrUIHandler(mPtrClassicHeader);
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        mPtrClassicHeader.onDetachedFromWindow();
+        super.onDetachedFromWindow();
+    }
+
     public PtrClassicDefaultHeader getHeader() {
         return mPtrClassicHeader;
     }
