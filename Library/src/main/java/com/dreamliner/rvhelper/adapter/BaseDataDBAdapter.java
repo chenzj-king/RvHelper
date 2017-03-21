@@ -1,19 +1,17 @@
 package com.dreamliner.rvhelper.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dreamliner.rvhelper.interfaces.ItemClickListener;
-import com.dreamliner.rvhelper.interfaces.ItemLongListener;
-import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
-import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
+import com.dreamliner.rvhelper.BR;
+import com.dreamliner.rvhelper.interfaces.OnItemClickListener;
+import com.dreamliner.rvhelper.interfaces.OnItemLongClickListener;
+import com.dreamliner.rvhelper.viewholder.BaseBindViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,25 +19,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * @author chenzj
- * @Title: BaseDataAdapter
- * @Description: 类的描述 - 专门用于处理数据用的Adapter.从这边开始扩展
- * @date 2016/6/12 09:05
- * @email admin@chenzhongjin.cn
- */
-public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends RecyclerView.Adapter<BaseViewHolder> {
+import static android.content.ContentValues.TAG;
+import static com.dreamliner.rvhelper.adapter.BaseDataAdapter.FOOTER_TYPE;
 
-    private static final String TAG = "BaseDataAdapter";
+/**
+ * Created by chenzj on 2017/3/15.
+ */
+
+public abstract class BaseDataDBAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
+    private ViewGroup mViewGroup;
 
     private List<T> mDataList;
-    private ItemClickListener mItemClickListener;
-    private ItemLongListener mItemLongListener;
+    private OnItemClickListener<T> mOnItemClickListener;
+    private OnItemLongClickListener<T> mOnItemLongClickListener;
+    private Decorator mDecorator;
 
-    //更加更多相关配置
-    public static final int FOOTER_TYPE = Integer.MAX_VALUE;
     private View mFooterView;
     protected int mSpanCount = 1;
     private GridLayoutManager.SpanSizeLookup mGridSpanSizeLookup;
@@ -47,25 +43,25 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     private final Object mLock = new Object();
 
-    public BaseDataAdapter() {
+    public BaseDataDBAdapter() {
         super();
         mDataList = new ArrayList<>();
     }
 
-    public BaseDataAdapter(ItemClickListener itemClickListener) {
+    public BaseDataDBAdapter(OnItemClickListener<T> onItemClickListener) {
         this();
-        mItemClickListener = itemClickListener;
+        mOnItemClickListener = onItemClickListener;
     }
 
-    public BaseDataAdapter(ItemLongListener itemLongListener) {
+    public BaseDataDBAdapter(OnItemLongClickListener<T> onItemLongClickListener) {
         this();
-        mItemLongListener = itemLongListener;
+        mOnItemLongClickListener = onItemLongClickListener;
     }
 
-    public BaseDataAdapter(ItemClickListener itemClickListener, ItemLongListener itemLongListener) {
+    public BaseDataDBAdapter(OnItemClickListener<T> onItemClickListener, OnItemLongClickListener<T> onItemLongClickListener) {
         this();
-        mItemClickListener = itemClickListener;
-        mItemLongListener = itemLongListener;
+        mOnItemClickListener = onItemClickListener;
+        mOnItemLongClickListener = onItemLongClickListener;
     }
 
     public Context getContext() {
@@ -78,13 +74,6 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
 
     public void removeFooterView(View view) {
         mFooterView = null;
-    }
-
-    protected View getView(@LayoutRes int layoutId, ViewGroup parent) {
-        if (null == mContext) {
-            mContext = parent.getContext();
-        }
-        return LayoutInflater.from(mContext).inflate(layoutId, parent, false);
     }
 
     public GridLayoutManager.SpanSizeLookup getGridSpanSizeLookup() {
@@ -104,14 +93,16 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
             }
             mGridLayoutManager.setSpanSizeLookup(mGridSpanSizeLookup);
         }
-        /*
-        else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            if (isHeader(position) || isFooter(position)) {
-                StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView
-                        .getLayoutParams();
-                layoutParams.setFullSpan(true);
-            }
-        }*/
+    }
+
+    @Override
+    public int getItemCount() {
+        if (null != mDataList) {
+            int dataSize = mDataList.size();
+            return dataSize == 0 ? 0 : dataSize + (null != mFooterView ? 1 : 0);
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -124,28 +115,51 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
     }
 
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == FOOTER_TYPE) {
-            return new FooterViewHolder(mFooterView);
-        } else {
-            return createCustomViewHolder(parent, viewType);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (null == mViewGroup) {
+            mViewGroup = parent;
+        }
+        if (null == mContext) {
+            mContext = parent.getContext();
+        }
+        switch (viewType) {
+            case FOOTER_TYPE:
+                return new RecyclerView.ViewHolder(mFooterView) {
+                };
+            default:
+                return createDBViewHolder(parent, viewType);
         }
     }
 
-    public abstract VH createCustomViewHolder(ViewGroup parent, int viewType);
-
-    protected abstract void bindView(VH holder, int position);
+    protected abstract BaseBindViewHolder createDBViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public int getItemCount() {
-        if (null != mDataList) {
-            int dataSize = mDataList.size();
-            return dataSize == 0 ? 0 : dataSize + (null != mFooterView ? 1 : 0);
-        } else {
-            return 0;
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        int itemViewType = holder.getItemViewType();
+        switch (itemViewType) {
+            case FOOTER_TYPE:
+                //不需要进行操作
+                break;
+            default:
+                final Object item = getItem(position);
+                if (holder instanceof BaseBindViewHolder) {
+                    BaseBindViewHolder baseBindViewHolder = (BaseBindViewHolder) holder;
+                    baseBindViewHolder.getBinding().setVariable(BR.item, item);
+                    baseBindViewHolder.getBinding().setVariable(BR.itemClick, getOnItemClickListener());
+                    baseBindViewHolder.getBinding().setVariable(BR.itemLongClick, getOnItemLongClickListener());
+                    baseBindViewHolder.getBinding().setVariable(BR.position, position);
+                    baseBindViewHolder.getBinding().executePendingBindings();
+                    if (null != mDecorator) {
+                        mDecorator.decorator(baseBindViewHolder, position, itemViewType);
+                    }
+                    break;
+                }
         }
     }
 
+    /******************
+     * DataList相关操作
+     *****************/
     public void add(@NonNull T object) {
         synchronized (mLock) {
             if (null != mDataList) {
@@ -281,22 +295,24 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
         }
     }
 
-    public ItemClickListener getItemClickListener() {
-        return mItemClickListener;
+    /******************
+     * click等相关操作
+     *****************/
+    public OnItemClickListener<T> getOnItemClickListener() {
+        return mOnItemClickListener;
     }
 
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        mItemClickListener = itemClickListener;
+    public OnItemLongClickListener<T> getOnItemLongClickListener() {
+        return mOnItemLongClickListener;
     }
 
-    public ItemLongListener getItemLongListener() {
-        return mItemLongListener;
+    public void setDecorator(Decorator decorator) {
+        mDecorator = decorator;
     }
 
-    public void setItemLongListener(ItemLongListener itemLongListener) {
-        mItemLongListener = itemLongListener;
-    }
-
+    /******************
+     * GridSpan默认实现
+     *****************/
     class GridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
         @Override
         public int getSpanSize(int position) {
@@ -306,5 +322,12 @@ public abstract class BaseDataAdapter<T, VH extends BaseViewHolder> extends Recy
                 return 1;
             }
         }
+    }
+
+    /******************
+     * 扩展的自定义设置
+     *****************/
+    public interface Decorator {
+        void decorator(BaseBindViewHolder holder, int position, int viewType);
     }
 }

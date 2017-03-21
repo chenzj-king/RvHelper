@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/%20maven%20central%20-1.1.3-green.svg)](https://bintray.com/chenzj-king/maven/RvHelper)
+[![](https://img.shields.io/badge/%20maven%20central%20-2.0.0-green.svg)](https://bintray.com/chenzj-king/maven/RvHelper)
 
 ## [EngLish](https://github.com/chenzj-king/RvHelper/blob/master/README-EN.md)
 
@@ -24,7 +24,7 @@
 
 	dependencies {
 		//...
-    	compile 'compile 'com.dreamliner.lib:RvHelper:1.1.3'
+    	compile 'compile 'com.dreamliner.lib:RvHelper:2.0.0'
 	}
 
 ##使用方式

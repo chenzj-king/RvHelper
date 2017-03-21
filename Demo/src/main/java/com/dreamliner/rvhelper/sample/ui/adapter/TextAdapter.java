@@ -45,7 +45,7 @@ public class TextAdapter extends BaseAdapter<String, TextAdapter.ViewHolder> {
 
     static class ViewHolder extends BaseViewHolder {
 
-        @BindView(R.id.item_text_textview)
+        @BindView(R.id.item_text_tv)
         TextView mTextTv;
 
         ViewHolder(View itemView, ItemClickListener itemClickListener) {

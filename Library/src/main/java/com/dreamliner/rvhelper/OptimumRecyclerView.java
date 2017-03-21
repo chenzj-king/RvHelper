@@ -403,7 +403,7 @@ public class OptimumRecyclerView extends FrameLayout {
         mLoadMoreHandler = loadMoreHandler;
         //配置loadmore
         mLoadMoreContainer.setEnableLoadMore(true);
-        mLoadMoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+        mLoadMoreContainer.setRecyclerViewAdapter(mRecyclerView.getAdapter());
 
         mLoadMoreContainer.setLoadMoreView(loadmoreView);
         mLoadMoreContainer.setLoadMoreUIHandler((LoadMoreUIHandler) loadmoreView);

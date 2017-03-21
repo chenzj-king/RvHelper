@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildTools
+
+    dataBinding {
+        enabled true
+    }
 
     defaultConfig {
         applicationId "com.dreamliner.rvhelper.sample"
@@ -94,12 +97,12 @@ dependencies {
     compile libraries.supportAppCompat
 
     compile libraries.butterknife
-    apt libraries.butterknifeApt
+    annotationProcessor libraries.butterknifeApt
 
     compile libraries.loadingDrawable
     compile libraries.flexibledivider
     compile libraries.percentSupport
     compile project(':Library')
     //user this in your project
-    //compile 'com.dreamliner.lib:RvHelper:1.0.2'
+    //compile 'com.dreamliner.lib:RvHelper:2.0.0'
 }

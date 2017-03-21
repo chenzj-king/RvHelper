@@ -10,6 +10,6 @@ import android.view.View;
  * @email admin@chenzhongjin.cn
  */
 public interface ItemLongListener {
-    public boolean onLongClick(View view, int position);
+    boolean onLongClick(View view, int position);
 }  
 

@@ -66,7 +66,7 @@ public class AddressbookAdapter extends BaseMixtureAdapter<Addressbook> {
         } else if (viewType == NORAML) {
             return new ViewHolder(getView(R.layout.item_addressbook, parent), getItemClickListener());
         } else {
-            return new BaseViewHolder(getView(R.layout.item_null, parent));
+            return new BaseViewHolder(getView(R.layout.item_databinding_null, parent));
         }
     }
 

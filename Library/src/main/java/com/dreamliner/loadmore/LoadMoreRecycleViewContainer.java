@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
+import com.dreamliner.rvhelper.adapter.BaseDataDBAdapter;
 
 import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getLastVisibleItemPosition;
 
@@ -16,7 +17,7 @@ import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getLastVisibleItemP
 public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
 
     private RecyclerView mRecyclerView;
-    private BaseDataAdapter<?, ?> mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
 
     protected int mItemLeftToLoadMore = 10;
 
@@ -76,14 +77,22 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
     @Override
     public void addFooterView(View view) {
         if (null != mAdapter) {
-            mAdapter.addFooterView(view);
+            if (mAdapter instanceof BaseDataAdapter) {
+                ((BaseDataAdapter) mAdapter).addFooterView(view);
+            } else if (mAdapter instanceof BaseDataDBAdapter) {
+                ((BaseDataDBAdapter) mAdapter).addFooterView(view);
+            }
         }
     }
 
     @Override
     public void removeFooterView(View view) {
         if (null != mAdapter) {
-            mAdapter.removeFooterView(view);
+            if (mAdapter instanceof BaseDataAdapter) {
+                ((BaseDataAdapter) mAdapter).removeFooterView(view);
+            } else if (mAdapter instanceof BaseDataDBAdapter) {
+                ((BaseDataDBAdapter) mAdapter).removeFooterView(view);
+            }
         }
     }
 
@@ -98,7 +107,7 @@ public class LoadMoreRecycleViewContainer extends LoadMoreContainerBase {
         return getRecyclerView();
     }
 
-    public void setRecyclerViewAdapter(BaseDataAdapter<?, ?> adapter) {
+    public void setRecyclerViewAdapter(RecyclerView.Adapter<?> adapter) {
         mAdapter = adapter;
     }
 
