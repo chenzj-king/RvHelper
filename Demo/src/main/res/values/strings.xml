@@ -5,4 +5,6 @@
     <string name="no_result">没有数据</string>
     <string name="try_loading">重新加载</string>
 
+    <string name="mix_test_tip" formatted="false">测试mix-%s</string>
+
 </resources>

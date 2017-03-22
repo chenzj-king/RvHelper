@@ -3,6 +3,7 @@ package com.dreamliner.rvhelper.sample.ui.activity.databind;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,9 @@ import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.rvhelper.OptimumRecyclerView;
-import com.dreamliner.rvhelper.adapter.BaseDBAdapter;
+import com.dreamliner.rvhelper.adapter.BaseMixtureDBAdapter;
 import com.dreamliner.rvhelper.interfaces.OnItemClickListener;
+import com.dreamliner.rvhelper.interfaces.OnItemLongClickListener;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.sample.AppContext;
 import com.dreamliner.rvhelper.sample.R;
@@ -25,19 +27,25 @@ import com.dreamliner.rvhelper.sample.view.DlLoadmoreView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.dreamliner.rvhelper.adapter.BaseDataAdapter.FOOTER_TYPE;
 import static com.dreamliner.rvhelper.util.StatusConstant.NET_ERROR;
 import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
 
 /**
  * Created by chenzj on 2017/3/21.
  */
-public class DataBindActivity extends BaseActivity implements OnRefreshListener, LoadMoreHandler, View.OnClickListener {
+public class DataBindActivity extends BaseActivity implements OnRefreshListener, LoadMoreHandler, View.OnClickListener
+        , OnItemClickListener<String>, OnItemLongClickListener<String> {
 
     private static final String TAG = "DataBindActivity";
 
     private ActDatabindAllBinding mActDatabindAllBinding;
     private OptimumRecyclerView mOptimumRecyclerView;
-    private BaseDBAdapter<String> mAdapter;
+    //private BaseDBAdapter<String> mAdapter;
+    private BaseMixtureDBAdapter<String> mAdapter;
+
+    private final int NORMAL = 0;
+    private final int MIX = 1;
 
     @Override
     protected int getLayoutId() {
@@ -49,12 +57,20 @@ public class DataBindActivity extends BaseActivity implements OnRefreshListener,
         mActDatabindAllBinding = DataBindingUtil.setContentView(this, R.layout.act_databind_all);
         mOptimumRecyclerView = mActDatabindAllBinding.optimumRv;
 
-        mAdapter = new BaseDBAdapter<>(new OnItemClickListener<String>() {
+        //mAdapter = new BaseDBAdapter<>(this, this, R.layout.item_databind_text);
+
+        SparseIntArray sparseIntArray = new SparseIntArray();
+        sparseIntArray.put(NORMAL, R.layout.item_databind_text);
+        sparseIntArray.put(MIX, R.layout.item_databind_mix_text);
+        mAdapter = new BaseMixtureDBAdapter<String>(this, this, sparseIntArray) {
             @Override
-            public void onItemClick(View v, int position, String s) {
-                showToast(s);
+            public int getItemViewType(int position) {
+                if (super.getItemViewType(position) != FOOTER_TYPE) {
+                    return position % 2;
+                }
+                return super.getItemViewType(position);
             }
-        }, R.layout.item_databind_text);
+        };
 
         mOptimumRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mOptimumRecyclerView.addItemDecoration(DividerUtil.getDefalutDivider(AppContext.getInstance()));
@@ -71,6 +87,17 @@ public class DataBindActivity extends BaseActivity implements OnRefreshListener,
         mOptimumRecyclerView.setEmptyOnClick(this);
 
         getNewData(true);
+    }
+
+    @Override
+    public void onItemClick(View v, int position, String s) {
+        showToast("点击" + s);
+    }
+
+    @Override
+    public boolean onItemLongClick(View v, int position, String s) {
+        showToast("长按" + s);
+        return true;
     }
 
     @Override

@@ -25,6 +25,7 @@ public abstract class BaseMixtureDBAdapter<T> extends BaseDataDBAdapter<T> {
     private SparseIntArray mItemTypeToLayoutMap = new SparseIntArray();
 
     public BaseMixtureDBAdapter(SparseIntArray itemTypeToLayoutMap) {
+        super();
         mItemTypeToLayoutMap = itemTypeToLayoutMap;
     }
 

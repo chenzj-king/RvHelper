@@ -24,7 +24,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@android:color/darker_gray"
         android:orientation="vertical">
 
         <TextView
@@ -35,7 +35,7 @@
             android:onClick="@{()->itemClick.onItemClick(itemTextTv,position,item)}"
             android:onLongClick="@{()->itemLongClick.onItemLongClick(itemTextTv,position,item)}"
             android:padding="15dp"
-            android:text="@{item}"
+            android:text="@{@string/mix_test_tip(item)}"
             />
     </LinearLayout>
 </layout>
