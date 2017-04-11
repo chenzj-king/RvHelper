@@ -62,6 +62,11 @@
             android:theme="@style/AppTheme"
             />
 
+        <activity
+            android:name=".ui.activity.banner.BannerActivity"
+            android:theme="@style/AppTheme"
+            />
+
     </application>
 
 </manifest>

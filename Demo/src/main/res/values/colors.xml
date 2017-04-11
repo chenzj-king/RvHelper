@@ -8,4 +8,7 @@
     <color name="default_bg_color">#F2F5F6</color>
     <color name="select_type_bg">#4D8FFD</color>
     <color name="default_title_color">#333333</color>
+
+    <color name="pagerIndicator_select_color">#dfdfdf</color>
+    <color name="pagerIndicator_unSelect_color">#64dfdfdf</color>
 </resources>

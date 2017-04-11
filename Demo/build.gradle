@@ -105,4 +105,11 @@ dependencies {
     compile project(':Library')
     //user this in your project
     //compile 'com.dreamliner.lib:RvHelper:2.0.0'
+    compile 'com.dreamliner.lib:AndroidImageSlider:1.1.0'
+
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }

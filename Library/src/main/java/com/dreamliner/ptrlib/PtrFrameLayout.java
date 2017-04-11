@@ -335,12 +335,14 @@ public class PtrFrameLayout extends ViewGroup {
                         mPreventForHorizontal = true;
                     }
                 }*/
+
                 //调整相关逻辑.防止Uptr+RecyclerView+Viewpager之类的滑动冲突问题
                 if (mDisableWhenHorizontalMove && !mPreventForHorizontal && Math.abs(offsetX) > Math.abs(offsetY)) {
                     if (mPtrIndicator.isInStartPosition()) {
                         mPreventForHorizontal = true;
                     }
                 }
+
                 if (mPreventForHorizontal) {
                     return dispatchTouchEventSupper(e);
                 }

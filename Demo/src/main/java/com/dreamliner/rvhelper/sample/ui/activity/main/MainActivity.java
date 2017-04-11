@@ -7,6 +7,7 @@ import android.view.View;
 import com.dreamliner.rvhelper.OptimumRecyclerView;
 import com.dreamliner.rvhelper.sample.R;
 import com.dreamliner.rvhelper.sample.ui.activity.addressbook.AddressbookActivity;
+import com.dreamliner.rvhelper.sample.ui.activity.banner.BannerActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customall.CustomAllActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customempty.CustomEmptyActivity;
 import com.dreamliner.rvhelper.sample.ui.activity.customfooter.CustomFooterActivity;
@@ -18,7 +19,9 @@ import com.dreamliner.rvhelper.sample.ui.activity.gridloadmore.GridLoadMoreActiv
 import com.dreamliner.rvhelper.sample.ui.adapter.TypeAdapter;
 import com.dreamliner.rvhelper.sample.ui.base.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,15 +44,18 @@ public class MainActivity extends BaseActivity {
 
     private SparseArray<String> mStringSparseArray = new SparseArray<>();
 
+    private List<Class<?>> mActivities = new ArrayList<>();
+
     private final int CUSTOM_LOADING = 0;
     private final int CUSTOM_EMPTY = 1;
     private final int CUSTOM_HEAD = 2;
     private final int CUSTOM_FOOTER = 3;
-    private final int DEFAUTL_ALL = 4;
+    private final int DEFAULT_ALL = 4;
     private final int CUSTOM_ALL = 5;
     private final int ADDRESS_BOOK = 6;
-    private final int GRID_LOADMORE = 7;
-    private final int DATABINDING = 8;
+    private final int GRID_LOAD_MORE = 7;
+    private final int DATA_BINDING = 8;
+    private final int BANNER = 9;
 
     @Override
     protected int getLayoutId() {
@@ -69,42 +75,25 @@ public class MainActivity extends BaseActivity {
             mStringSparseArray.put(i, strings[i]);
         }
         mAdapter.update(Arrays.asList(strings));
+
+        mActivities.add(CustomLoadingActivity.class);
+        mActivities.add(CustomEmptyActivity.class);
+        mActivities.add(CustomHeaderActivity.class);
+        mActivities.add(CustomFooterActivity.class);
+        mActivities.add(DefaultAllActivity.class);
+        mActivities.add(CustomAllActivity.class);
+        mActivities.add(AddressbookActivity.class);
+        mActivities.add(GridLoadMoreActivity.class);
+        mActivities.add(DataBindActivity.class);
+        mActivities.add(BannerActivity.class);
     }
 
     @Override
     protected void onItemClick(View view, int position) {
-
-        switch (mStringSparseArray.indexOfValue(mAdapter.getItem(position))) {
-            case CUSTOM_LOADING:
-                readyGo(CustomLoadingActivity.class);
-                break;
-            case CUSTOM_EMPTY:
-                readyGo(CustomEmptyActivity.class);
-                break;
-            case CUSTOM_HEAD:
-                readyGo(CustomHeaderActivity.class);
-                break;
-            case CUSTOM_FOOTER:
-                readyGo(CustomFooterActivity.class);
-                break;
-            case DEFAUTL_ALL:
-                readyGo(DefaultAllActivity.class);
-                break;
-            case CUSTOM_ALL:
-                readyGo(CustomAllActivity.class);
-                break;
-            case ADDRESS_BOOK:
-                readyGo(AddressbookActivity.class);
-                break;
-            case GRID_LOADMORE:
-                readyGo(GridLoadMoreActivity.class);
-                break;
-            case DATABINDING:
-                readyGo(DataBindActivity.class);
-                break;
-            default:
-                showToast("持续更新");
-                break;
+        if (mAdapter.getItemCount() - 1 == position) {
+            showToast("持续更新");
+        } else {
+            readyGo(mActivities.get(position));
         }
     }
 }
