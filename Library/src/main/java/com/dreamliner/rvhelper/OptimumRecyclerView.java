@@ -19,7 +19,6 @@ import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
 import com.dreamliner.ptrlib.PtrUIHandler;
-import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
 import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.loading.LoadingLayout;
@@ -388,7 +387,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
         //配置loadmore
         mLoadMoreContainer.setEnableLoadMore(true);
-        mLoadMoreContainer.setRecyclerViewAdapter((BaseDataAdapter<?, ?>) mRecyclerView.getAdapter());
+        mLoadMoreContainer.setRecyclerViewAdapter(mRecyclerView.getAdapter());
         mLoadMoreContainer.useDefaultFooter();
         mLoadMoreContainer.setAutoLoadMore(true);
         mLoadMoreContainer.setShowLoadingForFirstPage(true);
