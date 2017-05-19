@@ -5,11 +5,11 @@ ext.versions = [
         minSdk     : 15,
         targetSdk  : 23,
         compileSdk : 25,
-        buildTools : '25.0.2',
+        buildTools : '25.0.3',
 
         // Library versions
         junit      : '4.12',
-        supportLibs: '25.3.0',
+        supportLibs: '25.3.1',
         multidex   : '1.0.1',
 ]
 ext.libraries = [
