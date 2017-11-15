@@ -64,9 +64,9 @@ android {
     }
 
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", "${variant.buildType.name}".contains("release")
-                    ? "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}-${variant.productFlavors[0].name}.apk".toLowerCase()
+        variant.outputs.all {
+            outputFileName = (!"${variant.buildType.name}".contains("debug")
+                    ? "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}" + ".apk".toLowerCase()
                     : "dreamliner-rvhelperSample-${variant.buildType.name}.apk".toLowerCase())
         }
     }
@@ -82,34 +82,29 @@ android {
         preDexLibraries = false
         javaMaxHeapSize "4g"
     }
-
-    productFlavors {
-        dreamliner {
-            manifestPlaceholders = [CHANNEL_VALUE: name]
-        }
-    }
 }
 
 dependencies {
+    //implementation project(':Library')
+    //user this in your project
+    implementation 'com.dreamliner.lib:RvHelper:2.1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation libraries.junit
+    implementation libraries.supportAppCompat
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile libraries.junit
-    compile libraries.supportAppCompat
-
-    compile libraries.butterknife
+    implementation libraries.butterknife
     annotationProcessor libraries.butterknifeApt
 
-    compile libraries.loadingDrawable
-    compile libraries.flexibledivider
-    compile libraries.percentSupport
-    compile project(':Library')
-    //user this in your project
-    //compile 'com.dreamliner.lib:RvHelper:2.1.0'
-    compile 'com.dreamliner.lib:AndroidImageSlider:1.1.0'
+    implementation libraries.loadingDrawable
+    implementation libraries.flexibledivider
+    implementation libraries.percentSupport
 
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    implementation 'com.dreamliner.lib:AndroidImageSlider:1.1.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
+    implementation 'jp.wasabeef:glide-transformations:2.0.1'
 }

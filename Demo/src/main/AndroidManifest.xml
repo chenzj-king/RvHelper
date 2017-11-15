@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.dreamliner.rvhelper.sample">
 
     <application
@@ -67,6 +68,11 @@
             android:theme="@style/AppTheme"
             />
 
+        <meta-data
+            android:name="android.support.VERSION"
+            android:value="26.1.0"
+            tools:replace="android:value"
+            />
     </application>
 
 </manifest>

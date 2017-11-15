@@ -1,15 +1,15 @@
 ext.versions = [
-        code       : 7,
-        name       : '2.0.1',
+        code       : 8,
+        name       : '2.1.1',
 
         minSdk     : 15,
         targetSdk  : 23,
-        compileSdk : 25,
-        buildTools : '25.0.3',
+        compileSdk : 26,
+        buildTools : '26.0.3',
 
         // Library versions
         junit      : '4.12',
-        supportLibs: '25.4.0',
+        supportLibs: '26.1.0',
         multidex   : '1.0.1',
 ]
 ext.libraries = [

@@ -3,6 +3,7 @@ package com.dreamliner.rvhelper;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -553,7 +554,9 @@ public class OptimumRecyclerView extends FrameLayout {
                 mRecyclerView.smoothScrollBy(0, top);
             }
         } else {
-            mRecyclerView.scrollToPosition(n);
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
+            linearLayoutManager.scrollToPositionWithOffset(n, 0);
+
             isRecyclerMove = true;
         }
     }
