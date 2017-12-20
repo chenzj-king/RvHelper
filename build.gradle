@@ -1,15 +1,27 @@
-apply from: 'buildsystem/dependencies.gradle'
-
 buildscript {
-    apply from: 'buildsystem/dependencies.gradle'
+
+    ext.versions = [
+            code      : 9,
+            name      : '2.2.0',
+
+            minSdk    : 15,
+            targetSdk : 23,
+            compileSdk: 26,
+            buildTools: '26.0.3',
+
+            // Library versions
+            junit     : '4.12',
+            support   : '26.1.0',
+            multidex  : '1.0.2',
+    ]
+
     repositories {
         jcenter()
         google()
-        maven { url "https://jitpack.io" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.novoda:bintray-release:0.5.0'
     }
 }

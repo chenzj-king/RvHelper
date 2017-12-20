@@ -1,5 +1,7 @@
 package com.dreamliner.rvhelper.adapter;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.dreamliner.rvhelper.interfaces.ItemClickListener;
 import com.dreamliner.rvhelper.interfaces.ItemLongListener;
 import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
@@ -12,10 +14,9 @@ import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
  * @date 2016/6/12 09:05
  * @email admin@chenzhongjin.cn
  */
-public abstract class BaseMixtureAdapter<T> extends BaseDataAdapter<T, BaseViewHolder> {
+public abstract class BaseMixtureAdapter<T> extends BaseNormalAdapter<T, BaseViewHolder> {
 
     public BaseMixtureAdapter() {
-        super();
     }
 
     public BaseMixtureAdapter(ItemClickListener itemClickListener) {
@@ -31,9 +32,9 @@ public abstract class BaseMixtureAdapter<T> extends BaseDataAdapter<T, BaseViewH
     }
 
     @Override
-    public final void onBindViewHolder(BaseViewHolder holder, int position) {
+    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!(holder instanceof FooterViewHolder)) {
-            bindView(holder, position);
+            bindView((BaseViewHolder) holder, position);
         }
     }
 }

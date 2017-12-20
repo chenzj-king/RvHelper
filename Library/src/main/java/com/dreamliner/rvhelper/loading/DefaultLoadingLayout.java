@@ -5,7 +5,8 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.dreamliner.rvhelper.R;
+import com.dreamliner.lib.rvhelper.R;
+
 
 /**
  * @author chenzj

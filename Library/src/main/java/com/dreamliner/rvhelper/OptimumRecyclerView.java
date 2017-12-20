@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 
+import com.dreamliner.lib.rvhelper.R;
 import com.dreamliner.loadmore.LoadMoreHandler;
 import com.dreamliner.loadmore.LoadMoreRecycleViewContainer;
 import com.dreamliner.loadmore.LoadMoreUIHandler;
@@ -20,13 +21,17 @@ import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
 import com.dreamliner.ptrlib.PtrUIHandler;
+import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
 import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import com.dreamliner.rvhelper.loading.LoadingLayout;
 import com.dreamliner.rvhelper.util.FloatUtil;
 
-import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getFirstVisibleItemPosition;
-import static com.dreamliner.rvhelper.util.LayoutManagerUtil.getLastVisibleItemPosition;
+import java.util.Collection;
+import java.util.List;
+
+import static com.dreamliner.rvhelper.util.StatusConstant.NET_ERROR;
+import static com.dreamliner.rvhelper.util.StatusConstant.NO_RESULT;
 
 public class OptimumRecyclerView extends FrameLayout {
 
@@ -73,10 +78,6 @@ public class OptimumRecyclerView extends FrameLayout {
     private boolean mPullToFresh;
     private float mRatioOfHeaderHeightToRefresh;
     private float mResistance;
-
-
-    private boolean isRecyclerMove = false;
-    private int mRecyclerViewIndex = 0;
 
     public PtrClassicFrameLayout getPtrLayout() {
         return mPtrLayout;
@@ -209,8 +210,6 @@ public class OptimumRecyclerView extends FrameLayout {
         if (mScrollbarStyle != -1) {
             mRecyclerView.setScrollBarStyle(mScrollbarStyle);
         }
-
-        mRecyclerView.addOnScrollListener(new CustomOnScrollListener());
     }
 
     private void initLoadMoreView(View v) {
@@ -388,6 +387,9 @@ public class OptimumRecyclerView extends FrameLayout {
 
         //配置loadmore
         mLoadMoreContainer.setEnableLoadMore(true);
+        if (null == mRecyclerView.getAdapter()) {
+            throw new NullPointerException("loadMoreContainer must init after set recyclerView adapter");
+        }
         mLoadMoreContainer.setRecyclerViewAdapter(mRecyclerView.getAdapter());
         mLoadMoreContainer.useDefaultFooter();
         mLoadMoreContainer.setAutoLoadMore(true);
@@ -403,6 +405,9 @@ public class OptimumRecyclerView extends FrameLayout {
         mLoadMoreHandler = loadMoreHandler;
         //配置loadmore
         mLoadMoreContainer.setEnableLoadMore(true);
+        if (null == mRecyclerView.getAdapter()) {
+            throw new NullPointerException("loadMoreContainer must init after set recyclerView adapter");
+        }
         mLoadMoreContainer.setRecyclerViewAdapter(mRecyclerView.getAdapter());
 
         mLoadMoreContainer.setLoadMoreView(loadmoreView);
@@ -505,75 +510,13 @@ public class OptimumRecyclerView extends FrameLayout {
     }
 
     public void move(int n) {
-        move(n, true);
-    }
-
-    public void move(int n, boolean smooth) {
-        move(n, smooth, false, false);
-    }
-
-    public void moveWithItemDecoration(int n, boolean smooth) {
-        move(n, smooth, true, true);
-    }
-
-    public void move(int n, boolean smooth, boolean isAllMove, boolean isWithItemDecoration) {
         if (n < 0 || n >= getAdapter().getItemCount()) {
             Log.e(TAG, "move: index error");
             return;
         }
-        mRecyclerViewIndex = n;
         mRecyclerView.stopScroll();
-        if (smooth) {
-            smoothMoveToPosition(n);
-        } else {
-            moveToPosition(n, isAllMove, isWithItemDecoration);
-        }
-    }
-
-    private void moveToPosition(int n, boolean isAllMove, boolean isWithItemDecoration) {
-
-        int firstItem = getFirstVisibleItemPosition(getLayoutManager());
-        int lastItem = getLastVisibleItemPosition(getLayoutManager());
-
-        if (n <= firstItem) {
-            mRecyclerView.scrollToPosition(n);
-        } else if (n <= lastItem) {
-
-            int index = n - firstItem;
-            int top = mRecyclerView.getChildAt(index).getTop();
-            if (isWithItemDecoration) {
-                try {
-                    top -= getLayoutManager().getTopDecorationHeight(mRecyclerView.getChildAt(index));
-                } catch (Exception ex) {
-                }
-            }
-
-            if (isAllMove) {
-                mRecyclerView.scrollBy(0, top);
-            } else {
-                mRecyclerView.smoothScrollBy(0, top);
-            }
-        } else {
-            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
-            linearLayoutManager.scrollToPositionWithOffset(n, 0);
-
-            isRecyclerMove = true;
-        }
-    }
-
-    private void smoothMoveToPosition(int n) {
-
-        int firstItem = getFirstVisibleItemPosition(getLayoutManager());
-        int lastItem = getLastVisibleItemPosition(getLayoutManager());
-        if (n <= firstItem) {
-            mRecyclerView.smoothScrollToPosition(n);
-        } else if (n <= lastItem) {
-            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
-            mRecyclerView.smoothScrollBy(0, top);
-        } else {
-            mRecyclerView.smoothScrollToPosition(n);
-            isRecyclerMove = true;
-        }
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
+        linearLayoutManager.scrollToPositionWithOffset(n, 0);
     }
 
     public void setEmptyOnClick(OnClickListener emptyOnClick) {
@@ -582,33 +525,85 @@ public class OptimumRecyclerView extends FrameLayout {
         }
     }
 
-    class CustomOnScrollListener extends RecyclerView.OnScrollListener {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
+    private boolean isValidate(Collection<?> collection) {
+        return collection != null && collection.size() > 0;
+    }
 
-            if (isRecyclerMove && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                isRecyclerMove = false;
-                int n = mRecyclerViewIndex - getFirstVisibleItemPosition(getLayoutManager());
-                if (0 <= n && n < mRecyclerView.getChildCount()) {
-                    int top = mRecyclerView.getChildAt(n).getTop();
-                    mRecyclerView.smoothScrollBy(0, top);
-                }
+    private <T> BaseDataAdapter<T, RecyclerView.ViewHolder> getBaseDataAdapter() {
+        if (null != getRecyclerView().getAdapter() && getRecyclerView().getAdapter() instanceof BaseDataAdapter) {
+            return (BaseDataAdapter<T, RecyclerView.ViewHolder>) getRecyclerView().getAdapter();
+        } else {
+            throw new NullPointerException("you must set adapter");
+        }
+    }
+
+    public <T> void loadSuccess(List<T> dataList) {
+        loadSuccess(dataList, NO_RESULT);
+    }
+
+    public <T> void loadSuccess(List<T> dataList, int emptyType) {
+        if (isValidate(dataList)) {
+            BaseDataAdapter<T, RecyclerView.ViewHolder> baseDataAdapter = getBaseDataAdapter();
+            baseDataAdapter.update(dataList);
+        } else {
+            setEmptyType(emptyType);
+            getBaseDataAdapter().clear();
+        }
+    }
+
+    public <T> boolean loadSuccess(boolean isFirst, List<T> dataList, int total) {
+        return loadSuccess(isFirst, dataList, -1, total, NO_RESULT);
+    }
+
+    public <T> boolean loadSuccess(boolean isFirst, List<T> dataList, int total, int emptyType) {
+        return loadSuccess(isFirst, dataList, -1, total, emptyType);
+    }
+
+    public <T> boolean loadSuccess(boolean isFirst, List<T> dataList, int viewCount, int total, int emptyType) {
+        boolean hasNext = false;
+        BaseDataAdapter<T, RecyclerView.ViewHolder> baseDataAdapter = getBaseDataAdapter();
+        if (isFirst) {
+            if (isValidate(dataList)) {
+                baseDataAdapter.update(dataList);
+            } else {
+                setEmptyType(emptyType);
+                baseDataAdapter.clear();
+            }
+        } else {
+            if (isValidate(dataList)) {
+                baseDataAdapter.addAll(dataList);
+            } else {
+                loadMoreFinish(false, true);
             }
         }
+        if (viewCount == -1) {
+            //兼容没有head的那种场景
+            viewCount = baseDataAdapter.getData().size();
+        }
+        if (viewCount >= total) {
+            loadMoreFinish(false, false);
+            baseDataAdapter.notifyDataSetChanged();
+        } else {
+            hasNext = true;
+            loadMoreFinish(false, true);
+        }
+        return hasNext;
+    }
 
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
+    public void loadFail() {
+        loadFail(NET_ERROR);
+    }
 
-            if (isRecyclerMove) {
-                isRecyclerMove = false;
-                int n = mRecyclerViewIndex - getFirstVisibleItemPosition(getLayoutManager());
-                if (0 <= n && n < mRecyclerView.getChildCount()) {
-                    int top = mRecyclerView.getChildAt(n).getTop();
-                    mRecyclerView.scrollBy(0, top);
-                }
-            }
+    public void loadFail(int emptyType) {
+        loadFail(true, emptyType);
+    }
+
+    public void loadFail(boolean isFirst, int emptyType) {
+        if (isFirst) {
+            setEmptyType(NET_ERROR);
+            getBaseDataAdapter().clear();
+        } else {
+            loadMoreError(-1, "");
         }
     }
 }

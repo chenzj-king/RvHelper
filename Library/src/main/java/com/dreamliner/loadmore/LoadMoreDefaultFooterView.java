@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.dreamliner.rvhelper.R;
+import com.dreamliner.lib.rvhelper.R;
+
 
 public class LoadMoreDefaultFooterView extends RelativeLayout implements LoadMoreUIHandler {
 

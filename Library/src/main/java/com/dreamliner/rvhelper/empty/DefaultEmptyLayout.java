@@ -8,7 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.dreamliner.rvhelper.R;
+import com.dreamliner.lib.rvhelper.R;
 import com.dreamliner.rvhelper.view.CustomizedClickableSpan;
 
 import static com.dreamliner.rvhelper.util.StatusConstant.DEFAULT_NULL;

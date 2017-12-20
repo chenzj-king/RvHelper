@@ -50,7 +50,7 @@
                 android:visibility="invisible"
                 />
 
-            <com.dreamliner.rvhelper.sample.view.LetterView
+            <com.dreamliner.lib.rvhelper.sample.view.LetterView
                 android:id="@+id/right_letter"
                 android:layout_width="25dp"
                 android:layout_height="match_parent"

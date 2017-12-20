@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.dreamliner.rvhelper.sample">
+          package="com.dreamliner.lib.rvhelper.sample">
 
     <application
         android:name=".AppContext"
@@ -19,54 +19,16 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.activity.customloading.CustomLoadingActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.customempty.CustomEmptyActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.customheader.CustomHeaderActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.customfooter.CustomFooterActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.defaultall.DefaultAllActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.customall.CustomAllActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.addressbook.AddressbookActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.gridloadmore.GridLoadMoreActivity"
-            android:theme="@style/AppTheme"
-            />
-        <activity
-            android:name=".ui.activity.databind.DataBindActivity"
-            android:theme="@style/AppTheme"
-            />
-
-        <activity
-            android:name=".ui.activity.banner.BannerActivity"
-            android:theme="@style/AppTheme"
-            />
+        <activity android:name=".ui.activity.customloading.CustomLoadingActivity"/>
+        <activity android:name=".ui.activity.customempty.CustomEmptyActivity"/>
+        <activity android:name=".ui.activity.customheader.CustomHeaderActivity"/>
+        <activity android:name=".ui.activity.customfooter.CustomFooterActivity"/>
+        <activity android:name=".ui.activity.defaultall.DefaultAllActivity"/>
+        <activity android:name=".ui.activity.customall.CustomAllActivity"/>
+        <activity android:name=".ui.activity.addressbook.AddressbookActivity"/>
+        <activity android:name=".ui.activity.gridloadmore.GridLoadMoreActivity"/>
+        <activity android:name=".ui.activity.databind.DataBindActivity"/>
+        <activity android:name=".ui.activity.banner.BannerActivity"/>
 
         <meta-data
             android:name="android.support.VERSION"

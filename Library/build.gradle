@@ -30,10 +30,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation libraries.junit
-    implementation libraries.supportAppCompat
-    implementation libraries.supportRecyclerView
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.android.support:appcompat-v7:$versions.support"
+    api "com.android.support:recyclerview-v7:$versions.support"
 }
 
 tasks.withType(Javadoc) {
@@ -45,7 +44,7 @@ publish {
     userOrg = 'chenzj-king'
     groupId = 'com.dreamliner.lib'
     artifactId = 'RvHelper'
-    publishVersion = '2.1.1'
+    publishVersion = '2.2.0'
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/chenzj-king/RvHelper'
     bintrayUser = bintrayUserVal

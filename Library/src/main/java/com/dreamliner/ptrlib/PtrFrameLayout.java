@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import com.dreamliner.lib.rvhelper.R;
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
 import com.dreamliner.ptrlib.util.PtrCLog;
-import com.dreamliner.rvhelper.R;
 
 import java.lang.ref.WeakReference;
 

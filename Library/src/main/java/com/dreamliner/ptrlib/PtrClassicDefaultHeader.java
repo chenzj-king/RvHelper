@@ -13,8 +13,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.dreamliner.lib.rvhelper.R;
 import com.dreamliner.ptrlib.indicator.PtrIndicator;
-import com.dreamliner.rvhelper.R;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;

@@ -38,7 +38,7 @@ public class BaseDBAdapter<T> extends BaseDataDBAdapter<T> {
     }
 
     @Override
-    protected BaseBindViewHolder createDBViewHolder(ViewGroup parent, int viewType) {
+    public BaseBindViewHolder createCustomViewHolder(ViewGroup parent, int viewType) {
         return new BaseBindViewHolder<>(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 mLayoutRes, parent, false));
     }

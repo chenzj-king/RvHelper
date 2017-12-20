@@ -24,7 +24,7 @@
 
 	dependencies {
 		//...
-    	compile 'com.dreamliner.lib:RvHelper:2.1.0'
+    	compile 'com.dreamliner.lib:RvHelper:2.2.0'
 	}
 
 ##使用方式
@@ -68,14 +68,14 @@
 > 新建对应的loading.xml
 
 	<?xml version="1.0" encoding="utf-8"?>
-	<com.dreamliner.rvhelper.sample.view.DlLoadingLayout
+	<com.dreamliner.lib.rvhelper.sample.view.DlLoadingLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent">
 			
 		<!-- 这里进行自定义的界面定义.只需要配合CustomLoadingLayout的逻辑来进行实现即可-->
 
-	</com.dreamliner.rvhelper.sample.view.DlLoadingLayout>
+	</com.dreamliner.lib.rvhelper.sample.view.DlLoadingLayout>
 
 > 配置到OptimumRecyclerview中
 
@@ -126,7 +126,7 @@
 > 新建custom_empty.xml
 
 	<?xml version="1.0" encoding="utf-8"?>
-	<com.dreamliner.rvhelper.sample.view.DlEmptyLayout
+	<com.dreamliner.lib.rvhelper.sample.view.DlEmptyLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
@@ -135,7 +135,7 @@
 			
 		<!-- 这里进行自定义的界面定义.只需要配合CustomEmptyLayout的逻辑来进行实现即可-->
 		
-	</com.dreamliner.rvhelper.sample.view.DlEmptyLayout>
+	</com.dreamliner.lib.rvhelper.sample.view.DlEmptyLayout>
 
 > 配置到OptimumRecyclerview中
 

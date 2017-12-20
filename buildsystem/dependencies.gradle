@@ -1,6 +1,6 @@
 ext.versions = [
-        code       : 8,
-        name       : '2.1.1',
+        code       : 9,
+        name       : '2.2.0',
 
         minSdk     : 15,
         targetSdk  : 23,
@@ -10,7 +10,7 @@ ext.versions = [
         // Library versions
         junit      : '4.12',
         supportLibs: '26.1.0',
-        multidex   : '1.0.1',
+        multidex   : '1.0.2',
 ]
 ext.libraries = [
         junit              : "junit:junit:$versions.junit",
