@@ -600,7 +600,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
     public void loadFail(boolean isFirst, int emptyType) {
         if (isFirst) {
-            setEmptyType(NET_ERROR);
+            setEmptyType(emptyType);
             getBaseDataAdapter().clear();
         } else {
             loadMoreError(-1, "");

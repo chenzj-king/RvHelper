@@ -44,7 +44,7 @@ publish {
     userOrg = 'chenzj-king'
     groupId = 'com.dreamliner.lib'
     artifactId = 'RvHelper'
-    publishVersion = '2.2.0'
+    publishVersion = '2.2.2'
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/chenzj-king/RvHelper'
     bintrayUser = bintrayUserVal
