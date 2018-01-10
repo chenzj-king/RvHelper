@@ -50,10 +50,17 @@ public abstract class BaseDataDBAdapter<T> extends BaseDataAdapter<T, BaseBindVi
                 final Object item = getItem(position);
                 if (holder instanceof BaseBindViewHolder) {
                     BaseBindViewHolder baseBindViewHolder = (BaseBindViewHolder) holder;
+                    baseBindViewHolder.setItem(item);
+                    baseBindViewHolder.setOnItemClickListener(getOnItemClickListener());
+                    baseBindViewHolder.setOnItemLongClickListener(getOnItemLongClickListener());
                     baseBindViewHolder.getBinding().setVariable(BR.item, item);
+                    baseBindViewHolder.getBinding().setVariable(BR.position, position);
+                    //v2.3.0 加入.减少编写xml的时候要手动打中间生成的view成员变量
+                    baseBindViewHolder.getBinding().setVariable(BR.clickListener, baseBindViewHolder);
+                    baseBindViewHolder.getBinding().setVariable(BR.onLongClickListener, baseBindViewHolder);
+                    //v2.3.0不需要.但旧版本需要兼容
                     baseBindViewHolder.getBinding().setVariable(BR.itemClick, getOnItemClickListener());
                     baseBindViewHolder.getBinding().setVariable(BR.itemLongClick, getOnItemLongClickListener());
-                    baseBindViewHolder.getBinding().setVariable(BR.position, position);
                     baseBindViewHolder.getBinding().executePendingBindings();
                     if (null != mDecorator) {
                         mDecorator.decorator(baseBindViewHolder, position, itemViewType);

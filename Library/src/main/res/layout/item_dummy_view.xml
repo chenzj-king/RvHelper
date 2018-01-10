@@ -8,17 +8,24 @@
             type="java.lang.Integer"/>
 
         <variable
+            name="item"
+            type="java.lang.Void"/>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+
+        <variable
+            name="onLongClickListener"
+            type="android.view.View.OnLongClickListener"/>
+
+        <variable
             name="itemClick"
             type="com.dreamliner.rvhelper.interfaces.OnItemClickListener"/>
-
 
         <variable
             name="itemLongClick"
             type="com.dreamliner.rvhelper.interfaces.OnItemLongClickListener"/>
-
-        <variable
-            name="item"
-            type="java.lang.Void"/>
     </data>
 
     <LinearLayout

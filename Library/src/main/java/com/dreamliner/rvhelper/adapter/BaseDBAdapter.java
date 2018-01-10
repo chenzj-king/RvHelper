@@ -1,6 +1,7 @@
 package com.dreamliner.rvhelper.adapter;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class BaseDBAdapter<T> extends BaseDataDBAdapter<T> {
 
     @Override
     public BaseBindViewHolder createCustomViewHolder(ViewGroup parent, int viewType) {
-        return new BaseBindViewHolder<>(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                mLayoutRes, parent, false));
+        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), mLayoutRes, parent, false);
+        return new BaseBindViewHolder<ViewDataBinding, T>(viewDataBinding);
     }
 }

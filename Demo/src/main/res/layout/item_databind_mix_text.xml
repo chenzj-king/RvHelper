@@ -8,17 +8,17 @@
             type="java.lang.Integer"/>
 
         <variable
-            name="itemClick"
-            type="com.dreamliner.rvhelper.interfaces.OnItemClickListener"/>
-
-
-        <variable
-            name="itemLongClick"
-            type="com.dreamliner.rvhelper.interfaces.OnItemLongClickListener"/>
-
-        <variable
             name="item"
             type="java.lang.String"/>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+
+        <variable
+            name="onLongClickListener"
+            type="android.view.View.OnLongClickListener"/>
+
     </data>
 
     <LinearLayout
@@ -32,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{()->itemClick.onItemClick(itemTextTv,position,item)}"
-            android:onLongClick="@{()->itemLongClick.onItemLongClick(itemTextTv,position,item)}"
+            android:onClick="@{clickListener::onClick}"
+            android:onLongClick="@{onLongClickListener::onLongClick}"
             android:padding="15dp"
             android:text="@{@string/mix_test_tip(item)}"
             />

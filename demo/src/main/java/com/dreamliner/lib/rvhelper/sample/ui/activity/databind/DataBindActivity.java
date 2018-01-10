@@ -56,7 +56,6 @@ public class DataBindActivity extends BaseActivity implements OnRefreshListener,
         mOptimumRecyclerView = mActDatabindAllBinding.optimumRv;
 
         mAdapter = new BaseDBAdapter<>(this, this, R.layout.item_databind_text);
-
 //        SparseIntArray sparseIntArray = new SparseIntArray();
 //        sparseIntArray.put(NORMAL, R.layout.item_databind_text);
 //        sparseIntArray.put(MIX, R.layout.item_databind_mix_text);
