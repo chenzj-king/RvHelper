@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
@@ -21,6 +20,7 @@ import com.dreamliner.ptrlib.PtrDefaultHandler;
 import com.dreamliner.ptrlib.PtrFrameLayout;
 import com.dreamliner.ptrlib.PtrHandler;
 import com.dreamliner.ptrlib.PtrUIHandler;
+import com.dreamliner.ptrlib.util.PtrCLog;
 import com.dreamliner.rvhelper.adapter.BaseDataAdapter;
 import com.dreamliner.rvhelper.empty.EmptyLayout;
 import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
@@ -37,7 +37,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
     private static final String TAG = "OptimumRecyclerView";
 
-    private boolean isDebug = true;
+    private static boolean isDebug = true;
     //主界面
     private PtrClassicFrameLayout mPtrLayout;
     private LoadMoreRecycleViewContainer mLoadMoreContainer;
@@ -217,7 +217,7 @@ public class OptimumRecyclerView extends FrameLayout {
         mLoadMoreContainer.setEnableLoadMore(false);
     }
 
-    public void setDebug(boolean debug) {
+    public static void setDebug(boolean debug) {
         isDebug = debug;
     }
 
@@ -274,9 +274,7 @@ public class OptimumRecyclerView extends FrameLayout {
                         }
 
                         private void loadEmptyView() {
-                            if (isDebug) {
-                                Log.i(TAG, "try loadEmptyView and hide the hideProgress");
-                            }
+                            PtrCLog.i(TAG, "try loadEmptyView and hide the hideProgress");
                             hideLoadingView();
                             mPtrLayout.refreshComplete();
                             if (null != mEmptyLayout) {
@@ -511,7 +509,7 @@ public class OptimumRecyclerView extends FrameLayout {
 
     public void move(int n) {
         if (n < 0 || n >= getAdapter().getItemCount()) {
-            Log.e(TAG, "move: index error");
+            PtrCLog.e(TAG, "move: index error");
             return;
         }
         mRecyclerView.stopScroll();

@@ -2,6 +2,8 @@ package com.dreamliner.ptrlib.util;
 
 import android.util.Log;
 
+import com.dreamliner.ptrlib.PtrFrameLayout;
+
 /**
  * An encapsulation of {@link Log}, enable log level and print log with parameters.
  *
@@ -37,6 +39,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_VERBOSE) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.v(tag, msg);
     }
 
@@ -51,6 +56,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_VERBOSE) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.v(tag, msg, throwable);
     }
 
@@ -63,6 +71,9 @@ public class PtrCLog {
      */
     public static void v(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_VERBOSE) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -81,6 +92,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_DEBUG) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.d(tag, msg);
     }
 
@@ -93,6 +107,9 @@ public class PtrCLog {
      */
     public static void d(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_DEBUG) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -112,6 +129,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_DEBUG) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.d(tag, msg, throwable);
     }
 
@@ -123,6 +143,9 @@ public class PtrCLog {
      */
     public static void i(String tag, String msg) {
         if (sLevel > LEVEL_INFO) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         Log.i(tag, msg);
@@ -137,6 +160,9 @@ public class PtrCLog {
      */
     public static void i(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_INFO) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -155,6 +181,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_INFO) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.i(tag, msg, throwable);
     }
 
@@ -166,6 +195,9 @@ public class PtrCLog {
      */
     public static void w(String tag, String msg) {
         if (sLevel > LEVEL_WARNING) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         Log.w(tag, msg);
@@ -180,6 +212,9 @@ public class PtrCLog {
      */
     public static void w(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_WARNING) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -199,6 +234,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_WARNING) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.w(tag, msg, throwable);
     }
 
@@ -210,6 +248,9 @@ public class PtrCLog {
      */
     public static void e(String tag, String msg) {
         if (sLevel > LEVEL_ERROR) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         Log.e(tag, msg);
@@ -224,6 +265,9 @@ public class PtrCLog {
      */
     public static void e(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_ERROR) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -243,6 +287,9 @@ public class PtrCLog {
         if (sLevel > LEVEL_ERROR) {
             return;
         }
+        if (!PtrFrameLayout.DEBUG) {
+            return;
+        }
         Log.e(tag, msg, throwable);
     }
 
@@ -254,6 +301,9 @@ public class PtrCLog {
      */
     public static void f(String tag, String msg) {
         if (sLevel > LEVEL_FATAL) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         Log.wtf(tag, msg);
@@ -268,6 +318,9 @@ public class PtrCLog {
      */
     public static void f(String tag, String msg, Object... args) {
         if (sLevel > LEVEL_FATAL) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         if (args.length > 0) {
@@ -285,6 +338,9 @@ public class PtrCLog {
      */
     public static void f(String tag, String msg, Throwable throwable) {
         if (sLevel > LEVEL_FATAL) {
+            return;
+        }
+        if (!PtrFrameLayout.DEBUG) {
             return;
         }
         Log.wtf(tag, msg, throwable);

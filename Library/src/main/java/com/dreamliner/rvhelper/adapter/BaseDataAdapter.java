@@ -5,11 +5,11 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dreamliner.ptrlib.util.PtrCLog;
 import com.dreamliner.rvhelper.viewholder.FooterViewHolder;
 
 import java.util.ArrayList;
@@ -155,7 +155,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
 
     public void insert(@NonNull T object, int index) {
         if (index < 0 || index > getItemCount()) {
-            Log.i(TAG, "insert: index error");
+            PtrCLog.i(TAG, "insert: index error");
             return;
         }
         synchronized (mLock) {
@@ -168,7 +168,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
 
     public void insertAll(@NonNull Collection<? extends T> collection, int index) {
         if (index < 0 || index > getItemCount()) {
-            Log.i(TAG, "insertAll: index error");
+            PtrCLog.i(TAG, "insertAll: index error");
             return;
         }
         synchronized (mLock) {
@@ -182,7 +182,7 @@ public abstract class BaseDataAdapter<T, VH extends RecyclerView.ViewHolder> ext
     public void remove(int index) {
 
         if (index < 0 || index >= getItemCount()) {
-            Log.i(TAG, "remove: index error");
+            PtrCLog.i(TAG, "remove: index error");
             return;
         }
         synchronized (mLock) {
