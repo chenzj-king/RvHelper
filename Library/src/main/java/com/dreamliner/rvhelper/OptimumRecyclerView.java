@@ -588,6 +588,37 @@ public class OptimumRecyclerView extends FrameLayout {
         return hasNext;
     }
 
+    public <T> boolean loadPageSuccess(boolean isFirst, List<T> dataList, int page, int maxPage) {
+        return loadPageSuccess(isFirst, dataList, page, maxPage, NO_RESULT);
+    }
+
+    public <T> boolean loadPageSuccess(boolean isFirst, List<T> dataList, int page, int maxPage, int emptyType) {
+        boolean hasNext = false;
+        BaseDataAdapter<T, RecyclerView.ViewHolder> baseDataAdapter = getBaseDataAdapter();
+        if (isFirst) {
+            if (isValidate(dataList)) {
+                baseDataAdapter.update(dataList);
+            } else {
+                setEmptyType(emptyType);
+                baseDataAdapter.clear();
+            }
+        } else {
+            if (isValidate(dataList)) {
+                baseDataAdapter.addAll(dataList);
+            } else {
+                loadMoreFinish(false, true);
+            }
+        }
+        if (page >= maxPage) {
+            loadMoreFinish(false, false);
+            baseDataAdapter.notifyDataSetChanged();
+        } else {
+            hasNext = true;
+            loadMoreFinish(false, true);
+        }
+        return hasNext;
+    }
+
     public void loadFail() {
         loadFail(NET_ERROR);
     }
