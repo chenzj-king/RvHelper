@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -35,19 +36,95 @@ dependencies {
     api "com.android.support:recyclerview-v7:$versions.support"
 }
 
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
+//项目主页
+def siteUrl = 'https://github.com/chenzj-king/RvHelper'
+//项目的版本控制地址
+def gitUrl = 'https://github.com/chenzj-king/RvHelper.git'
+
+//发布到组织名称名字，必须填写
+group = "cn.dreamliner.lib"
+//发布到JCenter上的项目名字，必须填写
+def libName = "RvHelper"
+// 版本号，下次更新是只需要更改版本号即可
+version = "2.3.8"
+
+//生成源文件
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+//生成文档
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.encoding "UTF-8"
+    options.charSet 'UTF-8'
+    options.author true
+    options.version true
+    options.links "https://github.com/linglongxin24/FastDev/tree/master/mylibrary/docs/javadoc"
+    failOnError false
 }
 
-publish {
-    userOrg = 'chenzj-king'
-    groupId = 'com.dreamliner.lib'
-    artifactId = 'RvHelper'
-    publishVersion = '2.3.6'
-    desc = 'Oh hi, this is a nice description for a project, right?'
-    website = 'https://github.com/chenzj-king/RvHelper'
-    bintrayUser = bintrayUserVal
-    bintrayKey = bintrayKeyVal
-    dryRun = false
+//文档打包成jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+//拷贝javadoc文件
+task copyDoc(type: Copy) {
+    from "${buildDir}/docs/"
+    into "docs"
+}
+
+//上传到jcenter所需要的源码文件
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// 配置maven库，生成POM.xml文件
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'This is a lightweight SQLite database framework'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'This is a lightweight SQLite database framework'
+                        url 'https://github.com/linglongxin24/SQLite'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'chenzj-king'
+                        name 'chenzj'
+                        email 'admin@chenzhongjin.cn'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = bintrayUserVal
+    key = bintrayKeyVal
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = libName    //发布到JCenter上的项目名字，必须填写
+        desc = 'This is a RvHelper project'    //项目描述
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
 }
