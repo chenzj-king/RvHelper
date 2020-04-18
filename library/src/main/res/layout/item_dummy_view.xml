@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="position"
+            type="java.lang.Integer" />
+
+        <variable
+            name="item"
+            type="java.lang.Void" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onLongClickListener"
+            type="android.view.View.OnLongClickListener" />
+
+        <variable
+            name="itemClick"
+            type="com.dreamliner.rvhelper.interfaces.OnItemClickListener" />
+
+        <variable
+            name="itemLongClick"
+            type="com.dreamliner.rvhelper.interfaces.OnItemLongClickListener" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/item_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{()->itemClick.onItemClick(itemLl,position,item)}"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+</layout>

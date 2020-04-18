@@ -1,6 +1,7 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.defaultall;
 
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;

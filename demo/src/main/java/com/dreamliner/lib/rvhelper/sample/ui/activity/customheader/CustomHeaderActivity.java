@@ -1,6 +1,5 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.customheader;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.dreamliner.lib.rvhelper.sample.AppContext;
@@ -16,6 +15,7 @@ import com.dreamliner.rvhelper.interfaces.OnRefreshListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 
 /**

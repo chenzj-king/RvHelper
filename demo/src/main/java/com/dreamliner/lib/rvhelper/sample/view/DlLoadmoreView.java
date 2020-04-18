@@ -1,7 +1,6 @@
 package com.dreamliner.lib.rvhelper.sample.view;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
@@ -11,6 +10,8 @@ import com.dreamliner.lib.rvhelper.sample.R;
 import com.dreamliner.loadingdrawable.LoadingView;
 import com.dreamliner.loadmore.LoadMoreContainer;
 import com.dreamliner.loadmore.LoadMoreUIHandler;
+
+import androidx.annotation.StringRes;
 
 /**
  * @author chenzj

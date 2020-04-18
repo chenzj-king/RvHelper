@@ -1,0 +1,65 @@
+package com.dreamliner.rvhelper.adapter;
+
+import android.util.SparseIntArray;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import com.dreamliner.lib.rvhelper.R;
+import com.dreamliner.rvhelper.interfaces.OnItemClickListener;
+import com.dreamliner.rvhelper.interfaces.OnItemLongClickListener;
+import com.dreamliner.rvhelper.viewholder.BaseBindViewHolder;
+
+import androidx.annotation.LayoutRes;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+
+/**
+ * @author chenzj
+ * @Title: BaseAdapter
+ * @Description: 类的描述 -
+ * @date 2016/6/12 09:05
+ * @email admin@chenzhongjin.cn
+ */
+public class BaseMixtureDBAdapter<T> extends BaseDataDBAdapter<T> {
+
+    private static final int NO_FOUND_TYPE = -1;
+
+    private SparseIntArray mItemTypeToLayoutMap = new SparseIntArray();
+
+    public BaseMixtureDBAdapter(SparseIntArray itemTypeToLayoutMap) {
+        super();
+        mItemTypeToLayoutMap = itemTypeToLayoutMap;
+    }
+
+    public BaseMixtureDBAdapter(OnItemClickListener<T> onItemClickListener, SparseIntArray itemTypeToLayoutMap) {
+        super(onItemClickListener);
+        mItemTypeToLayoutMap = itemTypeToLayoutMap;
+    }
+
+    public BaseMixtureDBAdapter(OnItemLongClickListener<T> onItemLongClickListener, SparseIntArray itemTypeToLayoutMap) {
+        super(onItemLongClickListener);
+        mItemTypeToLayoutMap = itemTypeToLayoutMap;
+    }
+
+    public BaseMixtureDBAdapter(OnItemClickListener<T> onItemClickListener, OnItemLongClickListener<T> onItemLongClickListener,
+                                SparseIntArray itemTypeToLayoutMap) {
+        super(onItemClickListener, onItemLongClickListener);
+        mItemTypeToLayoutMap = itemTypeToLayoutMap;
+    }
+
+    @LayoutRes
+    protected int getLayoutRes(int viewType) {
+        if (mItemTypeToLayoutMap.get(viewType, NO_FOUND_TYPE) != NO_FOUND_TYPE) {
+            return mItemTypeToLayoutMap.get(viewType);
+        }
+        return R.layout.item_databinding_null;
+    }
+
+    @Override
+    public BaseBindViewHolder createCustomViewHolder(ViewGroup parent, int viewType) {
+        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), getLayoutRes(viewType),
+                parent, false);
+        return new BaseBindViewHolder<ViewDataBinding, T>(viewDataBinding);
+    }
+}
+

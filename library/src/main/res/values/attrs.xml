@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="OptimumRecyclerView">
+        <!-- -->
+        <attr name="rvhelp_mainLayoutId" format="reference" />
+        <attr name="rvhelp_layout_loading" format="reference" />
+        <attr name="rvhelp_layout_empty" format="reference" />
+        <attr name="rvhelp_layout_refresh_head" format="reference" />
+        <attr name="rvhelp_layout_footerview" format="reference" />
+
+        <attr name="rvhelp_loading" format="boolean" />
+        <attr name="rvhelp_empty" format="boolean" />
+        <attr name="rvhelp_recyclerClipToPadding" format="boolean" />
+        <attr name="rvhelp_recyclerPadding" format="dimension" />
+        <attr name="rvhelp_recyclerPaddingTop" format="dimension" />
+        <attr name="rvhelp_recyclerPaddingBottom" format="dimension" />
+        <attr name="rvhelp_recyclerPaddingLeft" format="dimension" />
+        <attr name="rvhelp_recyclerPaddingRight" format="dimension" />
+        <attr name="rvhelp_scrollbarStyle">
+            <flag name="insideOverlay" value="0x0" />
+            <flag name="insideInset" value="0x01000000" />
+            <flag name="outsideOverlay" value="0x02000000" />
+            <flag name="outsideInset" value="0x03000000" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PtrFrameLayout">
+        <!-- Optional. If you put header and content in xml, you can you these to specify them. -->
+        <attr name="ptr_header" format="reference" />
+        <attr name="ptr_content" format="reference" />
+
+        <!-- the resistance when you are moving the frame -->
+        <attr name="ptr_resistance" format="float" />
+
+        <!-- the ration of the height of the header to trigger refresh -->
+        <attr name="ptr_ratio_of_header_height_to_refresh" format="float" />
+
+        <attr name="ptr_duration_to_close" format="integer" />
+        <attr name="ptr_duration_to_close_header" format="integer" />
+
+        <!-- pull to refresh, otherwise release to refresh, default is release to refresh -->
+        <attr name="ptr_pull_to_fresh" format="boolean" />
+
+        <!-- keep header when refreshing-->
+        <attr name="ptr_keep_header_when_refresh" format="boolean" />
+
+        <attr name="ptr_bg_color" format="color" />
+
+    </declare-styleable>
+
+    <declare-styleable name="PtrClassicHeader">
+        <attr name="ptr_rotate_ani_time" format="integer" />
+    </declare-styleable>
+
+</resources>

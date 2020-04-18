@@ -1,7 +1,8 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.databind;
 
-import android.databinding.DataBindingUtil;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;

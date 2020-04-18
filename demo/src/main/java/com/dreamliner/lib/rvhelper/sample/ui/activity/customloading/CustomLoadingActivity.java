@@ -1,6 +1,7 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.customloading;
 
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

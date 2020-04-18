@@ -1,8 +1,8 @@
 buildscript {
 
     ext.versions = [
-            code      : 11,
-            name      : '2.3.8',
+            code      : 12,
+            name      : '3.0.0',
 
             minSdk    : 15,
             targetSdk : 23,
@@ -16,12 +16,12 @@ buildscript {
     ]
 
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
@@ -29,8 +29,8 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven { url "https://jitpack.io" }
     }
 }

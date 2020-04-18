@@ -1,0 +1,37 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="position"
+            type="java.lang.Integer" />
+
+        <variable
+            name="itemClick"
+            type="com.dreamliner.rvhelper.interfaces.OnItemClickListener" />
+
+        <variable
+            name="item"
+            type="String" />
+
+        <variable
+            name="onBannerListener"
+            type="com.youth.banner.listener.OnBannerListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:data="@{item}"
+            app:layout_constraintDimensionRatio="h,16:9"
+            app:bannerListener="@{onBannerListener}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

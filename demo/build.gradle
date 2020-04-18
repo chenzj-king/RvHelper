@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    dataBinding {
+        enabled true
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+    defaultConfig {
+        applicationId "com.dreamliner.rvhelper.sample"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.code
+        versionName versions.name
+        manifestPlaceholders = [CHANNEL_VALUE: "dreamliner"]
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+    }
+
+    signingConfigs {
+        release {
+            def filePrivateProperties = file("private.properties")
+            if (filePrivateProperties.exists()) {
+                Properties propsPrivate = new Properties()
+                propsPrivate.load(new FileInputStream(filePrivateProperties))
+                storeFile file(propsPrivate['RELEASE_STORE_FILE'])
+                storePassword propsPrivate['RELEASE_STORE_PASSWORD']
+                keyAlias propsPrivate['RELEASE_KEY_ALIAS']
+                keyPassword propsPrivate['RELEASE_KEY_PASSWORD']
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            resValue 'string', 'APP_NAME', 'RvHelper'
+            resValue 'string', 'isDebug', 'true'
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            resValue 'string', 'APP_NAME', 'RvHelper'
+            resValue 'string', 'isDebug', 'false'
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = (!"${variant.buildType.name}".contains("debug")
+                    ? "dreamliner-rvhelperSample-${variant.buildType.name}-V${variant.versionName}" + ".apk".toLowerCase()
+                    : "dreamliner-rvhelperSample-${variant.buildType.name}.apk".toLowerCase())
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+}
+
+dependencies {
+    api project(':library')
+    //api 'com.dreamliner.lib:RvHelper:2.1.0'
+
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    api 'com.squareup.okhttp3:okhttp:3.12.0'
+
+    api 'com.youth.banner:banner:2.0.7'
+    api 'com.github.chenzj-king:LoadingDrawable:1.0'
+    api 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    api 'com.zhy:percent-support-extends:1.1.1'
+
+    api 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+
+    api 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    api 'com.github.bumptech.glide:okhttp3-integration:4.11.0'
+    api 'jp.wasabeef:glide-transformations:4.1.0'
+}

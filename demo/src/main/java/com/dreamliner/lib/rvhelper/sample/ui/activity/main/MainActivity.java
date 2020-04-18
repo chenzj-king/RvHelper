@@ -1,6 +1,7 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.main;
 
-import android.support.v7.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import android.util.SparseArray;
 import android.view.View;
 

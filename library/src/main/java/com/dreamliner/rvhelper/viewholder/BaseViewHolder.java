@@ -1,6 +1,7 @@
 package com.dreamliner.rvhelper.viewholder;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 
 import com.dreamliner.rvhelper.interfaces.ItemClickListener;

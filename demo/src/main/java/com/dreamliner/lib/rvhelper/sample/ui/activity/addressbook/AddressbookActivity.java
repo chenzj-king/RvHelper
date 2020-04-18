@@ -1,6 +1,5 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.addressbook;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.widget.TextView;
 
 import com.dreamliner.lib.rvhelper.sample.AppContext;
@@ -17,6 +16,7 @@ import com.dreamliner.rvhelper.OptimumRecyclerView;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 
 

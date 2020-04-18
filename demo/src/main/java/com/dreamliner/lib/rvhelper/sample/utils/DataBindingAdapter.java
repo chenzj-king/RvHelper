@@ -1,23 +1,20 @@
 package com.dreamliner.lib.rvhelper.sample.utils;
 
-import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.dreamliner.lib.rvhelper.sample.AppContext;
 import com.dreamliner.lib.rvhelper.sample.R;
+import com.dreamliner.lib.rvhelper.sample.ui.activity.banner.ImageAdapter;
+import com.youth.banner.Banner;
+import com.youth.banner.config.IndicatorConfig;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.databinding.BindingAdapter;
 
 
 /**
@@ -45,40 +42,27 @@ public class DataBindingAdapter {
     }
 
 
-    @BindingAdapter(value = {"indicator", "data", "sliderClick"}, requireAll = false)
-    public static void setSlider(SliderLayout sliderLayout, PagerIndicator indicator, String data,
-                                 BaseSliderView.OnSliderClickListener onSliderClickListener) {
-
-        DisplayMetrics displayMetrics = AppContext.getInstance().getResources().getDisplayMetrics();
-        float width = displayMetrics.widthPixels;
-        ViewGroup.LayoutParams lp = sliderLayout.getLayoutParams();
-        lp.height = (int) (166 * width / 375);
-        sliderLayout.setLayoutParams(lp);
-        sliderLayout.requestLayout();
-
-        //清空旧的
-        sliderLayout.removeAllSliders();
+    @BindingAdapter(value = {"data", "bannerListener"}, requireAll = false)
+    public static void setSlider(Banner banner, String data, OnBannerListener onBannerListener) {
         List<String> banners = new ArrayList<>();
-        banners.add("http://jewely-image.b0.upaiyun.com/images/2017-02-22/148773250858acff1c6b69f.jpg");
-        banners.add("http://jewely-image.b0.upaiyun.com/images/2017-02-22/148774660958ad363167649.jpg");
-        banners.add("http://jewely-image.b0.upaiyun.com/ueditor/2017-02-28/1488248833.jpg");
+        banners.add("https://res.darryring.com/activity/drSEM_storeLandingPage/temp/part04_banner01.jpg");
+        banners.add("https://res.darryring.com/activity/drSEM_storeLandingPage/temp/part04_banner02.jpg");
+        banners.add("https://res.darryring.com/activity/drSEM_storeLandingPage/temp/part04_banner03.jpg");
         banners.add("https://static.darryring.com/ueditor/2017-03-28/1490687105.jpg");
-        for (String banner : banners) {
-            DefaultSliderView defaultSliderView = new DefaultSliderView(AppContext.getInstance());
-            defaultSliderView.image(banner).empty(R.drawable.bg_image_loading).error(R.drawable.bg_image_loading)
-                    .setScaleType(BaseSliderView.ScaleType.CenterCrop).setOnSliderClickListener(onSliderClickListener);
-            defaultSliderView.bundle(new Bundle());
-            defaultSliderView.getBundle().putSerializable("extra", banner);
-            sliderLayout.addSlider(defaultSliderView);
-        }
 
-        indicator.setDefaultIndicatorColor(ContextCompat.getColor(AppContext.getInstance(), R.color.pagerIndicator_select_color),
-                ContextCompat.getColor(AppContext.getInstance(), R.color.pagerIndicator_unSelect_color));
-        sliderLayout.setCustomIndicator(indicator);
-        sliderLayout.setCustomAnimation(new DescriptionAnimation());
-        sliderLayout.setDuration(3 * 1000);
-        sliderLayout.setRecoverCycleDuration(200);
-        sliderLayout.startAutoCycle();
+        banner.setAdapter(new ImageAdapter(banners));
+        banner.setIndicator(new CircleIndicator(banner.getContext()));
+        banner.setIndicatorSelectedColorRes(R.color.colorAccent);
+        banner.setIndicatorNormalColorRes(android.R.color.white);
+        banner.setIndicatorGravity(IndicatorConfig.Direction.LEFT);
+        banner.setIndicatorSpace((int) BannerUtils.dp2px(20));
+        banner.setIndicatorMargins(new IndicatorConfig.Margins((int) BannerUtils.dp2px(10)));
+        banner.setIndicatorWidth(10, 20);
+        //banner.addItemDecoration(new MarginItemDecoration((int) BannerUtils.dp2px(50)));
+        //banner.setPageTransformer(new DepthPageTransformer());
+        banner.setOnBannerListener(onBannerListener);
+        //banner.addOnPageChangeListener(onBannerListener);
+        banner.start();
     }
 }
 

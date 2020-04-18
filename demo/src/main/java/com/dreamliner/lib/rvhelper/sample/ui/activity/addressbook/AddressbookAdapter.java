@@ -1,6 +1,5 @@
 package com.dreamliner.lib.rvhelper.sample.ui.activity.addressbook;
 
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import com.dreamliner.rvhelper.viewholder.BaseViewHolder;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

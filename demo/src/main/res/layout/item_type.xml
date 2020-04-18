@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/select_type_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/type_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="定制头部"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_heightPercent="100%w"
+        app:layout_widthPercent="100%" />
+
+</com.zhy.android.percent.support.PercentRelativeLayout>
